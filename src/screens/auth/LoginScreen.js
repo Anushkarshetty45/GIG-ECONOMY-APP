@@ -23,12 +23,6 @@ import {
   loginRateLimiter
 } from '../../utils/validation';
 
-// Only import LocalAuthentication on native platforms
-let LocalAuthentication = null;
-if (Platform.OS !== 'web') {
-  LocalAuthentication = require('expo-local-authentication');
-}
-
 export const LoginScreen = ({ navigation }) => {
   const { theme, mode, toggleTheme } = useThemeStore();
   const { signIn } = useAuthStore();
