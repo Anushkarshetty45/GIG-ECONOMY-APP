@@ -35,12 +35,6 @@ export const DashboardScreen = ({ navigation }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      loadDashboardData();
-    }
-  }, [user]);
-
   const loadDashboardData = async () => {
     if (!user) return;
 
@@ -51,6 +45,13 @@ export const DashboardScreen = ({ navigation }) => {
       fetchTransactions(user.id),
     ]);
   };
+
+  useEffect(() => {
+    if (user) {
+      loadDashboardData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const onRefresh = async () => {
     setRefreshing(true);
