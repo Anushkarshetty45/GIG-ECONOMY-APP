@@ -50,7 +50,7 @@ export const useUserStore = create((set, get) => ({
 
       if (error) throw error;
 
-      const total = data.reduce((acc, transaction) => {
+      const total = (data || []).reduce((acc, transaction) => {
         if (transaction.type === 'income') {
           return acc + transaction.amount;
         } else if (transaction.type === 'expense') {
