@@ -75,33 +75,8 @@ export const LoginScreen = ({ navigation }) => {
     }
   };
 
-  const handleBiometricAuth = async () => {
-    try {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      if (!hasHardware) {
-        Alert.alert('Not Available', 'Biometric authentication is not available on this device');
-        return;
-      }
-
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-      if (!isEnrolled) {
-        Alert.alert('Not Set Up', 'Please set up biometric authentication in your device settings');
-        return;
-      }
-
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Login with Biometrics',
-        fallbackLabel: 'Use Password',
-      });
-
-      if (result.success) {
-        // In a real app, you would retrieve stored credentials here
-        Alert.alert('Success', 'Biometric authentication successful!');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Biometric authentication failed');
-    }
-  };
+  // Biometric auth removed for web/Electron compatibility
+  // Will be re-added in native mobile builds only
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -178,7 +153,23 @@ export const LoginScreen = ({ navigation }) => {
               />
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('ForgotPassword')}
+                onPress={() => {
+                  Alert.alert(
+                    'Reset Password',
+                    'Please enter your email address to reset your password.',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          // TODO: Implement forgot password functionality
+                          Alert.alert('Info', 'Password reset link will be sent to your email.');
+                        },
+                      },
+                    ],
+                    { cancelable: true }
+                  );
+                }}
                 style={styles.forgotPassword}
               >
                 <Text style={[styles.forgotPasswordText, { color: theme.colors.primary }]}>
@@ -194,27 +185,6 @@ export const LoginScreen = ({ navigation }) => {
                 loading={loading}
                 style={styles.loginButton}
               />
-
-              {/* Biometric Auth - Only show on native platforms */}
-              {Platform.OS !== 'web' && (
-                <>
-                  <View style={styles.divider}>
-                    <View style={[styles.dividerLine, { backgroundColor: theme.colors.border }]} />
-                    <Text style={[styles.dividerText, { color: theme.colors.textSecondary }]}>
-                      or
-                    </Text>
-                    <View style={[styles.dividerLine, { backgroundColor: theme.colors.border }]} />
-                  </View>
-
-                  <Button
-                    title="Use Biometric Login"
-                    variant="glass"
-                    size="large"
-                    onPress={handleBiometricAuth}
-                    style={styles.biometricButton}
-                  />
-                </>
-              )}
             </GlassCard>
 
             {/* Sign Up Link */}
