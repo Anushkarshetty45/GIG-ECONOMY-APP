@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "electron": "cross-env NODE_ENV=development concurrently \"expo start --web --port 8081\" \"wait-on http://localhost:8081 && electron electron.js\"",
+    "electron": "cross-env NODE_ENV=development concurrently \"expo start --web --port 8081 --offline\" \"wait-on http://localhost:8081 && electron electron.js\"",
     "electron:dev": "npm run electron",
     "build:android": "eas build --platform android",
     "build:ios": "eas build --platform ios",
@@ -25,6 +25,8 @@
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
     "@supabase/supabase-js": "^2.45.0",
     "@tanstack/react-query": "^5.28.0",
     "expo": "^51.0.0",
@@ -40,6 +42,7 @@
     "react-native-screens": "~3.31.0",
     "react-native-svg": "15.2.0",
     "react-native-web": "~0.19.10",
+    "three": "^0.182.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
@@ -68,13 +71,22 @@
     ],
     "mac": {
       "category": "public.app-category.finance",
-      "target": ["dmg", "zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "win": {
-      "target": ["nsis", "portable"]
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "category": "Finance"
     }
   },
