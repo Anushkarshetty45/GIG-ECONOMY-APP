@@ -16,11 +16,11 @@ import { useAuthStore } from '../../store/authStore';
 import { GlassCard } from '../../components/common/GlassCard';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
-import { 
-  validateEmail, 
-  validatePassword, 
+import {
+  validateEmail,
+  validatePassword,
   sanitizeInput,
-  getGenericAuthError 
+  getGenericAuthError
 } from '../../utils/validation';
 
 export const RegisterScreen = ({ navigation }) => {
