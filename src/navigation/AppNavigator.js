@@ -8,6 +8,7 @@ import { useAuthStore } from '../store/authStore';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 
 // Screens
+import { HomeScreen } from '../screens/HomeScreen';
 import { LandingScreen } from '../screens/LandingScreen';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
@@ -115,9 +116,10 @@ const AuthNavigator = () => {
         cardStyle: { backgroundColor: theme.colors.background },
       }}
     >
-      <Stack.Screen name="Landing" component={LandingScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Landing" component={LandingScreen} />
     </Stack.Navigator>
   );
 };
@@ -143,11 +145,7 @@ const MainStack = () => {
 // App Navigator
 export const AppNavigator = () => {
   const { theme } = useThemeStore();
-  const { user, loading, initialize } = useAuthStore();
-
-  useEffect(() => {
-    initialize();
-  }, []);
+  const { user, loading } = useAuthStore();
 
   if (loading) {
     return <LoadingSpinner message="Loading..." />;
