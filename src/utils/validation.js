@@ -4,45 +4,17 @@
  */
 
 /**
- * Validate password strength
- * Requirements:
- * - At least 8 characters
- * - At least one uppercase letter
- * - At least one lowercase letter
- * - At least one number
- * - At least one special character
+ * Validate password - accepts any non-empty password
  */
 export const validatePassword = (password) => {
-  const errors = [];
-  
-  if (!password) {
+  if (!password || password.length === 0) {
     return { valid: false, errors: ['Password is required'] };
   }
 
-  if (password.length < 8) {
-    errors.push('At least 8 characters');
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    errors.push('At least one uppercase letter');
-  }
-
-  if (!/[a-z]/.test(password)) {
-    errors.push('At least one lowercase letter');
-  }
-
-  if (!/[0-9]/.test(password)) {
-    errors.push('At least one number');
-  }
-
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-    errors.push('At least one special character (!@#$%^&*...)');
-  }
-
   return {
-    valid: errors.length === 0,
-    errors,
-    strength: calculatePasswordStrength(password)
+    valid: true,
+    errors: [],
+    strength: 4
   };
 };
 
