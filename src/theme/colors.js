@@ -1,46 +1,45 @@
-// Color palette for GIG ECONOMY app with Glassmorphism design
-// Inspired by professional, modern aesthetic with earthy tones
+// Color palette for GIG ECONOMY app - Black, Grey, and White theme
 
 export const colors = {
-  // Light Mode
+  // Light Mode - White and Grey
   light: {
-    // Primary colors
-    primary: '#6366f1',        // Indigo - main brand color
-    primaryLight: '#818cf8',   // Light indigo
-    primaryDark: '#4f46e5',    // Dark indigo
+    // Primary colors - Grey tones
+    primary: '#404040',        // Dark grey
+    primaryLight: '#6b6b6b',   // Medium grey
+    primaryDark: '#1a1a1a',    // Almost black
 
-    // Secondary colors (earthy tones from reference)
-    secondary: '#8b7355',      // Warm brown
-    secondaryLight: '#a38968', // Light brown
-    secondaryDark: '#6d5a43',  // Dark brown
+    // Secondary colors
+    secondary: '#808080',      // Medium grey
+    secondaryLight: '#999999', // Light grey
+    secondaryDark: '#595959',  // Dark grey
 
-    // Background colors (cream/off-white from reference)
-    background: '#f8f8f4',     // Off-white background
-    backgroundAlt: '#ffffff',  // Pure white
-    surface: 'rgba(255, 255, 255, 0.7)',  // Glassmorphism surface
+    // Background colors
+    background: '#ffffff',     // Pure white
+    backgroundAlt: '#f5f5f5',  // Light grey
+    surface: 'rgba(255, 255, 255, 0.7)',
 
     // Glassmorphism overlays
     glassLight: 'rgba(255, 255, 255, 0.25)',
     glassMedium: 'rgba(255, 255, 255, 0.45)',
     glassStrong: 'rgba(255, 255, 255, 0.65)',
 
-    // Text colors (from reference)
-    text: '#181818',           // Deep charcoal
-    textSecondary: '#3E3D35',  // Dark brown
-    textTertiary: '#6b7280',   // Gray
-    textInverse: '#ffffff',    // White text
+    // Text colors
+    text: '#000000',           // Pure black
+    textSecondary: '#404040',  // Dark grey
+    textTertiary: '#808080',   // Medium grey
+    textInverse: '#ffffff',    // White
 
-    // Status colors
-    success: '#10b981',        // Green
-    warning: '#f59e0b',        // Amber
-    error: '#ef4444',          // Red
-    info: '#3b82f6',           // Blue
+    // Status colors - Grey scale
+    success: '#404040',        // Dark grey
+    warning: '#6b6b6b',        // Medium grey
+    error: '#1a1a1a',          // Almost black
+    info: '#595959',           // Dark grey
 
     // Financial colors
-    income: '#10b981',         // Green
-    expense: '#ef4444',        // Red
-    savings: '#6366f1',        // Indigo
-    tax: '#f59e0b',           // Amber
+    income: '#2a2a2a',         // Dark grey
+    expense: '#404040',        // Dark grey
+    savings: '#595959',        // Dark grey
+    tax: '#6b6b6b',            // Medium grey
 
     // UI Elements
     border: 'rgba(0, 0, 0, 0.1)',
@@ -48,28 +47,28 @@ export const colors = {
     shadow: 'rgba(0, 0, 0, 0.15)',
     overlay: 'rgba(0, 0, 0, 0.5)',
 
-    // Gradients
-    gradient1: ['#6366f1', '#8b5cf6'],  // Indigo to purple
-    gradient2: ['#f59e0b', '#f97316'],  // Amber to orange
-    gradient3: ['#10b981', '#14b8a6'],  // Green to teal
+    // Gradients - Black to Grey
+    gradient1: ['#1a1a1a', '#404040'],
+    gradient2: ['#2a2a2a', '#6b6b6b'],
+    gradient3: ['#404040', '#808080'],
   },
 
-  // Dark Mode
+  // Dark Mode - Black and Grey
   dark: {
-    // Primary colors
-    primary: '#818cf8',        // Light indigo for dark mode
-    primaryLight: '#a5b4fc',   // Very light indigo
-    primaryDark: '#6366f1',    // Medium indigo
+    // Primary colors - Light grey for dark mode
+    primary: '#cccccc',        // Light grey
+    primaryLight: '#e5e5e5',   // Very light grey
+    primaryDark: '#a0a0a0',    // Medium grey
 
     // Secondary colors
-    secondary: '#a38968',      // Light brown
-    secondaryLight: '#b89d7f', // Very light brown
-    secondaryDark: '#8b7355',  // Medium brown
+    secondary: '#999999',      // Medium grey
+    secondaryLight: '#b3b3b3', // Light grey
+    secondaryDark: '#808080',  // Dark grey
 
     // Background colors
-    background: '#0f0f1a',     // Very dark blue-black
-    backgroundAlt: '#1a1a2e',  // Dark blue
-    surface: 'rgba(30, 30, 46, 0.7)',  // Glassmorphism surface
+    background: '#0a0a0a',     // Almost pure black
+    backgroundAlt: '#1a1a1a',  // Very dark grey
+    surface: 'rgba(26, 26, 26, 0.7)',
 
     // Glassmorphism overlays
     glassLight: 'rgba(255, 255, 255, 0.05)',
@@ -77,22 +76,22 @@ export const colors = {
     glassStrong: 'rgba(255, 255, 255, 0.15)',
 
     // Text colors
-    text: '#f8f8f4',           // Off-white
-    textSecondary: '#e5e5e5',  // Light gray
-    textTertiary: '#9ca3af',   // Medium gray
-    textInverse: '#181818',    // Dark text
+    text: '#ffffff',           // Pure white
+    textSecondary: '#cccccc',  // Light grey
+    textTertiary: '#808080',   // Medium grey
+    textInverse: '#000000',    // Black
 
-    // Status colors (slightly brighter for dark mode)
-    success: '#34d399',        // Lighter green
-    warning: '#fbbf24',        // Lighter amber
-    error: '#f87171',          // Lighter red
-    info: '#60a5fa',           // Lighter blue
+    // Status colors - Grey scale
+    success: '#d4d4d4',        // Light grey
+    warning: '#d9d9d9',        // Very light grey
+    error: '#b8b8b8',          // Medium light grey
+    info: '#d4d4d4',           // Light grey
 
     // Financial colors
-    income: '#34d399',         // Lighter green
-    expense: '#f87171',        // Lighter red
-    savings: '#818cf8',        // Light indigo
-    tax: '#fbbf24',           // Lighter amber
+    income: '#e0e0e0',         // Very light grey
+    expense: '#c0c0c0',        // Light grey
+    savings: '#d4d4d4',        // Light grey
+    tax: '#cccccc',            // Light grey
 
     // UI Elements
     border: 'rgba(255, 255, 255, 0.1)',
@@ -100,10 +99,10 @@ export const colors = {
     shadow: 'rgba(0, 0, 0, 0.5)',
     overlay: 'rgba(0, 0, 0, 0.7)',
 
-    // Gradients
-    gradient1: ['#818cf8', '#a78bfa'],  // Light indigo to light purple
-    gradient2: ['#fbbf24', '#fb923c'],  // Light amber to light orange
-    gradient3: ['#34d399', '#2dd4bf'],  // Light green to light teal
+    // Gradients - Black to Grey to White
+    gradient1: ['#1a1a1a', '#404040'],
+    gradient2: ['#2a2a2a', '#595959'],
+    gradient3: ['#404040', '#6b6b6b'],
   },
 };
 
@@ -111,7 +110,7 @@ export const colors = {
 export const glassmorphism = {
   light: {
     background: 'rgba(255, 255, 255, 0.25)',
-    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderColor: 'rgba(0, 0, 0, 0.18)',
     borderWidth: 1,
     backdropFilter: 'blur(10px)',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
