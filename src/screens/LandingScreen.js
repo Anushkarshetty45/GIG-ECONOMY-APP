@@ -61,6 +61,7 @@ export const LandingScreen = ({ navigation }) => {
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
+        pointerEvents="none"
       />
 
       {/* Theme Toggle Button */}
@@ -82,6 +83,7 @@ export const LandingScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <ScrollView
+        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -223,8 +225,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
   scrollContent: {
     paddingBottom: 40,
+    flexGrow: 1,
   },
   hero: {
     alignItems: 'center',
