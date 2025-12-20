@@ -8,8 +8,8 @@ export const useThemeStore = create(
   persist(
     (set, get) => ({
       // State
-      mode: 'light', // 'light' or 'dark'
-      theme: getTheme('light'),
+      mode: 'dark', // 'light' or 'dark'
+      theme: getTheme('dark'),
 
       // Actions
       toggleTheme: () => {
