@@ -86,7 +86,7 @@ export default function Expenses() {
         <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <CreditCard size={32} /> Expenses
         </h1>
-        <div style={{ fontSize: '24px', fontWeight: '700', color: '#ef4444' }}>
+        <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--theme-error)' }}>
           Total: ${getTotalExpenses().toFixed(2)}
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function Expenses() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#ef4444',
+                    color: 'var(--theme-error)',
                     flexShrink: 0
                   }}>
                     {getCategoryIcon(expense.category)}
@@ -184,10 +184,10 @@ export default function Expenses() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '18px', fontWeight: '600', color: 'var(--theme-text)', marginBottom: '4px' }}>
                           {expense.category}
                         </div>
-                        <div style={{ fontSize: '13px', color: '#71717a' }}>
+                        <div style={{ fontSize: '13px', color: 'var(--theme-text-tertiary)' }}>
                           {new Date(expense.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                         </div>
                       </div>
@@ -195,12 +195,12 @@ export default function Expenses() {
                         Delete
                       </button>
                     </div>
-                    <div style={{ fontSize: '32px', fontWeight: '700', color: '#ef4444', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '32px', fontWeight: '700', color: 'var(--theme-error)', marginBottom: '8px' }}>
                       ${expense.amount.toFixed(2)}
                     </div>
-                    <div style={{ display: 'flex', gap: '20px', fontSize: '14px', color: '#a1a1aa' }}>
+                    <div style={{ display: 'flex', gap: '20px', fontSize: '14px', color: 'var(--theme-text-secondary)' }}>
                       <div>
-                        <span style={{ color: '#71717a', fontWeight: '500' }}>Payment: </span>
+                        <span style={{ color: 'var(--theme-text-tertiary)', fontWeight: '500' }}>Payment: </span>
                         {expense.paymentMethod}
                       </div>
                     </div>
