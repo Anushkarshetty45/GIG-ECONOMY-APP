@@ -1,6 +1,112 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Determine current season based on date
+const getCurrentSeason = () => {
+  const now = new Date();
+  const month = now.getMonth(); // 0-11
+  const day = now.getDate();
+
+  // Spring: March 20 - June 20
+  if ((month === 2 && day >= 20) || (month > 2 && month < 5) || (month === 5 && day <= 20)) {
+    return 'spring';
+  }
+  // Summer: June 21 - September 22
+  if ((month === 5 && day >= 21) || (month > 5 && month < 8) || (month === 8 && day <= 22)) {
+    return 'summer';
+  }
+  // Fall: September 23 - December 20
+  if ((month === 8 && day >= 23) || (month > 8 && month < 11) || (month === 11 && day <= 20)) {
+    return 'fall';
+  }
+  // Winter: December 21 - March 19
+  return 'winter';
+};
+
+// Seasonal color palettes
+const seasonalPalettes = {
+  spring: {
+    name: 'Spring',
+    emoji: '🌸',
+    description: 'Fresh cherry blossoms',
+    colors: {
+      background: '#FFF5F7',
+      surface: '#FFE8ED',
+      card: '#FFD6E0',
+      border: '#FFB3C6',
+      text: '#4A1942',
+      textSecondary: '#8B4789',
+      textTertiary: '#B86FB5',
+      primary: '#FF69B4',
+      primaryHover: '#E75A9F',
+      success: '#66bb6a',
+      error: '#f44336',
+      warning: '#ff9800',
+      info: '#FF69B4',
+    }
+  },
+  summer: {
+    name: 'Summer',
+    emoji: '☀️',
+    description: 'Bright sunny vibes',
+    colors: {
+      background: '#FFFBF0',
+      surface: '#FFF4D6',
+      card: '#FFEDB8',
+      border: '#FFD97D',
+      text: '#5C4A1F',
+      textSecondary: '#8B7239',
+      textTertiary: '#B89F5F',
+      primary: '#FFB347',
+      primaryHover: '#FF9F2E',
+      success: '#66bb6a',
+      error: '#f44336',
+      warning: '#ff9800',
+      info: '#FFB347',
+    }
+  },
+  fall: {
+    name: 'Fall',
+    emoji: '🍁',
+    description: 'Autumn leaves',
+    colors: {
+      background: '#FFF8F0',
+      surface: '#FFE8D6',
+      card: '#FFD4B0',
+      border: '#FFAD70',
+      text: '#5C2E1F',
+      textSecondary: '#8B4A2F',
+      textTertiary: '#B8724F',
+      primary: '#D2691E',
+      primaryHover: '#B85A1A',
+      success: '#66bb6a',
+      error: '#f44336',
+      warning: '#ff9800',
+      info: '#D2691E',
+    }
+  },
+  winter: {
+    name: 'Winter',
+    emoji: '❄️',
+    description: 'Snowy twilight',
+    colors: {
+      background: '#F5F5F7',
+      surface: '#E8E8ED',
+      card: '#D9D9E3',
+      border: '#B8B8CC',
+      text: '#2D2A4A',
+      textSecondary: '#4A4668',
+      textTertiary: '#6B6889',
+      primary: '#8B7FB8',
+      primaryHover: '#7A6EA5',
+      success: '#66bb6a',
+      error: '#f44336',
+      warning: '#ff9800',
+      info: '#8B7FB8',
+    }
+  }
+};
+
 // Enhanced Pinterest-Style Theme Presets
 export const themePresets = {
   // Default Themes
@@ -13,6 +119,7 @@ export const themePresets = {
     colors: {
       background: '#ffffff',
       surface: '#fafafa',
+      card: '#f0f0f0',
       border: '#e0e0e0',
       text: '#1a1a1a',
       textSecondary: '#4a4a4a',
@@ -35,6 +142,7 @@ export const themePresets = {
     colors: {
       background: '#0a0a0a',
       surface: '#1a1a1a',
+      card: '#151515',
       border: '#2a2a2a',
       text: '#ffffff',
       textSecondary: '#b0b0b0',
@@ -56,18 +164,19 @@ export const themePresets = {
     emoji: '🌸',
     description: 'Dreamy pastel vibes',
     colors: {
-      background: '#fff5f9',
-      surface: '#ffe6f0',
-      border: '#ffb8d6',
-      text: '#4a2847',
-      textSecondary: '#6b3d5e',
-      textTertiary: '#8f5277',
-      primary: '#e91e63',
-      primaryHover: '#c2185b',
+      background: '#F7F3ED',
+      surface: '#EFD8D6',
+      card: '#E5C9C7',
+      border: '#C2C6B9',
+      text: '#422B23',
+      textSecondary: '#6B4539',
+      textTertiary: '#8B6B5F',
+      primary: '#DBA1A2',
+      primaryHover: '#C28B8C',
       success: '#66bb6a',
       error: '#e53935',
       warning: '#ffa726',
-      info: '#ab47bc',
+      info: '#DBA1A2',
     }
   },
   
@@ -80,6 +189,7 @@ export const themePresets = {
     colors: {
       background: '#fff8f3',
       surface: '#ffebe0',
+      card: '#ffdcc9',
       border: '#ffb894',
       text: '#5c3828',
       textSecondary: '#7a4d36',
@@ -102,6 +212,7 @@ export const themePresets = {
     colors: {
       background: '#faf7ff',
       surface: '#f0e6ff',
+      card: '#e5d7ff',
       border: '#d1b3f5',
       text: '#3d2466',
       textSecondary: '#5a3d80',
@@ -124,6 +235,7 @@ export const themePresets = {
     colors: {
       background: '#f5fffb',
       surface: '#e6fff3',
+      card: '#d7ffe9',
       border: '#b3f0d6',
       text: '#1a4d3d',
       textSecondary: '#2d6654',
@@ -144,85 +256,63 @@ export const themePresets = {
     emoji: '🌊',
     description: 'Cool ocean blues',
     colors: {
-      background: '#f5fbff',
-      surface: '#e6f5ff',
-      border: '#b3dbf5',
-      text: '#1a3d52',
-      textSecondary: '#2d5a73',
-      textTertiary: '#407694',
-      primary: '#0288d1',
-      primaryHover: '#01579b',
+      background: '#F0F8FF',
+      surface: '#E3F2FD',
+      card: '#D4E9F7',
+      border: '#B3D9F2',
+      text: '#1A3A52',
+      textSecondary: '#2B5F7C',
+      textTertiary: '#4A7FA0',
+      primary: '#4A90B8',
+      primaryHover: '#2B5F7C',
       success: '#66bb6a',
       error: '#e53935',
       warning: '#ffa726',
-      info: '#039be5',
+      info: '#4A90B8',
     }
   },
 
   // Enhanced Dark Pinterest Themes
-  moodyPurple: {
-    id: 'moodyPurple',
-    name: 'Moody Purple',
+  midnightLatte: {
+    id: 'midnightLatte',
+    name: 'Midnight Latte',
     mode: 'dark',
-    emoji: '🌙',
-    description: 'Mystical purple nights',
+    emoji: '☕',
+    description: 'Sophisticated coffee tones',
     colors: {
-      background: '#1a0f2e',
-      surface: '#2b1a47',
-      border: '#4a2f70',
-      text: '#f3e8ff',
-      textSecondary: '#d1b3f5',
-      textTertiary: '#b08acc',
-      primary: '#ba68c8',
-      primaryHover: '#9c27b0',
+      background: '#2C3839',
+      surface: '#3F4E4F',
+      card: '#364143',
+      border: '#6B5A4D',
+      text: '#DCD7C9',
+      textSecondary: '#C4BFB1',
+      textTertiary: '#A27B5B',
+      primary: '#A27B5B',
+      primaryHover: '#C9A079',
       success: '#66bb6a',
-      error: '#e53935',
-      warning: '#ffa726',
-      info: '#ab47bc',
+      error: '#f44336',
+      warning: '#ff9800',
+      info: '#A27B5B',
     }
   },
 
-  forestGreen: {
-    id: 'forestGreen',
-    name: 'Forest Green',
-    mode: 'dark',
-    emoji: '🌲',
-    description: 'Enchanted forest',
-    colors: {
-      background: '#0f1f1a',
-      surface: '#1a2e26',
-      border: '#2d4a3d',
-      text: '#e8f5ed',
-      textSecondary: '#c4e6d1',
-      textTertiary: '#9fd4b5',
-      primary: '#4db6ac',
-      primaryHover: '#00897b',
-      success: '#66bb6a',
-      error: '#e53935',
-      warning: '#ffa726',
-      info: '#26a69a',
-    }
-  },
-
-  sunsetGradient: {
-    id: 'sunsetGradient',
-    name: 'Sunset Vibes',
-    mode: 'dark',
-    emoji: '🌇',
-    description: 'Romantic sunset',
-    colors: {
-      background: '#1f0f1a',
-      surface: '#2e1a26',
-      border: '#4d2f3d',
-      text: '#ffe6f0',
-      textSecondary: '#ffb8d6',
-      textTertiary: '#ff8ab8',
-      primary: '#ec407a',
-      primaryHover: '#c2185b',
-      success: '#66bb6a',
-      error: '#e53935',
-      warning: '#ffa726',
-      info: '#f06292',
+  seasonal: {
+    id: 'seasonal',
+    name: 'Seasonal',
+    mode: 'light',
+    emoji: '🌍',
+    description: 'Changes with seasons',
+    getSeason: getCurrentSeason,
+    colors: seasonalPalettes[getCurrentSeason()].colors,
+    get emoji() {
+      return seasonalPalettes[getCurrentSeason()].emoji;
+    },
+    get name() {
+      const season = getCurrentSeason();
+      return `Seasonal (${seasonalPalettes[season].name})`;
+    },
+    get description() {
+      return seasonalPalettes[getCurrentSeason()].description;
     }
   }
 };
@@ -238,7 +328,21 @@ export const useThemeStore = create(
       // Get current active theme object
       getActiveTheme: () => {
         const { currentTheme, customTheme } = get();
-        return themePresets[currentTheme] || customTheme || themePresets.pureWhite;
+        const theme = themePresets[currentTheme] || customTheme || themePresets.pureWhite;
+
+        // If seasonal theme, refresh colors based on current season
+        if (currentTheme === 'seasonal') {
+          const season = getCurrentSeason();
+          return {
+            ...theme,
+            colors: seasonalPalettes[season].colors,
+            emoji: seasonalPalettes[season].emoji,
+            name: `Seasonal (${seasonalPalettes[season].name})`,
+            description: seasonalPalettes[season].description
+          };
+        }
+
+        return theme;
       },
 
       // Apply theme to CSS variables
