@@ -83,7 +83,7 @@ export default function Income() {
         <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <DollarSign size={32} /> Income
         </h1>
-        <div style={{ fontSize: '24px', fontWeight: '700', color: '#10b981' }}>
+        <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--theme-success)' }}>
           Total: ${getTotalIncome().toFixed(2)}
         </div>
       </div>
@@ -172,7 +172,7 @@ export default function Income() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#10b981',
+                    color: 'var(--theme-success)',
                     flexShrink: 0
                   }}>
                     {getPlatformIcon(income.platform)}
@@ -180,10 +180,10 @@ export default function Income() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '18px', fontWeight: '600', color: 'var(--theme-text)', marginBottom: '4px' }}>
                           {income.platform}
                         </div>
-                        <div style={{ fontSize: '13px', color: '#71717a' }}>
+                        <div style={{ fontSize: '13px', color: 'var(--theme-text-tertiary)' }}>
                           {new Date(income.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                         </div>
                       </div>
@@ -191,13 +191,13 @@ export default function Income() {
                         Delete
                       </button>
                     </div>
-                    <div style={{ fontSize: '32px', fontWeight: '700', color: '#10b981', marginBottom: income.notes ? '12px' : '0' }}>
+                    <div style={{ fontSize: '32px', fontWeight: '700', color: 'var(--theme-success)', marginBottom: income.notes ? '12px' : '0' }}>
                       ${income.amount.toFixed(2)}
                     </div>
                     {income.notes && (
-                      <div style={{ padding: '12px', background: '#09090b', borderRadius: '6px', border: '1px solid #27272a' }}>
-                        <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px', fontWeight: '500' }}>Notes</div>
-                        <div style={{ fontSize: '14px', color: '#a1a1aa', lineHeight: '1.5' }}>{income.notes}</div>
+                      <div style={{ padding: '12px', background: 'var(--theme-surface)', borderRadius: '6px', border: '1px solid var(--theme-border)' }}>
+                        <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px', fontWeight: '500' }}>Notes</div>
+                        <div style={{ fontSize: '14px', color: 'var(--theme-text-secondary)', lineHeight: '1.5' }}>{income.notes}</div>
                       </div>
                     )}
                   </div>
