@@ -58,15 +58,15 @@ export default function HomePage() {
                 <div className="preview-cards">
                   <div className="preview-card">
                     <div className="preview-card-label">Total Income</div>
-                    <div className="preview-card-value" style={{ color: '#10b981' }}>$12,450</div>
+                    <div className="preview-card-value" style={{ color: 'var(--theme-success)' }}>$12,450</div>
                   </div>
                   <div className="preview-card">
                     <div className="preview-card-label">Total Expenses</div>
-                    <div className="preview-card-value" style={{ color: '#ef4444' }}>$5,230</div>
+                    <div className="preview-card-value" style={{ color: 'var(--theme-error)' }}>$5,230</div>
                   </div>
                   <div className="preview-card">
                     <div className="preview-card-label">Net Income</div>
-                    <div className="preview-card-value" style={{ color: '#71717a' }}>$7,220</div>
+                    <div className="preview-card-value" style={{ color: 'var(--theme-text-tertiary)' }}>$7,220</div>
                   </div>
                 </div>
 
@@ -81,7 +81,7 @@ export default function HomePage() {
                         <div className="preview-transaction-name">Uber Delivery</div>
                         <div className="preview-transaction-date">Today</div>
                       </div>
-                      <div className="preview-transaction-amount" style={{ color: '#10b981' }}>+$145.00</div>
+                      <div className="preview-transaction-amount" style={{ color: 'var(--theme-success)' }}>+$145.00</div>
                     </div>
                     <div className="preview-transaction">
                       <div className="preview-transaction-icon" style={{ background: 'rgba(239, 68, 68, 0.15)' }}>
@@ -91,7 +91,7 @@ export default function HomePage() {
                         <div className="preview-transaction-name">Gas & Fuel</div>
                         <div className="preview-transaction-date">Yesterday</div>
                       </div>
-                      <div className="preview-transaction-amount" style={{ color: '#ef4444' }}>-$52.00</div>
+                      <div className="preview-transaction-amount" style={{ color: 'var(--theme-error)' }}>-$52.00</div>
                     </div>
                     <div className="preview-transaction">
                       <div className="preview-transaction-icon" style={{ background: 'rgba(16, 185, 129, 0.15)' }}>
@@ -101,7 +101,7 @@ export default function HomePage() {
                         <div className="preview-transaction-name">DoorDash</div>
                         <div className="preview-transaction-date">Dec 18</div>
                       </div>
-                      <div className="preview-transaction-amount" style={{ color: '#10b981' }}>+$230.00</div>
+                      <div className="preview-transaction-amount" style={{ color: 'var(--theme-success)' }}>+$230.00</div>
                     </div>
                   </div>
                 </div>
@@ -188,7 +188,7 @@ export default function HomePage() {
           <div className="section-divider"></div>
           <div className="features-grid">
             <div className="feature-card">
-              <DollarSign size={48} style={{ marginBottom: '16px', color: '#10b981' }} />
+              <DollarSign size={48} style={{ marginBottom: '16px', color: 'var(--theme-success)' }} />
               <h3 className="feature-title">Income & Expense Tracking</h3>
               <ul className="feature-list">
                 <li>Track multiple income sources</li>
@@ -198,7 +198,7 @@ export default function HomePage() {
               </ul>
             </div>
             <div className="feature-card">
-              <TrendingUp size={48} style={{ marginBottom: '16px', color: '#71717a' }} />
+              <TrendingUp size={48} style={{ marginBottom: '16px', color: 'var(--theme-text-tertiary)' }} />
               <h3 className="feature-title">Smart Analytics & Reports</h3>
               <ul className="feature-list">
                 <li>Visual charts and graphs</li>
@@ -208,7 +208,7 @@ export default function HomePage() {
               </ul>
             </div>
             <div className="feature-card">
-              <Target size={48} style={{ marginBottom: '16px', color: '#fbbf24' }} />
+              <Target size={48} style={{ marginBottom: '16px', color: 'var(--theme-warning)' }} />
               <h3 className="feature-title">Goals & Tax Tools</h3>
               <ul className="feature-list">
                 <li>Set and track savings goals</li>
@@ -218,7 +218,7 @@ export default function HomePage() {
               </ul>
             </div>
             <div className="feature-card">
-              <Shield size={48} style={{ marginBottom: '16px', color: '#ef4444' }} />
+              <Shield size={48} style={{ marginBottom: '16px', color: 'var(--theme-error)' }} />
               <h3 className="feature-title">Secure & Reliable</h3>
               <ul className="feature-list">
                 <li>Bank-level encryption</li>
