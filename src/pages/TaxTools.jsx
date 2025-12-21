@@ -106,7 +106,7 @@ export default function TaxTools() {
             background: 'rgba(255, 255, 255, 0.05)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
             borderRadius: '8px',
-            color: '#ffffff',
+            color: 'var(--theme-text)',
             fontSize: '14px'
           }}
         >
@@ -155,11 +155,11 @@ export default function TaxTools() {
             <tbody>
               {quarterlyData.map((q, index) => (
                 <tr key={q.quarter} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <td style={{ padding: '12px', color: '#ffffff', fontWeight: '600' }}>{q.quarter}</td>
+                  <td style={{ padding: '12px', color: 'var(--theme-text)', fontWeight: '600' }}>{q.quarter}</td>
                   <td style={{ padding: '12px', textAlign: 'right', color: '#34d399' }}>${q.income.toFixed(2)}</td>
                   <td style={{ padding: '12px', textAlign: 'right', color: '#f87171' }}>${q.expenses.toFixed(2)}</td>
-                  <td style={{ padding: '12px', textAlign: 'right', color: '#818cf8' }}>${q.taxable.toFixed(2)}</td>
-                  <td style={{ padding: '12px', textAlign: 'right', color: '#fbbf24', fontWeight: '600' }}>${q.tax.toFixed(2)}</td>
+                  <td style={{ padding: '12px', textAlign: 'right', color: 'var(--theme-info)' }}>${q.taxable.toFixed(2)}</td>
+                  <td style={{ padding: '12px', textAlign: 'right', color: 'var(--theme-warning)', fontWeight: '600' }}>${q.tax.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -269,7 +269,7 @@ export default function TaxTools() {
               padding: '20px'
             }}>
               <div style={{ fontSize: '32px', marginBottom: '12px' }}>{tip.icon}</div>
-              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', marginBottom: '8px' }}>{tip.title}</h3>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--theme-text)', marginBottom: '8px' }}>{tip.title}</h3>
               <p style={{ fontSize: '14px', color: '#9ca3af', lineHeight: '22px' }}>{tip.desc}</p>
             </div>
           ))}
