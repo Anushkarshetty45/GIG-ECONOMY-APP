@@ -945,7 +945,7 @@ export default function Export() {
     <div className="dashboard-page">
       <div style={{ marginBottom: '40px' }}>
         <h1 style={{
-          color: '#ffffff',
+          color: 'var(--theme-text)',
           fontSize: '32px',
           fontWeight: '700',
           marginBottom: '8px',
@@ -956,7 +956,7 @@ export default function Export() {
         }}>
           <Download size={36} strokeWidth={2.5} /> Export Financial Data
         </h1>
-        <p style={{ color: '#71717a', fontSize: '15px', marginLeft: '48px' }}>
+        <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '15px', marginLeft: '48px' }}>
           Generate professional reports and export your financial data
         </p>
       </div>
@@ -976,7 +976,7 @@ export default function Export() {
               marginBottom: '12px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#a1a1aa'
+              color: 'var(--theme-text-secondary)'
             }}>
               <FileText size={16} />
               What to Export
@@ -996,7 +996,7 @@ export default function Export() {
               marginBottom: '12px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#a1a1aa'
+              color: 'var(--theme-text-secondary)'
             }}>
               <Calendar size={16} />
               Date Range
@@ -1017,7 +1017,7 @@ export default function Export() {
               marginBottom: '12px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#a1a1aa'
+              color: 'var(--theme-text-secondary)'
             }}>
               <FileSpreadsheet size={16} />
               Format
@@ -1036,7 +1036,7 @@ export default function Export() {
             width: '100%',
             fontSize: '18px',
             padding: '18px',
-            background: 'linear-gradient(135deg, #52525b 0%, #71717a 100%)',
+            background: 'var(--theme-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1059,8 +1059,8 @@ export default function Export() {
             onClick={() => quickTemplate('tax')}
             style={{
               padding: '24px',
-              background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-              border: '1px solid #27272a',
+              background: 'var(--theme-surface)',
+              border: '1px solid var(--theme-border)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -1079,7 +1079,7 @@ export default function Export() {
               <Receipt size={24} color="#ef4444" strokeWidth={2} />
             </div>
             <div style={{ fontWeight: '600', fontSize: '15px' }}>Tax Preparation</div>
-            <div style={{ fontSize: '12px', color: '#71717a' }}>Year · CSV</div>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)' }}>Year · CSV</div>
           </button>
 
           <button
@@ -1087,8 +1087,8 @@ export default function Export() {
             onClick={() => quickTemplate('monthly')}
             style={{
               padding: '24px',
-              background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-              border: '1px solid #27272a',
+              background: 'var(--theme-surface)',
+              border: '1px solid var(--theme-border)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -1107,7 +1107,7 @@ export default function Export() {
               <Calendar size={24} color="#3b82f6" strokeWidth={2} />
             </div>
             <div style={{ fontWeight: '600', fontSize: '15px' }}>Monthly Report</div>
-            <div style={{ fontSize: '12px', color: '#71717a' }}>Month · PDF</div>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)' }}>Month · PDF</div>
           </button>
 
           <button
@@ -1115,8 +1115,8 @@ export default function Export() {
             onClick={() => quickTemplate('quarterly')}
             style={{
               padding: '24px',
-              background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-              border: '1px solid #27272a',
+              background: 'var(--theme-surface)',
+              border: '1px solid var(--theme-border)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -1135,7 +1135,7 @@ export default function Export() {
               <BarChart3 size={24} color="#a855f7" strokeWidth={2} />
             </div>
             <div style={{ fontWeight: '600', fontSize: '15px' }}>Quarterly Report</div>
-            <div style={{ fontSize: '12px', color: '#71717a' }}>Quarter · PDF</div>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)' }}>Quarter · PDF</div>
           </button>
 
           <button
@@ -1143,8 +1143,8 @@ export default function Export() {
             onClick={() => quickTemplate('yearend')}
             style={{
               padding: '24px',
-              background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-              border: '1px solid #27272a',
+              background: 'var(--theme-surface)',
+              border: '1px solid var(--theme-border)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -1163,10 +1163,10 @@ export default function Export() {
               <TrendingUp size={24} color="#10b981" strokeWidth={2} />
             </div>
             <div style={{ fontWeight: '600', fontSize: '15px' }}>Year-End Report</div>
-            <div style={{ fontSize: '12px', color: '#71717a' }}>Year · PDF</div>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)' }}>Year · PDF</div>
           </button>
         </div>
-        <p style={{ color: '#71717a', marginTop: '16px', fontSize: '14px', textAlign: 'center' }}>
+        <p style={{ color: 'var(--theme-text-tertiary)', marginTop: '16px', fontSize: '14px', textAlign: 'center' }}>
           Click a template to instantly generate and download that report
         </p>
       </div>
@@ -1179,22 +1179,22 @@ export default function Export() {
         <div className="summary-cards">
           <div className="summary-card">
             <div className="card-label">Income Entries</div>
-            <div className="card-value" style={{ color: '#10b981' }}>{incomes.length}</div>
+            <div className="card-value" style={{ color: 'var(--theme-success)' }}>{incomes.length}</div>
             <div className="card-sublabel">${getTotalIncome().toFixed(2)} total</div>
           </div>
           <div className="summary-card">
             <div className="card-label">Expense Entries</div>
-            <div className="card-value" style={{ color: '#ef4444' }}>{expenses.length}</div>
+            <div className="card-value" style={{ color: 'var(--theme-error)' }}>{expenses.length}</div>
             <div className="card-sublabel">${getTotalExpenses().toFixed(2)} total</div>
           </div>
           <div className="summary-card">
             <div className="card-label">Savings Goals</div>
-            <div className="card-value" style={{ color: '#818cf8' }}>{goals.length}</div>
+            <div className="card-value" style={{ color: 'var(--theme-info)' }}>{goals.length}</div>
             <div className="card-sublabel">Active goals</div>
           </div>
           <div className="summary-card">
             <div className="card-label">Total Transactions</div>
-            <div className="card-value" style={{ color: '#71717a' }}>{incomes.length + expenses.length}</div>
+            <div className="card-value" style={{ color: 'var(--theme-text-tertiary)' }}>{incomes.length + expenses.length}</div>
             <div className="card-sublabel">All time</div>
           </div>
         </div>
