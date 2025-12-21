@@ -352,8 +352,8 @@ export default function Insurance() {
         style={{
           background: type.hasThis
             ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%)'
-            : 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: `1px solid ${type.hasThis ? 'rgba(16, 185, 129, 0.3)' : '#27272a'}`,
+            : 'var(--theme-card)',
+          border: `1px solid ${type.hasThis ? 'rgba(16, 185, 129, 0.3)' : 'var(--theme-border)'}`,
           borderRadius: '16px',
           padding: '24px',
           cursor: 'pointer',
@@ -372,7 +372,8 @@ export default function Insurance() {
           alignItems: 'center',
           gap: '6px',
           padding: '6px 12px',
-          background: 'rgba(0, 0, 0, 0.5)',
+          background: 'var(--theme-background)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '8px',
           fontSize: '12px',
           fontWeight: '600',
@@ -439,7 +440,8 @@ export default function Insurance() {
         alignItems: 'center',
         marginBottom: '16px',
         padding: '12px',
-        background: 'rgba(0, 0, 0, 0.3)',
+        background: 'var(--theme-background)',
+        border: '1px solid var(--theme-border)',
         borderRadius: '10px'
       }}>
         <div>
@@ -469,7 +471,7 @@ export default function Insurance() {
         <div style={{
           marginTop: '20px',
           paddingTop: '20px',
-          borderTop: '1px solid #27272a'
+          borderTop: '1px solid var(--theme-border)'
         }}>
           <div style={{
             marginBottom: '16px',
