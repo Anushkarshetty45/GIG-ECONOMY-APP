@@ -2,6 +2,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { LayoutDashboard, DollarSign, CreditCard, Target, TrendingUp, Camera, Download, Calculator, Shield, Settings, LogOut } from 'lucide-react'
 import ThemeSwitcherModal from '../components/ThemeSwitcherModal'
+import AnimatedBackground from '../components/AnimatedBackground'
 import './DashboardLayout.css'
 
 export default function DashboardLayout() {
@@ -29,6 +30,7 @@ export default function DashboardLayout() {
 
   return (
     <div className="dashboard-layout">
+      <AnimatedBackground />
       <aside className="sidebar">
         <div className="sidebar-header">
           <h2>GIG ECONOMY</h2>
