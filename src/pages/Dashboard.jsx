@@ -101,7 +101,7 @@ export default function Dashboard() {
                       ></div>
                     </div>
                     <div className="goal-amounts">
-                      ${goal.currentAmount.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
+                      ${Number(goal.currentAmount || 0).toFixed(2)} / ${Number(goal.targetAmount || 0).toFixed(2)}
                     </div>
                   </div>
                 )
