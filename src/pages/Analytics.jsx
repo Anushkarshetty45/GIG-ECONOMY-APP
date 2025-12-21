@@ -126,11 +126,11 @@ export default function Analytics() {
   const currentMonthData = getCurrentMonthData()
 
   return (
-    <div className="dashboard-page" style={{ background: '#0a0a0a', minHeight: '100vh' }}>
+    <div className="dashboard-page" style={{ background: 'var(--theme-background)', minHeight: '100vh' }}>
       {/* Header */}
       <div style={{ marginBottom: '40px' }}>
         <h1 style={{
-          color: '#ffffff',
+          color: 'var(--theme-text)',
           fontSize: '32px',
           fontWeight: '700',
           marginBottom: '8px',
@@ -141,7 +141,7 @@ export default function Analytics() {
         }}>
           <TrendingUp size={36} strokeWidth={2.5} /> Analytics Dashboard
         </h1>
-        <p style={{ color: '#71717a', fontSize: '15px', marginLeft: '48px' }}>
+        <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '15px', marginLeft: '48px' }}>
           Comprehensive view of your financial performance
         </p>
       </div>
@@ -154,8 +154,8 @@ export default function Analytics() {
         marginBottom: '40px'
       }}>
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '24px',
           position: 'relative',
@@ -168,7 +168,7 @@ export default function Analytics() {
             right: 0,
             width: '100px',
             height: '100px',
-            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, transparent 0%, transparent 70%)',
             borderRadius: '50%',
             transform: 'translate(30%, -30%)'
           }} />
@@ -182,16 +182,16 @@ export default function Analytics() {
               <div style={{
                 width: '36px',
                 height: '36px',
-                background: 'rgba(16, 185, 129, 0.15)',
+                background: 'var(--theme-success)15',
                 borderRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <DollarSign size={20} color="#10b981" strokeWidth={2.5} />
+                <DollarSign size={20} color="var(--theme-success)" strokeWidth={2.5} />
               </div>
               <span style={{
-                color: '#71717a',
+                color: 'var(--theme-text-tertiary)',
                 fontSize: '13px',
                 fontWeight: '600',
                 textTransform: 'uppercase',
@@ -200,18 +200,18 @@ export default function Analytics() {
                 Total Income
               </span>
             </div>
-            <div style={{ color: '#10b981', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
+            <div style={{ color: 'var(--theme-success)', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
               ${totalIncome.toFixed(2)}
             </div>
-            <div style={{ color: '#52525b', fontSize: '13px', marginTop: '8px' }}>
+            <div style={{ color: 'var(--theme-text-secondary)', fontSize: '13px', marginTop: '8px' }}>
               All-time earnings
             </div>
           </div>
         </div>
 
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '24px',
           position: 'relative',
@@ -223,7 +223,7 @@ export default function Analytics() {
             right: 0,
             width: '100px',
             height: '100px',
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, transparent 0%, transparent 70%)',
             borderRadius: '50%',
             transform: 'translate(30%, -30%)'
           }} />
@@ -237,16 +237,16 @@ export default function Analytics() {
               <div style={{
                 width: '36px',
                 height: '36px',
-                background: 'rgba(239, 68, 68, 0.15)',
+                background: 'var(--theme-error)15',
                 borderRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <CreditCard size={20} color="#ef4444" strokeWidth={2.5} />
+                <CreditCard size={20} color="var(--theme-error)" strokeWidth={2.5} />
               </div>
               <span style={{
-                color: '#71717a',
+                color: 'var(--theme-text-tertiary)',
                 fontSize: '13px',
                 fontWeight: '600',
                 textTransform: 'uppercase',
@@ -255,18 +255,18 @@ export default function Analytics() {
                 Total Expenses
               </span>
             </div>
-            <div style={{ color: '#ef4444', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
+            <div style={{ color: 'var(--theme-error)', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
               ${totalExpenses.toFixed(2)}
             </div>
-            <div style={{ color: '#52525b', fontSize: '13px', marginTop: '8px' }}>
+            <div style={{ color: 'var(--theme-text-secondary)', fontSize: '13px', marginTop: '8px' }}>
               All-time spending
             </div>
           </div>
         </div>
 
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '24px',
           position: 'relative',
@@ -278,7 +278,7 @@ export default function Analytics() {
             right: 0,
             width: '100px',
             height: '100px',
-            background: `radial-gradient(circle, ${netIncome >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'} 0%, transparent 70%)`,
+            background: `radial-gradient(circle, transparent 0%, transparent 70%)`,
             borderRadius: '50%',
             transform: 'translate(30%, -30%)'
           }} />
@@ -292,16 +292,16 @@ export default function Analytics() {
               <div style={{
                 width: '36px',
                 height: '36px',
-                background: netIncome >= 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                background: netIncome >= 0 ? 'var(--theme-success)15' : 'var(--theme-error)15',
                 borderRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Wallet size={20} color={netIncome >= 0 ? '#10b981' : '#ef4444'} strokeWidth={2.5} />
+                <Wallet size={20} color={netIncome >= 0 ? 'var(--theme-success)' : 'var(--theme-error)'} strokeWidth={2.5} />
               </div>
               <span style={{
-                color: '#71717a',
+                color: 'var(--theme-text-tertiary)',
                 fontSize: '13px',
                 fontWeight: '600',
                 textTransform: 'uppercase',
@@ -310,18 +310,18 @@ export default function Analytics() {
                 Net Income
               </span>
             </div>
-            <div style={{ color: netIncome >= 0 ? '#10b981' : '#ef4444', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
+            <div style={{ color: netIncome >= 0 ? 'var(--theme-success)' : 'var(--theme-error)', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
               ${netIncome.toFixed(2)}
             </div>
-            <div style={{ color: '#52525b', fontSize: '13px', marginTop: '8px' }}>
+            <div style={{ color: 'var(--theme-text-secondary)', fontSize: '13px', marginTop: '8px' }}>
               {netIncome >= 0 ? 'Positive balance' : 'Negative balance'}
             </div>
           </div>
         </div>
 
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '24px',
           position: 'relative',
@@ -333,7 +333,7 @@ export default function Analytics() {
             right: 0,
             width: '100px',
             height: '100px',
-            background: `radial-gradient(circle, ${currentMonthData.net >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'} 0%, transparent 70%)`,
+            background: `radial-gradient(circle, transparent 0%, transparent 70%)`,
             borderRadius: '50%',
             transform: 'translate(30%, -30%)'
           }} />
@@ -347,16 +347,16 @@ export default function Analytics() {
               <div style={{
                 width: '36px',
                 height: '36px',
-                background: currentMonthData.net >= 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                background: currentMonthData.net >= 0 ? 'var(--theme-success)15' : 'var(--theme-error)15',
                 borderRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <TrendingDown size={20} color={currentMonthData.net >= 0 ? '#10b981' : '#ef4444'} strokeWidth={2.5} />
+                <TrendingDown size={20} color={currentMonthData.net >= 0 ? 'var(--theme-success)' : 'var(--theme-error)'} strokeWidth={2.5} />
               </div>
               <span style={{
-                color: '#71717a',
+                color: 'var(--theme-text-tertiary)',
                 fontSize: '13px',
                 fontWeight: '600',
                 textTransform: 'uppercase',
@@ -365,10 +365,10 @@ export default function Analytics() {
                 This Month Net
               </span>
             </div>
-            <div style={{ color: currentMonthData.net >= 0 ? '#10b981' : '#ef4444', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
+            <div style={{ color: currentMonthData.net >= 0 ? 'var(--theme-success)' : 'var(--theme-error)', fontSize: '36px', fontWeight: '700', letterSpacing: '-0.02em' }}>
               ${currentMonthData.net.toFixed(2)}
             </div>
-            <div style={{ color: '#52525b', fontSize: '13px', marginTop: '8px' }}>
+            <div style={{ color: 'var(--theme-text-secondary)', fontSize: '13px', marginTop: '8px' }}>
               Current month performance
             </div>
           </div>
@@ -378,15 +378,15 @@ export default function Analytics() {
       {/* Main Chart - Income vs Expenses */}
       <div style={{
         marginBottom: '40px',
-        background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-        border: '1px solid #27272a',
+        background: 'var(--theme-surface)',
+        border: '1px solid var(--theme-border)',
         borderRadius: '16px',
         padding: '32px',
-        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
       }}>
         <div style={{ marginBottom: '24px' }}>
           <h2 style={{
-            color: '#ffffff',
+            color: 'var(--theme-text)',
             fontSize: '20px',
             fontWeight: '700',
             marginBottom: '4px',
@@ -394,7 +394,7 @@ export default function Analytics() {
           }}>
             Income vs Expenses (Last 6 Months)
           </h2>
-          <p style={{ color: '#71717a', fontSize: '14px' }}>
+          <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '14px' }}>
             Track your financial performance over time
           </p>
         </div>
@@ -410,29 +410,29 @@ export default function Analytics() {
                 <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-border)" opacity={0.5} />
             <XAxis
               dataKey="month"
-              stroke="#71717a"
+              stroke="var(--theme-text-tertiary)"
               style={{ fontSize: '13px', fontWeight: '500' }}
               tickMargin={12}
             />
             <YAxis
-              stroke="#71717a"
+              stroke="var(--theme-text-tertiary)"
               style={{ fontSize: '13px', fontWeight: '500' }}
               tickMargin={8}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip
               contentStyle={{
-                background: '#09090b',
-                border: '1px solid #27272a',
+                background: 'var(--theme-surface)',
+                border: '1px solid var(--theme-border)',
                 borderRadius: '12px',
-                color: '#ffffff',
+                color: 'var(--theme-text)',
                 padding: '12px 16px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
               }}
-              labelStyle={{ color: '#a1a1aa', marginBottom: '8px', fontWeight: '600' }}
+              labelStyle={{ color: 'var(--theme-text-secondary)', marginBottom: '8px', fontWeight: '600' }}
               formatter={(value) => [`$${value.toFixed(2)}`, '']}
             />
             <Legend
@@ -445,7 +445,7 @@ export default function Analytics() {
               stroke="#ef4444"
               strokeWidth={3}
               name="Expenses"
-              dot={{ fill: '#ef4444', r: 5, strokeWidth: 2, stroke: '#18181b' }}
+              dot={{ fill: '#ef4444', r: 5, strokeWidth: 2, stroke: 'var(--theme-surface)' }}
               activeDot={{ r: 7 }}
             />
             <Line
@@ -454,7 +454,7 @@ export default function Analytics() {
               stroke="#10b981"
               strokeWidth={3}
               name="Income"
-              dot={{ fill: '#10b981', r: 5, strokeWidth: 2, stroke: '#18181b' }}
+              dot={{ fill: '#10b981', r: 5, strokeWidth: 2, stroke: 'var(--theme-surface)' }}
               activeDot={{ r: 7 }}
             />
             <Line
@@ -463,7 +463,7 @@ export default function Analytics() {
               stroke="#818cf8"
               strokeWidth={3}
               name="Net"
-              dot={{ fill: '#818cf8', r: 5, strokeWidth: 2, stroke: '#18181b' }}
+              dot={{ fill: '#818cf8', r: 5, strokeWidth: 2, stroke: 'var(--theme-surface)' }}
               activeDot={{ r: 7 }}
             />
           </LineChart>
@@ -475,15 +475,15 @@ export default function Analytics() {
         {/* Income by Platform */}
         {platformData.length > 0 && (
           <div style={{
-            background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-            border: '1px solid #27272a',
+            background: 'var(--theme-surface)',
+            border: '1px solid var(--theme-border)',
             borderRadius: '16px',
             padding: '28px',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
           }}>
             <div style={{ marginBottom: '20px' }}>
               <h2 style={{
-                color: '#ffffff',
+                color: 'var(--theme-text)',
                 fontSize: '18px',
                 fontWeight: '700',
                 marginBottom: '4px',
@@ -491,7 +491,7 @@ export default function Analytics() {
               }}>
                 Income by Platform (This Month)
               </h2>
-              <p style={{ color: '#71717a', fontSize: '13px' }}>
+              <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '13px' }}>
                 Breakdown of income sources
               </p>
             </div>
@@ -502,7 +502,7 @@ export default function Analytics() {
                   cx="50%"
                   cy="50%"
                   labelLine={{
-                    stroke: '#71717a',
+                    stroke: 'var(--theme-text-tertiary)',
                     strokeWidth: 1
                   }}
                   label={(props) => {
@@ -516,7 +516,7 @@ export default function Analytics() {
                       <text
                         x={x}
                         y={y}
-                        fill="#ffffff"
+                        fill="var(--theme-text)"
                         textAnchor={x > cx ? 'start' : 'end'}
                         dominantBaseline="central"
                         style={{ fontSize: '14px', fontWeight: 600 }}
@@ -529,7 +529,7 @@ export default function Analytics() {
                   fill="#8884d8"
                   dataKey="value"
                   strokeWidth={2}
-                  stroke="#18181b"
+                  stroke="var(--theme-surface)"
                 >
                   {platformData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -537,14 +537,14 @@ export default function Analytics() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    background: '#18181b',
-                    border: '1px solid #27272a',
+                    background: 'var(--theme-surface)',
+                    border: '1px solid var(--theme-border)',
                     borderRadius: '12px',
                     padding: '12px 16px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                   }}
-                  itemStyle={{ color: '#ffffff', fontWeight: 600 }}
-                  labelStyle={{ color: '#a1a1aa', marginBottom: '8px', fontWeight: 600 }}
+                  itemStyle={{ color: 'var(--theme-text)', fontWeight: 600 }}
+                  labelStyle={{ color: 'var(--theme-text-secondary)', marginBottom: '8px', fontWeight: 600 }}
                   formatter={(value, name) => [`$${value.toFixed(2)}`, name]}
                 />
               </PieChart>
@@ -555,15 +555,15 @@ export default function Analytics() {
         {/* Expenses by Category */}
         {categoryData.length > 0 && (
           <div style={{
-            background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-            border: '1px solid #27272a',
+            background: 'var(--theme-surface)',
+            border: '1px solid var(--theme-border)',
             borderRadius: '16px',
             padding: '28px',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
           }}>
             <div style={{ marginBottom: '20px' }}>
               <h2 style={{
-                color: '#ffffff',
+                color: 'var(--theme-text)',
                 fontSize: '18px',
                 fontWeight: '700',
                 marginBottom: '4px',
@@ -571,16 +571,16 @@ export default function Analytics() {
               }}>
                 Expenses by Category (This Month)
               </h2>
-              <p style={{ color: '#71717a', fontSize: '13px' }}>
+              <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '13px' }}>
                 Top spending categories
               </p>
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={categoryData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-border)" opacity={0.5} />
                 <XAxis
                   dataKey="name"
-                  stroke="#71717a"
+                  stroke="var(--theme-text-tertiary)"
                   style={{ fontSize: '12px', fontWeight: '500' }}
                   angle={-45}
                   textAnchor="end"
@@ -588,19 +588,19 @@ export default function Analytics() {
                   tickMargin={8}
                 />
                 <YAxis
-                  stroke="#71717a"
+                  stroke="var(--theme-text-tertiary)"
                   style={{ fontSize: '12px', fontWeight: '500' }}
                   tickMargin={8}
                   tickFormatter={(value) => `$${value}`}
                 />
                 <Tooltip
                   contentStyle={{
-                    background: '#09090b',
-                    border: '1px solid #27272a',
+                    background: 'var(--theme-surface)',
+                    border: '1px solid var(--theme-border)',
                     borderRadius: '12px',
-                    color: '#ffffff',
+                    color: 'var(--theme-text)',
                     padding: '12px 16px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                   }}
                   formatter={(value) => [`$${value.toFixed(2)}`, '']}
                   cursor={{ fill: 'rgba(239, 68, 68, 0.1)' }}
@@ -621,15 +621,15 @@ export default function Analytics() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '40px' }}>
         {/* Income Trend */}
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '28px',
-          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
         }}>
           <div style={{ marginBottom: '20px' }}>
             <h2 style={{
-              color: '#ffffff',
+              color: 'var(--theme-text)',
               fontSize: '18px',
               fontWeight: '700',
               marginBottom: '4px',
@@ -637,7 +637,7 @@ export default function Analytics() {
             }}>
               Income Trend
             </h2>
-            <p style={{ color: '#71717a', fontSize: '13px' }}>
+            <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '13px' }}>
               Monthly income performance
             </p>
           </div>
@@ -649,27 +649,27 @@ export default function Analytics() {
                   <stop offset="100%" stopColor="#059669" stopOpacity={1}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-border)" opacity={0.5} />
               <XAxis
                 dataKey="month"
-                stroke="#71717a"
+                stroke="var(--theme-text-tertiary)"
                 style={{ fontSize: '12px', fontWeight: '500' }}
                 tickMargin={10}
               />
               <YAxis
-                stroke="#71717a"
+                stroke="var(--theme-text-tertiary)"
                 style={{ fontSize: '12px', fontWeight: '500' }}
                 tickMargin={8}
                 tickFormatter={(value) => `$${value}`}
               />
               <Tooltip
                 contentStyle={{
-                  background: '#09090b',
-                  border: '1px solid #27272a',
+                  background: 'var(--theme-surface)',
+                  border: '1px solid var(--theme-border)',
                   borderRadius: '12px',
-                  color: '#ffffff',
+                  color: 'var(--theme-text)',
                   padding: '12px 16px',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                 }}
                 formatter={(value) => [`$${value.toFixed(2)}`, '']}
                 cursor={{ fill: 'rgba(16, 185, 129, 0.1)' }}
@@ -686,15 +686,15 @@ export default function Analytics() {
 
         {/* Expense Trend */}
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '28px',
-          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
         }}>
           <div style={{ marginBottom: '20px' }}>
             <h2 style={{
-              color: '#ffffff',
+              color: 'var(--theme-text)',
               fontSize: '18px',
               fontWeight: '700',
               marginBottom: '4px',
@@ -702,7 +702,7 @@ export default function Analytics() {
             }}>
               Expense Trend
             </h2>
-            <p style={{ color: '#71717a', fontSize: '13px' }}>
+            <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '13px' }}>
               Monthly spending pattern
             </p>
           </div>
@@ -714,27 +714,27 @@ export default function Analytics() {
                   <stop offset="100%" stopColor="#dc2626" stopOpacity={1}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-border)" opacity={0.5} />
               <XAxis
                 dataKey="month"
-                stroke="#71717a"
+                stroke="var(--theme-text-tertiary)"
                 style={{ fontSize: '12px', fontWeight: '500' }}
                 tickMargin={10}
               />
               <YAxis
-                stroke="#71717a"
+                stroke="var(--theme-text-tertiary)"
                 style={{ fontSize: '12px', fontWeight: '500' }}
                 tickMargin={8}
                 tickFormatter={(value) => `$${value}`}
               />
               <Tooltip
                 contentStyle={{
-                  background: '#09090b',
-                  border: '1px solid #27272a',
+                  background: 'var(--theme-surface)',
+                  border: '1px solid var(--theme-border)',
                   borderRadius: '12px',
-                  color: '#ffffff',
+                  color: 'var(--theme-text)',
                   padding: '12px 16px',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                 }}
                 formatter={(value) => [`$${value.toFixed(2)}`, '']}
                 cursor={{ fill: 'rgba(239, 68, 68, 0.1)' }}
@@ -753,27 +753,27 @@ export default function Analytics() {
       {/* Empty State */}
       {incomes.length === 0 && expenses.length === 0 && (
         <div style={{
-          background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-          border: '1px solid #27272a',
+          background: 'var(--theme-surface)',
+          border: '1px solid var(--theme-border)',
           borderRadius: '16px',
           padding: '60px 24px',
           textAlign: 'center',
-          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
         }}>
           <div style={{
             width: '80px',
             height: '80px',
-            background: 'rgba(113, 113, 122, 0.1)',
+            background: 'var(--theme-border)',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 24px'
           }}>
-            <TrendingUp size={40} color="#71717a" strokeWidth={2} />
+            <TrendingUp size={40} color="var(--theme-text-tertiary)" strokeWidth={2} />
           </div>
           <h3 style={{
-            color: '#ffffff',
+            color: 'var(--theme-text)',
             fontSize: '20px',
             fontWeight: '700',
             marginBottom: '8px',
@@ -782,7 +782,7 @@ export default function Analytics() {
             No Data Yet
           </h3>
           <p style={{
-            color: '#71717a',
+            color: 'var(--theme-text-tertiary)',
             fontSize: '15px',
             lineHeight: '1.6',
             maxWidth: '400px',
