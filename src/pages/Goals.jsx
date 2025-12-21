@@ -115,7 +115,7 @@ export default function Goals() {
         <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Target size={32} /> Savings Goals
         </h1>
-        <div style={{ fontSize: '24px', fontWeight: '700', color: '#71717a' }}>
+        <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--theme-text-tertiary)' }}>
           {goals.length} {goals.length === 1 ? 'Goal' : 'Goals'}
         </div>
       </div>
@@ -124,22 +124,22 @@ export default function Goals() {
         <div className="summary-cards" style={{ marginBottom: '32px' }}>
           <div className="summary-card">
             <div className="card-label">Total Saved</div>
-            <div className="card-value" style={{ color: '#10b981' }}>${getTotalSaved().toFixed(2)}</div>
+            <div className="card-value" style={{ color: 'var(--theme-success)' }}>${getTotalSaved().toFixed(2)}</div>
             <div className="card-sublabel">Across all goals</div>
           </div>
           <div className="summary-card">
             <div className="card-label">Total Target</div>
-            <div className="card-value" style={{ color: '#71717a' }}>${getTotalTarget().toFixed(2)}</div>
+            <div className="card-value" style={{ color: 'var(--theme-text-tertiary)' }}>${getTotalTarget().toFixed(2)}</div>
             <div className="card-sublabel">Combined goals</div>
           </div>
           <div className="summary-card">
             <div className="card-label">Overall Progress</div>
-            <div className="card-value" style={{ color: '#818cf8' }}>{getOverallProgress().toFixed(1)}%</div>
+            <div className="card-value" style={{ color: 'var(--theme-info)' }}>{getOverallProgress().toFixed(1)}%</div>
             <div className="card-sublabel">Total completion</div>
           </div>
           <div className="summary-card">
             <div className="card-label">Remaining</div>
-            <div className="card-value" style={{ color: '#ef4444' }}>${(getTotalTarget() - getTotalSaved()).toFixed(2)}</div>
+            <div className="card-value" style={{ color: 'var(--theme-error)' }}>${(getTotalTarget() - getTotalSaved()).toFixed(2)}</div>
             <div className="card-sublabel">To reach all goals</div>
           </div>
         </div>
@@ -241,12 +241,12 @@ export default function Goals() {
                     <div style={{
                       width: '48px',
                       height: '48px',
-                      background: isCompleted ? 'rgba(16, 185, 129, 0.15)' : 'rgba(113, 113, 122, 0.15)',
+                      background: isCompleted ? 'var(--theme-success)15' : 'var(--theme-border)',
                       borderRadius: '8px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: isCompleted ? '#10b981' : '#71717a',
+                      color: isCompleted ? 'var(--theme-success)' : 'var(--theme-text-tertiary)',
                       flexShrink: 0
                     }}>
                       {getCategoryIcon(goal.category || goal.name)}
@@ -254,10 +254,10 @@ export default function Goals() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '18px', fontWeight: '600', color: '#ffffff', marginBottom: '4px' }}>
+                          <div style={{ fontSize: '18px', fontWeight: '600', color: 'var(--theme-text)', marginBottom: '4px' }}>
                             {goal.name}
                           </div>
-                          <div style={{ fontSize: '13px', color: '#71717a' }}>
+                          <div style={{ fontSize: '13px', color: 'var(--theme-text-tertiary)' }}>
                             {goal.category || 'Savings Goal'}
                           </div>
                         </div>
@@ -278,9 +278,9 @@ export default function Goals() {
                         <div style={{
                           marginBottom: '16px',
                           padding: '16px',
-                          background: '#09090b',
+                          background: 'var(--theme-surface)',
                           borderRadius: '8px',
-                          border: '1px solid #27272a'
+                          border: '1px solid var(--theme-border)'
                         }}>
                           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end' }}>
                             <div className="form-field" style={{ flex: 1, marginBottom: 0 }}>
@@ -308,16 +308,16 @@ export default function Goals() {
 
                       <div style={{ marginBottom: '12px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                          <span style={{ fontSize: '14px', color: '#a1a1aa' }}>
+                          <span style={{ fontSize: '14px', color: 'var(--theme-text-secondary)' }}>
                             ${goal.currentAmount.toFixed(2)} of ${goal.targetAmount.toFixed(2)}
                           </span>
-                          <span style={{ fontSize: '14px', fontWeight: '600', color: isCompleted ? '#10b981' : '#71717a' }}>
+                          <span style={{ fontSize: '14px', fontWeight: '600', color: isCompleted ? 'var(--theme-success)' : 'var(--theme-text-tertiary)' }}>
                             {progress.toFixed(1)}%
                           </span>
                         </div>
                         <div style={{
                           height: '10px',
-                          background: '#27272a',
+                          background: 'var(--theme-border)',
                           borderRadius: '5px',
                           overflow: 'hidden'
                         }}>
@@ -325,8 +325,8 @@ export default function Goals() {
                             height: '100%',
                             width: `${Math.min(progress, 100)}%`,
                             background: isCompleted ?
-                              'linear-gradient(90deg, #10b981 0%, #059669 100%)' :
-                              'linear-gradient(90deg, #52525b 0%, #71717a 100%)',
+                              'var(--theme-success)' :
+                              'var(--theme-text-tertiary)',
                             transition: 'width 0.3s ease',
                             borderRadius: '5px'
                           }}></div>
@@ -335,19 +335,19 @@ export default function Goals() {
 
                       <div style={{ display: 'flex', gap: '20px', fontSize: '14px', flexWrap: 'wrap' }}>
                         {!isCompleted && (
-                          <div style={{ color: '#a1a1aa' }}>
-                            <span style={{ color: '#71717a', fontWeight: '500' }}>Remaining: </span>
+                          <div style={{ color: 'var(--theme-text-secondary)' }}>
+                            <span style={{ color: 'var(--theme-text-tertiary)', fontWeight: '500' }}>Remaining: </span>
                             ${remaining.toFixed(2)}
                           </div>
                         )}
                         {isCompleted && (
-                          <div style={{ color: '#10b981', fontWeight: '600' }}>
+                          <div style={{ color: 'var(--theme-success)', fontWeight: '600' }}>
                             ✓ Goal Completed!
                           </div>
                         )}
                         {goal.deadline && (
-                          <div style={{ color: '#a1a1aa' }}>
-                            <span style={{ color: '#71717a', fontWeight: '500' }}>Deadline: </span>
+                          <div style={{ color: 'var(--theme-text-secondary)' }}>
+                            <span style={{ color: 'var(--theme-text-tertiary)', fontWeight: '500' }}>Deadline: </span>
                             {new Date(goal.deadline).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',
@@ -361,14 +361,14 @@ export default function Goals() {
                         <div style={{
                           marginTop: '12px',
                           padding: '12px',
-                          background: '#09090b',
+                          background: 'var(--theme-surface)',
                           borderRadius: '6px',
-                          border: '1px solid #27272a'
+                          border: '1px solid var(--theme-border)'
                         }}>
-                          <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px', fontWeight: '500' }}>
+                          <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px', fontWeight: '500' }}>
                             Notes
                           </div>
-                          <div style={{ fontSize: '14px', color: '#a1a1aa', lineHeight: '1.5' }}>
+                          <div style={{ fontSize: '14px', color: 'var(--theme-text-secondary)', lineHeight: '1.5' }}>
                             {goal.notes}
                           </div>
                         </div>
