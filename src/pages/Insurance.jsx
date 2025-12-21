@@ -415,7 +415,7 @@ export default function Insurance() {
       <h3 style={{
         fontSize: '20px',
         fontWeight: '700',
-        color: '#ffffff',
+        color: 'var(--theme-text)',
         marginBottom: '8px',
         letterSpacing: '-0.01em'
       }}>
@@ -425,7 +425,7 @@ export default function Insurance() {
       {/* Description */}
       <p style={{
         fontSize: '14px',
-        color: '#a1a1aa',
+        color: 'var(--theme-text-secondary)',
         marginBottom: '16px',
         lineHeight: '1.6'
       }}>
@@ -443,8 +443,8 @@ export default function Insurance() {
         borderRadius: '10px'
       }}>
         <div>
-          <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px' }}>Avg. Cost</div>
-          <div style={{ fontSize: '18px', fontWeight: '700', color: '#ffffff' }}>
+          <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px' }}>Avg. Cost</div>
+          <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--theme-text)' }}>
             ${type.avgCost}/mo
           </div>
         </div>
@@ -481,7 +481,7 @@ export default function Insurance() {
             <h4 style={{
               fontSize: '14px',
               fontWeight: '700',
-              color: '#10b981',
+              color: 'var(--theme-success)',
               marginBottom: '8px',
               display: 'flex',
               alignItems: 'center',
@@ -492,7 +492,7 @@ export default function Insurance() {
               <Info size={16} />
               Why It's Important
             </h4>
-            <p style={{ fontSize: '13px', color: '#d4d4d8', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '13px', color: 'var(--theme-text-secondary)', lineHeight: '1.6' }}>
               {type.whyImportant}
             </p>
           </div>
@@ -518,7 +518,7 @@ export default function Insurance() {
               <CheckCircle size={16} />
               What's Covered
             </h4>
-            <p style={{ fontSize: '13px', color: '#d4d4d8', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '13px', color: 'var(--theme-text-secondary)', lineHeight: '1.6' }}>
               {type.coverage}
             </p>
           </div>
@@ -544,7 +544,7 @@ export default function Insurance() {
               <TrendingUp size={16} />
               Recommendation
             </h4>
-            <p style={{ fontSize: '13px', color: '#d4d4d8', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '13px', color: 'var(--theme-text-secondary)', lineHeight: '1.6' }}>
               {type.recommended}
             </p>
           </div>
@@ -584,7 +584,7 @@ export default function Insurance() {
       {/* Header */}
       <div style={{ marginBottom: '40px' }}>
         <h1 style={{
-          color: '#ffffff',
+          color: 'var(--theme-text)',
           fontSize: '32px',
           fontWeight: '700',
           marginBottom: '8px',
@@ -595,7 +595,7 @@ export default function Insurance() {
         }}>
           <Shield size={36} strokeWidth={2.5} /> Smart Insurance Advisor
         </h1>
-        <p style={{ color: '#71717a', fontSize: '15px', marginLeft: '48px' }}>
+        <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '15px', marginLeft: '48px' }}>
           AI-powered recommendations based on your income and expenses
         </p>
       </div>
@@ -604,14 +604,14 @@ export default function Insurance() {
       <div style={{
         marginBottom: '32px',
         padding: '24px',
-        background: 'linear-gradient(135deg, #18181b 0%, #0f0f10 100%)',
-        border: '1px solid #27272a',
+        background: 'var(--theme-surface)',
+        border: '1px solid var(--theme-border)',
         borderRadius: '16px'
       }}>
         <h2 style={{
           fontSize: '18px',
           fontWeight: '700',
-          color: '#ffffff',
+          color: 'var(--theme-text)',
           marginBottom: '16px',
           display: 'flex',
           alignItems: 'center',
@@ -622,28 +622,28 @@ export default function Insurance() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
           <div>
-            <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px' }}>Monthly Income</div>
-            <div style={{ fontSize: '20px', fontWeight: '700', color: '#10b981' }}>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px' }}>Monthly Income</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--theme-success)' }}>
               ${monthlyIncome.toFixed(0)}
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px' }}>Monthly Expenses</div>
-            <div style={{ fontSize: '20px', fontWeight: '700', color: '#ef4444' }}>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px' }}>Monthly Expenses</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--theme-error)' }}>
               ${monthlyExpenses.toFixed(0)}
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px' }}>Insurance Budget</div>
-            <div style={{ fontSize: '20px', fontWeight: '700', color: '#818cf8' }}>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px' }}>Insurance Budget</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--theme-info)' }}>
               ${totalMonthlyCost.toFixed(0)}/mo
-              <span style={{ fontSize: '12px', color: '#71717a', marginLeft: '4px' }}>
+              <span style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginLeft: '4px' }}>
                 ({insuranceBudgetPercentage.toFixed(1)}%)
               </span>
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '12px', color: '#71717a', marginBottom: '4px' }}>Savings Rate</div>
+            <div style={{ fontSize: '12px', color: 'var(--theme-text-tertiary)', marginBottom: '4px' }}>Savings Rate</div>
             <div style={{
               fontSize: '20px',
               fontWeight: '700',
@@ -659,22 +659,22 @@ export default function Insurance() {
       <div className="summary-cards" style={{ marginBottom: '32px' }}>
         <div className="summary-card">
           <div className="card-label">Active Policies</div>
-          <div className="card-value" style={{ color: '#10b981' }}>{activePolicies}</div>
+          <div className="card-value" style={{ color: 'var(--theme-success)' }}>{activePolicies}</div>
           <div className="card-sublabel">Insurance types</div>
         </div>
         <div className="summary-card">
           <div className="card-label">Monthly Cost</div>
-          <div className="card-value" style={{ color: '#71717a' }}>${totalMonthlyCost.toFixed(2)}</div>
+          <div className="card-value" style={{ color: 'var(--theme-text-tertiary)' }}>${totalMonthlyCost.toFixed(2)}</div>
           <div className="card-sublabel">Per month</div>
         </div>
         <div className="summary-card">
           <div className="card-label">Annual Cost</div>
-          <div className="card-value" style={{ color: '#818cf8' }}>${totalAnnualCost.toFixed(2)}</div>
+          <div className="card-value" style={{ color: 'var(--theme-info)' }}>${totalAnnualCost.toFixed(2)}</div>
           <div className="card-sublabel">Per year</div>
         </div>
         <div className="summary-card">
           <div className="card-label">High Priority</div>
-          <div className="card-value" style={{ color: '#ef4444' }}>
+          <div className="card-value" style={{ color: 'var(--theme-error)' }}>
             {categorizedInsurances.high.filter(i => !i.hasThis).length}
           </div>
           <div className="card-sublabel">Recommendations</div>
@@ -699,7 +699,7 @@ export default function Insurance() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px', alignItems: 'start' }}>
             <div className="form-field" style={{ marginBottom: 0 }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#a1a1aa' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: 'var(--theme-text-secondary)' }}>
                 Insurance Type *
               </label>
               <select
@@ -717,7 +717,7 @@ export default function Insurance() {
             </div>
 
             <div className="form-field" style={{ marginBottom: 0 }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#a1a1aa' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: 'var(--theme-text-secondary)' }}>
                 Provider *
               </label>
               <input
@@ -733,7 +733,7 @@ export default function Insurance() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px', alignItems: 'start' }}>
             <div className="form-field" style={{ marginBottom: 0 }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#a1a1aa' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: 'var(--theme-text-secondary)' }}>
                 Policy Number (Optional)
               </label>
               <input
@@ -746,7 +746,7 @@ export default function Insurance() {
             </div>
 
             <div className="form-field" style={{ marginBottom: 0 }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#a1a1aa' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: 'var(--theme-text-secondary)' }}>
                 Monthly Cost *
               </label>
               <input
@@ -763,7 +763,7 @@ export default function Insurance() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px', alignItems: 'start' }}>
             <div className="form-field" style={{ marginBottom: 0 }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#a1a1aa' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: 'var(--theme-text-secondary)' }}>
                 Coverage Amount/Details (Optional)
               </label>
               <input
@@ -776,7 +776,7 @@ export default function Insurance() {
             </div>
 
             <div className="form-field" style={{ marginBottom: 0 }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#a1a1aa' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: 'var(--theme-text-secondary)' }}>
                 Renewal Date (Optional)
               </label>
               <input
@@ -831,7 +831,7 @@ export default function Insurance() {
                         <div className="item-title" style={{ fontSize: '18px', fontWeight: '600' }}>
                           {typeInfo.label}
                         </div>
-                        <div style={{ fontSize: '24px', fontWeight: '700', color: '#71717a', marginTop: '8px' }}>
+                        <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--theme-text-tertiary)', marginTop: '8px' }}>
                           ${policy.monthlyCost.toFixed(2)}/mo
                         </div>
                         <div style={{ fontSize: '14px', color: '#9ca3af', marginTop: '4px' }}>
@@ -882,12 +882,12 @@ export default function Insurance() {
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
-            color: '#ef4444'
+            color: 'var(--theme-error)'
           }}>
             <AlertTriangle size={20} />
             High Priority - Essential Coverage
           </h2>
-          <p style={{ color: '#a1a1aa', marginBottom: '24px', fontSize: '14px' }}>
+          <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '24px', fontSize: '14px' }}>
             These insurance types are critical for your financial protection. Strongly recommended based on your income of ${monthlyIncome.toFixed(0)}/month.
           </p>
           <div style={{
@@ -912,7 +912,7 @@ export default function Insurance() {
             <Info size={20} />
             Medium Priority - Important Protection
           </h2>
-          <p style={{ color: '#a1a1aa', marginBottom: '24px', fontSize: '14px' }}>
+          <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '24px', fontSize: '14px' }}>
             These policies provide valuable protection and should be considered as your business grows.
           </p>
           <div style={{
@@ -932,12 +932,12 @@ export default function Insurance() {
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
-            color: '#71717a'
+            color: 'var(--theme-text-tertiary)'
           }}>
             <Activity size={20} />
             Low Priority - Optional Coverage
           </h2>
-          <p style={{ color: '#a1a1aa', marginBottom: '24px', fontSize: '14px' }}>
+          <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '24px', fontSize: '14px' }}>
             These are optional coverages that may become more relevant as your income increases.
           </p>
           <div style={{
