@@ -423,3 +423,144 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ========== ANIMATIONS ========== */
+
+/* Page entrance animations */
+.dashboard-page {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.summary-card {
+  animation: fadeInScale 0.5s ease-out backwards;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.summary-card:nth-child(1) { animation-delay: 0.1s; }
+.summary-card:nth-child(2) { animation-delay: 0.2s; }
+.summary-card:nth-child(3) { animation-delay: 0.3s; }
+.summary-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hover effects */
+.summary-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.action-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.action-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.action-button:active {
+  transform: translateY(0);
+}
+
+/* Data item animations */
+.data-item {
+  animation: slideInRight 0.4s ease-out backwards;
+  transition: all 0.3s ease;
+}
+
+.data-item:nth-child(1) { animation-delay: 0.05s; }
+.data-item:nth-child(2) { animation-delay: 0.1s; }
+.data-item:nth-child(3) { animation-delay: 0.15s; }
+.data-item:nth-child(4) { animation-delay: 0.2s; }
+.data-item:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.data-item:hover {
+  transform: translateX(5px);
+  box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Button animations */
+.btn-submit,
+.btn-delete,
+.btn-edit,
+.btn-cancel {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-submit:active,
+.btn-delete:active,
+.btn-edit:active,
+.btn-cancel:active {
+  transform: scale(0.98);
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color 0.4s ease,
+              color 0.4s ease,
+              border-color 0.4s ease !important;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
