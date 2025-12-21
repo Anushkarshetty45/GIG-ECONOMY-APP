@@ -137,9 +137,19 @@ export const useFinanceStore = create(
       },
 
       deleteReceipt: (id) => {
+        // Find the receipt to get the linked expense ID
+        const receipt = get().receipts.find((r) => r.id === id);
+
+        // Delete the receipt
         set((state) => ({
           receipts: state.receipts.filter((receipt) => receipt.id !== id),
         }));
+
+        // If receipt has a linked expense, delete it too
+        if (receipt && receipt.expenseId) {
+          console.log('Deleting linked expense:', receipt.expenseId);
+          get().deleteExpense(receipt.expenseId);
+        }
       },
 
       // Computed values

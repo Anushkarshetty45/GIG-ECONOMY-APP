@@ -9,65 +9,137 @@ export default function Receipts() {
   const [selectedReceipt, setSelectedReceipt] = useState(null)
   const [ocrProgress, setOcrProgress] = useState(0)
 
-  // Image preprocessing function to improve OCR accuracy
+  // Optimized image preprocessing for receipt OCR with error handling
   const preprocessImage = (imageUri) => {
     return new Promise((resolve, reject) => {
       const img = new Image()
+
       img.onload = () => {
-        // Create canvas
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
+        try {
+          console.log('🖼️  Preprocessing image for OCR...')
+          console.log('   Original:', img.width, 'x', img.height)
 
-        // Set canvas size - scale up small images for better OCR
-        const scaleFactor = Math.max(1, 2000 / Math.max(img.width, img.height))
-        canvas.width = img.width * scaleFactor
-        canvas.height = img.height * scaleFactor
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
 
-        // Draw image
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+          // Scale to 2400px (good balance of quality and performance)
+          const maxDimension = 2400
+          const scale = Math.max(1, maxDimension / Math.max(img.width, img.height))
+          canvas.width = Math.floor(img.width * scale)
+          canvas.height = Math.floor(img.height * scale)
 
-        // Get image data
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const data = imageData.data
+          console.log('   Scaled to:', canvas.width, 'x', canvas.height)
 
-        // Apply preprocessing: Convert to grayscale and increase contrast
-        for (let i = 0; i < data.length; i += 4) {
-          // Convert to grayscale
-          const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114
+          // Draw with high quality
+          ctx.imageSmoothingEnabled = true
+          ctx.imageSmoothingQuality = 'high'
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 
-          // Increase contrast (make darks darker, lights lighter)
-          let adjusted = gray
-          if (gray < 128) {
-            adjusted = Math.max(0, gray - 30)  // Darken dark areas
-          } else {
-            adjusted = Math.min(255, gray + 30)  // Lighten light areas
+          // Get pixel data
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+          const len = data.length
+
+          console.log('   Converting to high-contrast black & white...')
+
+          // Step 1: Convert to grayscale
+          for (let i = 0; i < len; i += 4) {
+            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3
+            data[i] = data[i + 1] = data[i + 2] = avg
           }
 
-          // Apply sharpening by enhancing edges
-          const sharpen = adjusted * 1.2
-          const final = Math.min(255, Math.max(0, sharpen))
+          // Step 2: Calculate average brightness for threshold
+          let sum = 0
+          for (let i = 0; i < len; i += 4) {
+            sum += data[i]
+          }
+          const avgBrightness = sum / (len / 4)
+          const threshold = avgBrightness * 0.75  // Adaptive threshold
 
-          data[i] = final      // R
-          data[i + 1] = final  // G
-          data[i + 2] = final  // B
-          // Alpha stays the same
+          console.log('   Brightness threshold:', threshold.toFixed(0))
+
+          // Step 3: Apply threshold (convert to pure black/white)
+          for (let i = 0; i < len; i += 4) {
+            const value = data[i] > threshold ? 255 : 0
+            data[i] = data[i + 1] = data[i + 2] = value
+          }
+
+          // Step 4: Simple denoising - remove isolated pixels
+          const width = canvas.width
+          const height = canvas.height
+          const cleaned = new Uint8ClampedArray(data)
+
+          for (let y = 1; y < height - 1; y++) {
+            for (let x = 1; x < width - 1; x++) {
+              const idx = (y * width + x) * 4
+
+              if (data[idx] === 0) {  // Black pixel
+                // Count black neighbors
+                let blackCount = 0
+                for (let dy = -1; dy <= 1; dy++) {
+                  for (let dx = -1; dx <= 1; dx++) {
+                    const nIdx = ((y + dy) * width + (x + dx)) * 4
+                    if (data[nIdx] === 0) blackCount++
+                  }
+                }
+                // Remove if too few black neighbors (likely noise)
+                if (blackCount < 3) {
+                  cleaned[idx] = cleaned[idx + 1] = cleaned[idx + 2] = 255
+                }
+              }
+            }
+          }
+
+          // Apply cleaned data
+          for (let i = 0; i < len; i++) {
+            data[i] = cleaned[i]
+          }
+
+          // Step 5: Slight sharpening for text clarity
+          console.log('   Sharpening text...')
+          const sharpened = new Uint8ClampedArray(data)
+
+          for (let y = 1; y < height - 1; y++) {
+            for (let x = 1; x < width - 1; x++) {
+              const idx = (y * width + x) * 4
+
+              // Simple sharpening kernel
+              const center = data[idx] * 5
+              const edges =
+                data[((y-1) * width + x) * 4] +      // top
+                data[((y+1) * width + x) * 4] +      // bottom
+                data[(y * width + (x-1)) * 4] +      // left
+                data[(y * width + (x+1)) * 4]        // right
+
+              const value = Math.min(255, Math.max(0, center - edges))
+              sharpened[idx] = sharpened[idx + 1] = sharpened[idx + 2] = value
+            }
+          }
+
+          // Apply sharpened data
+          for (let i = 0; i < len; i++) {
+            data[i] = sharpened[i]
+          }
+
+          ctx.putImageData(imageData, 0, 0)
+
+          const processedImage = canvas.toDataURL('image/png')
+          console.log('✅ Image preprocessing complete!')
+          resolve(processedImage)
+
+        } catch (error) {
+          console.error('❌ Preprocessing error:', error)
+          console.log('⚠️  Falling back to original image')
+          resolve(imageUri)  // Fallback to original
         }
-
-        // Put the processed data back
-        ctx.putImageData(imageData, 0, 0)
-
-        // Convert canvas to data URL
-        const processedImage = canvas.toDataURL('image/png')
-        console.log('✓ Image preprocessed - Original size:', img.width, 'x', img.height,
-                    'Processed size:', canvas.width, 'x', canvas.height)
-        resolve(processedImage)
       }
 
       img.onerror = (error) => {
-        console.error('Image preprocessing error:', error)
-        reject(error)
+        console.error('❌ Image load error:', error)
+        reject(new Error('Failed to load image'))
       }
 
+      img.crossOrigin = 'anonymous'  // Enable CORS if needed
       img.src = imageUri
     })
   }
@@ -77,153 +149,359 @@ export default function Receipts() {
     console.log(text)
     console.log('=== OCR TEXT END ===')
 
-    // Clean up text - normalize whitespace
-    const cleanText = text.replace(/\s+/g, ' ').trim()
+    // Clean up text - normalize whitespace but keep line breaks for context
+    const cleanText = text.replace(/[ \t]+/g, ' ').trim()
+    const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0)
 
-    // Extract total amount - try multiple strategies
+    // Extract total amount - ENHANCED with comprehensive pattern matching
     let amount = null
+    let amountConfidence = 0  // Track how confident we are (higher = better)
 
-    // Strategy 1: Look for "TOTAL" or similar keywords followed by amount
-    const totalPatterns = [
-      // TOTAL: $12.34 or TOTAL $12.34 or TOTAL 12.34
-      /(?:total|grand\s*total|subtotal|amount\s*due|balance\s*due|payment\s*total|final\s*total)[:\s]*\$?\s*(\d{1,6}[.,]\d{2})/i,
-      // Amount Due: $12.34
-      /(?:amount|balance|due)[:\s]*\$?\s*(\d{1,6}[.,]\d{2})/i,
-      // Line that says just TOTAL then amount on next part
-      /total[:\s]*[\r\n\s]*\$?\s*(\d{1,6}[.,]\d{2})/i
+    console.log('📊 ANALYZING RECEIPT FOR TOTAL AMOUNT...')
+    console.log('Number of lines:', lines.length)
+
+    // Strategy 1A: Look for explicit TOTAL keywords with various formats (HIGHEST PRIORITY)
+    const totalKeywordPatterns = [
+      // Most explicit patterns first
+      { pattern: /(?:grand[\s\-_]*total|total[\s\-_]*amount|final[\s\-_]*total|amount[\s\-_]*due|balance[\s\-_]*due|total[\s\-_]*price)[:\s=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 100, label: 'Grand/Final Total' },
+      { pattern: /(?:total|ttl)[\s]*[:\-=][\s]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 95, label: 'Total with separator' },
+      { pattern: /\btotal\b[\s]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 90, label: 'Simple Total' },
+      { pattern: /(?:sub[\s]*total|subtotal)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 85, label: 'Subtotal' },
+      // Payment/charge related
+      { pattern: /(?:amount[\s]*charged|payment[\s]*total|total[\s]*charge)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 95, label: 'Payment Total' },
+      // Common receipt variations
+      { pattern: /(?:net[\s]*total|gross[\s]*total)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 92, label: 'Net/Gross Total' },
     ]
 
-    for (const pattern of totalPatterns) {
-      const match = text.match(pattern)
-      if (match) {
-        amount = match[1].replace(',', '.').replace(/\s/g, '')
-        console.log('✓ Found amount with keyword pattern:', amount, 'from:', match[0])
-        break
+    for (const { pattern, confidence, label } of totalKeywordPatterns) {
+      const matches = [...text.matchAll(pattern)]
+      if (matches.length > 0) {
+        console.log(`🔍 Found ${matches.length} match(es) for "${label}"`)
+
+        // If multiple totals, prefer the last one (usually GRAND TOTAL or final amount)
+        const match = matches[matches.length - 1]
+        const extractedAmount = match[1].replace(/,/g, '').replace(/\s/g, '')
+        const numValue = parseFloat(extractedAmount)
+
+        if (numValue > 0 && numValue < 100000) {
+          if (confidence > amountConfidence) {
+            amount = extractedAmount
+            amountConfidence = confidence
+            console.log(`✅ BEST MATCH: ${label} with ${confidence}% confidence: $${amount}`)
+            console.log(`   Full match: "${match[0]}"`)
+          }
+        }
       }
     }
 
-    // Strategy 2: If no TOTAL keyword, find all dollar amounts and pick smartly
-    if (!amount) {
-      // Match formats: $12.34, $ 12.34, 12.34
-      const dollarAmounts = text.match(/\$\s*(\d{1,6}[.,]\d{2})/g)
-      const plainAmounts = text.match(/(?<!\d)(\d{1,6}\.\d{2})(?!\d)/g)
+    // Strategy 1B: Look for TOTAL keyword on one line and amount on next line (common format)
+    if (!amount || amountConfidence < 85) {
+      console.log('🔍 Checking for multi-line TOTAL format...')
+      for (let i = 0; i < lines.length - 1; i++) {
+        // Check if line contains "total" but no number
+        if (/\b(?:total|ttl|grand\s*total|final\s*total)\b/i.test(lines[i]) && !/\d{1,6}[.,]\d{2}/.test(lines[i])) {
+          // Check next line for amount
+          const nextLine = lines[i + 1]
+          const amountMatch = nextLine.match(/\$?\s*(\d{1,6}[.,]\d{2})/)
 
-      let allAmounts = []
+          if (amountMatch) {
+            const extractedAmount = amountMatch[1].replace(/,/g, '').replace(/\s/g, '')
+            const numValue = parseFloat(extractedAmount)
 
-      if (dollarAmounts) {
-        allAmounts = dollarAmounts.map(a => parseFloat(a.replace(/[$,\s]/g, '')))
-        console.log('Found dollar amounts:', allAmounts)
-      } else if (plainAmounts) {
-        allAmounts = plainAmounts.map(a => parseFloat(a))
-        console.log('Found plain amounts:', allAmounts)
+            if (numValue > 0 && numValue < 100000 && 85 > amountConfidence) {
+              amount = extractedAmount
+              amountConfidence = 85
+              console.log(`✅ Found TOTAL on line: "${lines[i]}"`)
+              console.log(`   Amount on next line: $${amount} (85% confidence)`)
+              break
+            }
+          }
+        }
       }
+    }
+
+    // Strategy 2: Search in the bottom 40% of receipt (totals are at the end)
+    if (!amount || amountConfidence < 75) {
+      console.log('🔍 Searching bottom portion of receipt...')
+      const bottomPortion = lines.slice(-Math.ceil(lines.length * 0.4))
+      const bottomText = bottomPortion.join('\n')
+
+      // Look for any total-like keyword in bottom
+      const bottomTotalMatch = bottomText.match(/(?:total|balance|amount\s*due)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/i)
+
+      if (bottomTotalMatch) {
+        const extractedAmount = bottomTotalMatch[1].replace(/,/g, '').replace(/\s/g, '')
+        const numValue = parseFloat(extractedAmount)
+
+        if (numValue > 0 && numValue < 100000 && 75 > amountConfidence) {
+          amount = extractedAmount
+          amountConfidence = 75
+          console.log(`✅ Found total in bottom section: $${amount} (75% confidence)`)
+          console.log(`   From: "${bottomTotalMatch[0]}"`)
+        }
+      }
+    }
+
+    // Strategy 3: Look at amounts near bottom - pick largest (totals are usually biggest)
+    if (!amount || amountConfidence < 60) {
+      console.log('🔍 Analyzing amounts in bottom 40%...')
+      const bottomPortion = lines.slice(-Math.ceil(lines.length * 0.4))
+      const bottomText = bottomPortion.join('\n')
+
+      const amountMatches = [...bottomText.matchAll(/\$?\s*(\d{1,6}[.,]\d{2})/g)]
+
+      if (amountMatches.length > 0) {
+        const amounts = amountMatches
+          .map(m => parseFloat(m[1].replace(/,/g, '').replace(/\s/g, '')))
+          .filter(a => a > 0 && a < 100000)
+
+        if (amounts.length > 0) {
+          const maxAmount = Math.max(...amounts)
+          if (60 > amountConfidence) {
+            amount = maxAmount.toFixed(2)
+            amountConfidence = 60
+            console.log(`✅ Largest amount in bottom section: $${amount} (60% confidence)`)
+            console.log(`   All amounts found: ${amounts.map(a => '$' + a.toFixed(2)).join(', ')}`)
+          }
+        }
+      }
+    }
+
+    // Strategy 4: Last resort - pick the largest amount from entire receipt
+    if (!amount || amountConfidence < 40) {
+      console.log('🔍 Fallback: Finding largest amount in entire receipt...')
+      const allAmounts = [...text.matchAll(/\$?\s*(\d{1,6}[.,]\d{2})/g)]
+        .map(m => parseFloat(m[1].replace(/,/g, '').replace(/\s/g, '')))
+        .filter(a => a > 0 && a < 100000)
 
       if (allAmounts.length > 0) {
-        // Filter out unrealistic amounts
-        const realistic = allAmounts.filter(a => a > 0 && a < 10000)
+        allAmounts.sort((a, b) => b - a)
+        const maxAmount = allAmounts[0]
 
-        if (realistic.length > 0) {
-          // Usually the total is the largest amount
-          amount = Math.max(...realistic).toFixed(2)
-          console.log('✓ Picked largest amount:', amount, 'from:', realistic)
+        if (40 > amountConfidence) {
+          amount = maxAmount.toFixed(2)
+          amountConfidence = 40
+          console.log(`⚠️  Fallback - largest amount: $${amount} (40% confidence)`)
+          console.log(`   Top 5 amounts: ${allAmounts.slice(0, 5).map(a => '$' + a.toFixed(2)).join(', ')}`)
         }
       }
     }
 
-    // Strategy 3: Look for any number with 2 decimal places
+    // Final fallback - any decimal number
     if (!amount) {
-      const anyMoney = text.match(/(\d{1,6}\.\d{2})/)
-      if (anyMoney) {
-        amount = anyMoney[1]
-        console.log('✓ Found amount from basic pattern:', amount)
+      console.log('🔍 Final fallback - looking for any decimal number...')
+      const anyDecimal = text.match(/(\d{1,6}\.\d{2})/)
+      if (anyDecimal) {
+        amount = anyDecimal[1]
+        amountConfidence = 20
+        console.log(`⚠️  Last resort - any decimal: $${amount} (20% confidence)`)
       }
     }
 
-    // Extract store name - intelligent recognition
+    // Ultra fallback - numbers without decimals (format as dollars.cents)
+    if (!amount) {
+      console.log('🔍 Ultra fallback - looking for numbers without decimals...')
+      // Find numbers with 3-6 digits (e.g., "1234" could be $12.34)
+      const wholeNumbers = [...text.matchAll(/\b(\d{3,6})\b/g)]
+        .map(m => parseInt(m[1]))
+        .filter(n => n > 100 && n < 100000)  // Between $1.00 and $1000.00
+
+      if (wholeNumbers.length > 0) {
+        // Take the largest, assume last 2 digits are cents
+        const largest = Math.max(...wholeNumbers)
+        amount = (largest / 100).toFixed(2)
+        amountConfidence = 15
+        console.log(`⚠️  Ultra fallback - number without decimal: ${largest} → $${amount} (15% confidence)`)
+      }
+    }
+
+    // Absolute last resort - just take any number with 1 decimal
+    if (!amount) {
+      console.log('🔍 Absolute fallback - any number with 1 decimal...')
+      const singleDecimal = text.match(/(\d{1,6}\.\d{1})/)
+      if (singleDecimal) {
+        amount = parseFloat(singleDecimal[1]).toFixed(2)
+        amountConfidence = 10
+        console.log(`⚠️  Absolute fallback - single decimal: $${amount} (10% confidence)`)
+      }
+    }
+
+    console.log(`\n💰 FINAL AMOUNT DETECTED: $${amount || '0.00'} (${amountConfidence}% confidence)\n`)
+
+    // Extract store name - IMPROVED intelligent recognition with better accuracy
     const knownStores = [
-      'starbucks', 'dunkin', 'mcdonalds', 'burger king', 'wendys', 'taco bell',
-      'subway', 'kfc', 'pizza hut', 'dominos', 'chipotle', 'panera',
-      'walmart', 'target', 'costco', 'safeway', 'kroger', 'whole foods',
-      'trader joes', 'aldi', 'publix', 'food lion', 'giant', 'albertsons',
-      'shell', 'exxon', 'chevron', 'bp', 'mobil', 'texaco', '76', 'arco',
-      'cvs', 'walgreens', 'rite aid', 'best buy', 'apple store', 'amazon',
-      'home depot', 'lowes', 'staples', 'office depot', 'fedex', 'ups',
-      'hilton', 'marriott', 'hyatt', 'holiday inn', 'motel 6', 'super 8'
+      // Coffee & Fast Food
+      { name: 'starbucks', variations: ['starbucks', 'sbux'] },
+      { name: 'dunkin', variations: ['dunkin', 'dunkin donuts', 'dunkin\''] },
+      { name: 'mcdonalds', variations: ['mcdonalds', 'mcdonald\'s', 'mickey d'] },
+      { name: 'burger king', variations: ['burger king', 'bk'] },
+      { name: 'wendys', variations: ['wendys', 'wendy\'s'] },
+      { name: 'taco bell', variations: ['taco bell', 'tacobell'] },
+      { name: 'subway', variations: ['subway'] },
+      { name: 'kfc', variations: ['kfc', 'kentucky fried chicken'] },
+      { name: 'pizza hut', variations: ['pizza hut', 'pizzahut'] },
+      { name: 'dominos', variations: ['dominos', 'domino\'s'] },
+      { name: 'chipotle', variations: ['chipotle'] },
+      { name: 'panera', variations: ['panera', 'panera bread'] },
+      // Grocery Stores
+      { name: 'walmart', variations: ['walmart', 'wal-mart', 'wal mart'] },
+      { name: 'target', variations: ['target'] },
+      { name: 'costco', variations: ['costco'] },
+      { name: 'safeway', variations: ['safeway'] },
+      { name: 'kroger', variations: ['kroger'] },
+      { name: 'whole foods', variations: ['whole foods', 'wholefoods'] },
+      { name: 'trader joes', variations: ['trader joes', 'trader joe\'s'] },
+      { name: 'aldi', variations: ['aldi'] },
+      { name: 'publix', variations: ['publix'] },
+      // Gas Stations
+      { name: 'shell', variations: ['shell'] },
+      { name: 'exxon', variations: ['exxon', 'exxonmobil'] },
+      { name: 'chevron', variations: ['chevron'] },
+      { name: 'bp', variations: ['bp', 'british petroleum'] },
+      { name: 'mobil', variations: ['mobil'] },
+      { name: 'texaco', variations: ['texaco'] },
+      { name: '76', variations: ['76', 'union 76'] },
+      { name: 'arco', variations: ['arco'] },
+      // Pharmacies & Retail
+      { name: 'cvs', variations: ['cvs', 'cvs pharmacy'] },
+      { name: 'walgreens', variations: ['walgreens'] },
+      { name: 'rite aid', variations: ['rite aid', 'riteaid'] },
+      { name: 'best buy', variations: ['best buy', 'bestbuy'] },
+      { name: 'apple store', variations: ['apple', 'apple store'] },
+      { name: 'amazon', variations: ['amazon'] },
+      { name: 'home depot', variations: ['home depot', 'homedepot'] },
+      { name: 'lowes', variations: ['lowes', 'lowe\'s'] },
+      // Hotels
+      { name: 'hilton', variations: ['hilton'] },
+      { name: 'marriott', variations: ['marriott'] },
+      { name: 'hyatt', variations: ['hyatt'] }
     ]
 
-    const lines = text.split('\n')
-      .map(line => line.trim())
-      .filter(line => {
-        // Skip empty lines
-        if (line.length < 2) return false
-        // Skip lines that are just numbers, dates, or symbols
-        if (/^[\d\s\-\/:.,#]+$/.test(line)) return false
-        // Skip common receipt headers
-        if (/^(receipt|invoice|tax invoice|customer copy|merchant copy|tax|date|time|store|location)/i.test(line)) return false
-        // Skip lines that are just "Thank you" or similar
-        if (/^(thank you|thanks|have a nice day|come again)/i.test(line)) return false
-        return true
-      })
+    // Filter lines to get candidates for store names
+    const filteredLines = lines.filter(line => {
+      // Skip empty lines
+      if (line.length < 2) return false
+      // Skip lines that are just numbers, dates, or symbols
+      if (/^[\d\s\-\/:.,#]+$/.test(line)) return false
+      // Skip common receipt headers/footers
+      if (/^(receipt|invoice|tax invoice|customer copy|merchant copy|tax|date|time|store|location|phone|fax|email|website|thank you|thanks|have a nice day|come again|served by|cashier|server)/i.test(line)) return false
+      return true
+    })
 
     let storeName = 'Unknown Store'
+    let storeConfidence = 0
 
-    // Strategy 1: Try to find known store names in the text
+    // Strategy 1: Look for known store names (HIGHEST PRIORITY)
     const lowerText = text.toLowerCase()
     for (const store of knownStores) {
-      if (lowerText.includes(store)) {
-        // Found a known store! Try to extract the exact line
-        const storeLine = lines.find(line => line.toLowerCase().includes(store))
-        if (storeLine) {
-          storeName = storeLine
-            .replace(/[^\w\s&'-]/g, '')
-            .substring(0, 50)
-            .trim()
-          console.log('✓ Recognized known store:', storeName)
-          break
+      for (const variation of store.variations) {
+        if (lowerText.includes(variation)) {
+          // Found a known store! Try to extract the most complete version from receipt
+          const storeLine = filteredLines.find(line =>
+            line.toLowerCase().includes(variation)
+          )
+
+          if (storeLine) {
+            // Clean and capitalize properly
+            let cleanedName = storeLine
+              .replace(/[^\w\s&'-]/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .substring(0, 50)
+
+            // Convert to title case for better readability
+            cleanedName = cleanedName
+              .toLowerCase()
+              .split(' ')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ')
+
+            storeName = cleanedName
+            storeConfidence = 100
+            console.log(`✓ Recognized known store with 100% confidence: "${storeName}" (matched: ${variation})`)
+            break
+          }
         }
       }
+      if (storeConfidence === 100) break
     }
 
-    // Strategy 2: If no known store, look for store-name patterns
-    if (storeName === 'Unknown Store' && lines.length > 0) {
-      // Look for lines that look like store names (mostly uppercase letters, 3+ chars)
-      const candidateLines = lines.filter(line => {
-        // Should have mostly letters
+    // Strategy 2: Look for store name in first 5 lines (stores usually print name at top)
+    if (storeConfidence < 80 && filteredLines.length > 0) {
+      const topLines = filteredLines.slice(0, 5)
+
+      for (const line of topLines) {
+        // Look for lines that look like store names:
+        // - Mostly letters (at least 60%)
+        // - 3-50 characters
+        // - Preferably uppercase or title case
         const letterCount = (line.match(/[a-zA-Z]/g) || []).length
         const totalChars = line.replace(/\s/g, '').length
         const letterRatio = totalChars > 0 ? letterCount / totalChars : 0
 
-        // Should be at least 60% letters
-        return letterRatio >= 0.6 && line.length >= 3 && line.length <= 50
-      })
+        if (letterRatio >= 0.6 && line.length >= 3 && line.length <= 50) {
+          // Check if it's in ALL CAPS (common for store names)
+          const isAllCaps = line === line.toUpperCase() && /[A-Z]/.test(line)
 
-      if (candidateLines.length > 0) {
-        // Take the first candidate, preferring uppercase lines (store names often in caps)
-        const uppercaseLines = candidateLines.filter(line => line === line.toUpperCase())
-        storeName = (uppercaseLines[0] || candidateLines[0])
-          .replace(/[^\w\s&'-]/g, '')
-          .substring(0, 50)
-          .trim()
-        console.log('✓ Extracted store name from pattern:', storeName)
+          let cleanedName = line
+            .replace(/[^\w\s&'-]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+
+          // Convert to title case for readability
+          cleanedName = cleanedName
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+
+          const confidence = isAllCaps ? 85 : 75
+
+          if (confidence > storeConfidence) {
+            storeName = cleanedName
+            storeConfidence = confidence
+            console.log(`✓ Extracted store name from top of receipt with ${confidence}% confidence: "${storeName}"`)
+          }
+
+          if (isAllCaps) break  // If we found an all-caps name, it's likely the store name
+        }
       }
     }
 
-    // Strategy 3: Fallback to first meaningful line
-    if (storeName === 'Unknown Store' && lines.length > 0) {
-      storeName = lines[0]
-        .replace(/[^\w\s&'-]/g, '')
-        .substring(0, 50)
+    // Strategy 3: Fallback - use first meaningful line
+    if (storeConfidence < 50 && filteredLines.length > 0) {
+      let cleanedName = filteredLines[0]
+        .replace(/[^\w\s&'-]/g, ' ')
+        .replace(/\s+/g, ' ')
         .trim()
-      console.log('✓ Using first line as store name:', storeName)
+        .substring(0, 50)
+
+      // Convert to title case
+      cleanedName = cleanedName
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+
+      storeName = cleanedName
+      storeConfidence = 40
+      console.log(`✓ Using first line as store name with 40% confidence: "${storeName}"`)
     }
 
-    // Clean up common prefixes/suffixes
+    // Clean up common business suffixes and prefixes
     storeName = storeName
-      .replace(/^(store|shop|location|branch|#)\s*/i, '')
-      .replace(/\s*(inc|llc|ltd|corp|corporation|co)\.?$/i, '')
+      .replace(/^(store|shop|location|branch|#)\s+/i, '')
+      .replace(/\s+(inc|llc|ltd|corp|corporation|co|store|location|branch)\.?$/i, '')
+      .replace(/\s+/g, ' ')
       .trim()
 
-    console.log('✓ Final store name:', storeName)
+    // Ensure we have something
+    if (!storeName || storeName.length < 2) {
+      storeName = 'Unknown Store'
+      storeConfidence = 0
+    }
+
+    console.log(`✓ FINAL STORE NAME: "${storeName}" (Confidence: ${storeConfidence}%)`)
 
     // Extract date - multiple format support
     const datePatterns = [
@@ -445,26 +723,23 @@ export default function Receipts() {
         // Preprocess image to improve OCR accuracy
         const processedImage = await preprocessImage(imageUri)
 
-        console.log('Initializing Tesseract with optimized settings...')
+        console.log('🔍 Starting OCR text recognition...')
         setOcrProgress(10)
 
-        // Perform OCR with optimized configuration
+        // Perform OCR with optimized settings
         const result = await Tesseract.recognize(
-          processedImage,  // Use preprocessed image
+          processedImage,
           'eng',
           {
             logger: (m) => {
               if (m.status === 'recognizing text') {
                 const progress = 10 + Math.round(m.progress * 80)  // 10-90%
-                console.log(`OCR Progress: ${progress}%`)
                 setOcrProgress(progress)
-              } else {
-                console.log('OCR Status:', m.status)
+                if (progress % 20 === 0) {
+                  console.log(`   OCR: ${progress}%`)
+                }
               }
-            },
-            // Tesseract configuration for better receipt reading
-            tessedit_pageseg_mode: Tesseract.PSM.AUTO,  // Automatic page segmentation
-            tessedit_char_whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$.,/-:() &\'',  // Common receipt characters
+            }
           }
         )
 
@@ -487,18 +762,24 @@ export default function Receipts() {
         const amountValue = parseFloat(extractedData.amount)
 
         if (isNaN(amountValue) || amountValue <= 0) {
-          console.warn('Amount not detected, prompting user...')
+          console.warn('❌ Amount not detected automatically')
+          console.warn('OCR Text Preview:', ocrText.substring(0, 500))
+
+          // Show a more helpful error message
+          const textPreview = ocrText.substring(0, 200).trim()
           const userAmount = prompt(
-            'Could not detect amount automatically. Please enter the receipt amount:',
+            `Could not detect total amount automatically.\n\nOCR detected text:\n"${textPreview}${ocrText.length > 200 ? '...' : ''}"\n\nPlease enter the receipt total amount:`,
             '0.00'
           )
           if (userAmount) {
             finalAmount = parseFloat(userAmount).toFixed(2)
             extractedData.amount = finalAmount
-            console.log('User entered amount:', finalAmount)
+            console.log('✓ User entered amount:', finalAmount)
           } else {
-            throw new Error('Receipt amount is required')
+            throw new Error('Receipt amount is required to save the receipt')
           }
+        } else {
+          console.log('✅ Amount detected successfully:', finalAmount)
         }
 
         const category = categorizeReceipt(extractedData.storeName, ocrText)
@@ -511,15 +792,19 @@ export default function Receipts() {
           paymentMethod: 'Credit Card'
         }
 
+        // Save expense first and get its ID
+        console.log('Saving expense:', expenseData)
+        const savedExpense = addExpense(expenseData)
+        console.log('Expense saved with ID:', savedExpense.id)
+
+        // Save receipt with link to expense
         const receiptData = {
           ...extractedData,
           imageUri,
           ocrText,
-          category
+          category,
+          expenseId: savedExpense.id  // Link receipt to expense
         }
-
-        console.log('Saving expense:', expenseData)
-        addExpense(expenseData)
 
         console.log('Saving receipt:', { ...receiptData, imageUri: 'base64...' })
         addReceipt(receiptData)
@@ -648,7 +933,16 @@ export default function Receipts() {
                     >
                       {selectedReceipt?.id === receipt.id ? 'Hide' : 'View'}
                     </button>
-                    <button className="btn-delete" onClick={() => deleteReceipt(receipt.id)}>Delete</button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => {
+                        if (window.confirm(`Delete this receipt and its linked expense?\n\nStore: ${receipt.storeName}\nAmount: $${parseFloat(receipt.amount).toFixed(2)}\n\nThis will remove both the receipt and the expense from your records.`)) {
+                          deleteReceipt(receipt.id)
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
                 <div className="item-details">
