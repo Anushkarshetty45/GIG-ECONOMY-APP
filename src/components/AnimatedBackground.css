@@ -1,0 +1,321 @@
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  top: -100px;
+  animation: fall linear infinite;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+@keyframes fall {
+  0% {
+    top: -100px;
+    transform: translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    top: calc(100vh + 50px);
+    transform: translateX(150px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Gradient overlay animation */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 107, 107, 0.03),
+    rgba(255, 204, 107, 0.03),
+    rgba(78, 205, 196, 0.03),
+    rgba(162, 155, 254, 0.03)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  opacity: 0.5;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Wave effect for Ocean Breeze */
+.wave-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat-x;
+  animation: wave-animation 20s linear infinite;
+}
+
+.wave1 {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(74, 144, 184, 0.05) 25%,
+    transparent 50%,
+    rgba(74, 144, 184, 0.05) 75%,
+    transparent 100%);
+  animation-duration: 25s;
+  opacity: 0.8;
+}
+
+.wave2 {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(43, 95, 124, 0.05) 25%,
+    transparent 50%,
+    rgba(43, 95, 124, 0.05) 75%,
+    transparent 100%);
+  animation-duration: 30s;
+  animation-direction: reverse;
+  opacity: 0.6;
+}
+
+.wave3 {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(26, 58, 82, 0.03) 25%,
+    transparent 50%,
+    rgba(26, 58, 82, 0.03) 75%,
+    transparent 100%);
+  animation-duration: 35s;
+  opacity: 0.4;
+}
+
+@keyframes wave-animation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Smooth entrance animations for dashboard content */
+.dashboard-page,
+.dashboard-section,
+.summary-cards,
+.form-container {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.summary-card {
+  animation: fadeInScale 0.5s ease-out backwards;
+}
+
+.summary-card:nth-child(1) { animation-delay: 0.1s; }
+.summary-card:nth-child(2) { animation-delay: 0.2s; }
+.summary-card:nth-child(3) { animation-delay: 0.3s; }
+.summary-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hover effects */
+.summary-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.summary-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.action-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.action-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.action-button:active {
+  transform: translateY(0);
+}
+
+/* Data item animations */
+.data-item {
+  animation: slideInRight 0.4s ease-out backwards;
+  transition: all 0.3s ease;
+}
+
+.data-item:nth-child(1) { animation-delay: 0.05s; }
+.data-item:nth-child(2) { animation-delay: 0.1s; }
+.data-item:nth-child(3) { animation-delay: 0.15s; }
+.data-item:nth-child(4) { animation-delay: 0.2s; }
+.data-item:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.data-item:hover {
+  transform: translateX(5px);
+  box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Form field animations */
+.form-field input,
+.form-field select,
+.form-field textarea {
+  transition: all 0.3s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Button ripple effect */
+.btn-submit,
+.btn-delete,
+.btn-edit,
+.btn-cancel {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-submit:active,
+.btn-delete:active,
+.btn-edit:active,
+.btn-cancel:active {
+  transform: scale(0.98);
+}
+
+/* Progress bar animation */
+.goal-progress-fill {
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: progressGlow 2s ease-in-out infinite;
+}
+
+@keyframes progressGlow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Health score circle animation */
+.health-score-circle svg circle {
+  transition: stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme transition */
+* {
+  transition: background-color 0.4s ease,
+              color 0.4s ease,
+              border-color 0.4s ease,
+              fill 0.4s ease,
+              stroke 0.4s ease !important;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .particle,
+  .wave,
+  .gradient-overlay {
+    display: none;
+  }
+}
