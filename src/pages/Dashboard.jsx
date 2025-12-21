@@ -125,7 +125,7 @@ export default function Dashboard() {
                 cy="100"
                 r="80"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.1)"
+                stroke="var(--theme-border)"
                 strokeWidth="12"
               />
               <circle
@@ -133,7 +133,7 @@ export default function Dashboard() {
                 cy="100"
                 r="80"
                 fill="none"
-                stroke="#71717a"
+                stroke="var(--theme-primary)"
                 strokeWidth="12"
                 strokeDasharray={`${(financialHealthScore / 100) * 502.4} 502.4`}
                 strokeLinecap="round"
@@ -145,7 +145,7 @@ export default function Dashboard() {
                 textAnchor="middle"
                 fontSize="32"
                 fontWeight="700"
-                fill="#ffffff"
+                fill="var(--theme-text)"
               >
                 {financialHealthScore.toFixed(0)}%
               </text>
