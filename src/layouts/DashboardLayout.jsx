@@ -1,6 +1,7 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { LayoutDashboard, DollarSign, CreditCard, Target, TrendingUp, Camera, Download, Calculator, Shield, LogOut } from 'lucide-react'
+import { LayoutDashboard, DollarSign, CreditCard, Target, TrendingUp, Camera, Download, Calculator, Shield, Settings, LogOut } from 'lucide-react'
+import ThemeSwitcherModal from '../components/ThemeSwitcherModal'
 import './DashboardLayout.css'
 
 export default function DashboardLayout() {
@@ -17,7 +18,8 @@ export default function DashboardLayout() {
     { path: '/dashboard/receipts', icon: Camera, label: 'Receipts' },
     { path: '/dashboard/export', icon: Download, label: 'Export' },
     { path: '/dashboard/tax-tools', icon: Calculator, label: 'Tax Tools' },
-    { path: '/dashboard/insurance', icon: Shield, label: 'Insurance' }
+    { path: '/dashboard/insurance', icon: Shield, label: 'Insurance' },
+    { path: '/dashboard/settings', icon: Settings, label: 'Settings' }
   ]
 
   const handleSignOut = async () => {
@@ -58,6 +60,8 @@ export default function DashboardLayout() {
       <main className="main-content">
         <Outlet />
       </main>
+
+      <ThemeSwitcherModal />
     </div>
   )
 }
