@@ -874,7 +874,7 @@ export default function Receipts() {
               display: 'inline-block',
               padding: '16px 32px',
               background: '#71717a',
-              color: '#ffffff',
+              color: 'var(--theme-text)',
               borderRadius: '12px',
               cursor: uploading ? 'not-allowed' : 'pointer',
               fontSize: '16px',
@@ -894,18 +894,18 @@ export default function Receipts() {
                 maxWidth: '400px',
                 margin: '0 auto',
                 height: '8px',
-                background: '#27272a',
+                background: 'var(--theme-border)',
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
                 <div style={{
                   width: `${ocrProgress}%`,
                   height: '100%',
-                  background: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+                  background: 'var(--theme-success)',
                   transition: 'width 0.3s ease'
                 }} />
               </div>
-              <p style={{ color: '#71717a', fontSize: '13px', marginTop: '8px' }}>
+              <p style={{ color: 'var(--theme-text-tertiary)', fontSize: '13px', marginTop: '8px' }}>
                 Reading receipt text...
               </p>
             </div>
@@ -956,8 +956,8 @@ export default function Receipts() {
                       {receipt.items.map(item => `${item.name} ($${item.price})`).join(', ')}
                     </div>
                   )}
-                  <div className="item-detail" style={{ marginTop: '8px', padding: '8px', background: '#09090b', borderRadius: '6px' }}>
-                    <strong style={{ color: '#10b981' }}>✓ Auto-saved to Expenses</strong>
+                  <div className="item-detail" style={{ marginTop: '8px', padding: '8px', background: 'var(--theme-surface)', borderRadius: '6px' }}>
+                    <strong style={{ color: 'var(--theme-success)' }}>✓ Auto-saved to Expenses</strong>
                   </div>
                 </div>
                 {selectedReceipt?.id === receipt.id && receipt.imageUri && (
