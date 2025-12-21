@@ -11,9 +11,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0a0a0f;
-  color: #ffffff;
+  background: var(--theme-background, #0a0a0f);
+  color: var(--theme-text, #ffffff);
   overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 code {
@@ -31,14 +32,14 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: var(--theme-surface, #1a1a2e);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6366f1;
+  background: var(--theme-primary, #6366f1);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #818cf8;
+  background: var(--theme-primary-hover, #818cf8);
 }
