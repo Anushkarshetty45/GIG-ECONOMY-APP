@@ -1,7 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://motdfjvymyjvgmfpkrqo.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vdGRmanZ5bXlqdmdtZnBrcnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NzQ5NjQsImV4cCI6MjA4MTI1MDk2NH0.shsca4ES39IWdtY5y0aBlr4KQgmcH_25i9Ym5JYVv2U'
+// SECURITY: API keys are loaded from environment variables only
+// Never hardcode credentials in source code
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+// Validate that environment variables are present
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('⚠️ CRITICAL: Supabase credentials missing!')
+  console.error('Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY')
+  throw new Error('Supabase configuration missing. Check .env file.')
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -15,8 +24,4 @@ export const isSupabaseConfigured = () => {
   return supabaseUrl && supabaseAnonKey
 }
 
-if (isSupabaseConfigured()) {
-  console.log('✅ Supabase configured successfully')
-} else {
-  console.warn('⚠️ Supabase credentials not found. App will run in demo mode.')
-}
+console.log('✅ Supabase configured successfully')
