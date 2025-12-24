@@ -331,18 +331,18 @@ export default function HomePage() {
           </div>
           <div className="footer-column">
             <h4>Product</h4>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
+            <a href="#features" onClick={(e) => { e.preventDefault(); document.querySelector('.features')?.scrollIntoView({ behavior: 'smooth' }); }}>Features</a>
+            <a href="#pricing" onClick={(e) => { e.preventDefault(); document.querySelector('.pricing')?.scrollIntoView({ behavior: 'smooth' }); }}>Pricing</a>
           </div>
           <div className="footer-column">
             <h4>Support</h4>
-            <a href="#help">Help Center</a>
-            <a href="#contact">Contact</a>
+            <a href="/help" onClick={(e) => { e.preventDefault(); navigate('/help'); }}>Help Center</a>
+            <a href="mailto:support@gigeconomyapp.com?subject=Support%20Request">Contact</a>
           </div>
           <div className="footer-column">
             <h4>Legal</h4>
-            <a href="#privacy">Privacy</a>
-            <a href="#terms">Terms</a>
+            <a href="/privacy" onClick={(e) => { e.preventDefault(); navigate('/privacy'); }}>Privacy</a>
+            <a href="/terms" onClick={(e) => { e.preventDefault(); navigate('/terms'); }}>Terms</a>
           </div>
         </div>
         <div className="footer-bottom">

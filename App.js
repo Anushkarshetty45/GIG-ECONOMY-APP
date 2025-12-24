@@ -59,13 +59,13 @@ function AppContent() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <SafeAreaProvider>
-          <QueryClientProvider client={queryClient}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
             <AppContent />
-          </QueryClientProvider>
-        </SafeAreaProvider>
-      </GestureHandlerRootView>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
     </ErrorBoundary>
   );
 }

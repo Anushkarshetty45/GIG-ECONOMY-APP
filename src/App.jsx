@@ -6,6 +6,9 @@ import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import ThemeSelector from './pages/ThemeSelector'
+import HelpCenter from './pages/HelpCenter'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
 import DashboardLayout from './layouts/DashboardLayout'
 import Dashboard from './pages/Dashboard'
 import Income from './pages/Income'
@@ -47,6 +50,11 @@ function App() {
         <Route path="/" element={!user ? <HomePage /> : <Navigate to={hasSelectedTheme ? "/dashboard" : "/theme-selection"} />} />
         <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to={hasSelectedTheme ? "/dashboard" : "/theme-selection"} />} />
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to={hasSelectedTheme ? "/dashboard" : "/theme-selection"} />} />
+
+        {/* Public Pages */}
+        <Route path="/help" element={<HelpCenter />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
 
         <Route path="/theme-selection" element={user ? <ThemeSelector /> : <Navigate to="/" />} />
 
