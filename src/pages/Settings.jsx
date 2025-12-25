@@ -1,24 +1,35 @@
 import { useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { useThemeStore, themePresets } from '../store/themeStore'
+import { useSettingsStore, currencies, dateFormats } from '../store/settingsStore'
 import { Settings as SettingsIcon, User, Bell, Lock, Database, Info, Palette, Mail, Shield, Download, Trash2, LogOut } from 'lucide-react'
 import './Settings.css'
 
 export default function Settings() {
-  const { user, signOut } = useAuthStore()
+  const { user, signOut, updatePassword } = useAuthStore()
   const { currentTheme, toggleThemeSwitcher } = useThemeStore()
+  const {
+    currency,
+    dateFormat,
+    shareAnalytics,
+    dataSharing,
+    emailNotifications,
+    weeklyReports,
+    goalReminders,
+    expenseAlerts,
+    setCurrency,
+    setDateFormat,
+    setShareAnalytics,
+    setDataSharing,
+    setEmailNotifications,
+    setWeeklyReports,
+    setGoalReminders,
+    setExpenseAlerts
+  } = useSettingsStore()
+
   const [activeTab, setActiveTab] = useState('profile')
-  const [notifications, setNotifications] = useState({
-    email: true,
-    push: false,
-    goalReminders: true,
-    weeklyReports: true,
-    expenseAlerts: true
-  })
-  const [privacy, setPrivacy] = useState({
-    dataSharing: false,
-    analytics: true
-  })
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
+  const [show2FAModal, setShow2FAModal] = useState(false)
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
@@ -144,20 +155,32 @@ export default function Settings() {
                   <div className="setting-label">
                     <span>Currency Format</span>
                   </div>
-                  <select className="settings-select">
-                    <option>USD ($)</option>
-                    <option>EUR (€)</option>
-                    <option>GBP (£)</option>
+                  <select
+                    className="settings-select"
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                  >
+                    {Object.values(currencies).map(curr => (
+                      <option key={curr.code} value={curr.code}>
+                        {curr.code} ({curr.symbol})
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="setting-item">
                   <div className="setting-label">
                     <span>Date Format</span>
                   </div>
-                  <select className="settings-select">
-                    <option>MM/DD/YYYY</option>
-                    <option>DD/MM/YYYY</option>
-                    <option>YYYY-MM-DD</option>
+                  <select
+                    className="settings-select"
+                    value={dateFormat}
+                    onChange={(e) => setDateFormat(e.target.value)}
+                  >
+                    {Object.values(dateFormats).map(format => (
+                      <option key={format.code} value={format.code}>
+                        {format.code}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -178,8 +201,8 @@ export default function Settings() {
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      checked={notifications.email}
-                      onChange={(e) => setNotifications({...notifications, email: e.target.checked})}
+                      checked={emailNotifications}
+                      onChange={(e) => setEmailNotifications(e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -193,8 +216,8 @@ export default function Settings() {
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      checked={notifications.weeklyReports}
-                      onChange={(e) => setNotifications({...notifications, weeklyReports: e.target.checked})}
+                      checked={weeklyReports}
+                      onChange={(e) => setWeeklyReports(e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -211,8 +234,8 @@ export default function Settings() {
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      checked={notifications.goalReminders}
-                      onChange={(e) => setNotifications({...notifications, goalReminders: e.target.checked})}
+                      checked={goalReminders}
+                      onChange={(e) => setGoalReminders(e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -226,8 +249,8 @@ export default function Settings() {
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      checked={notifications.expenseAlerts}
-                      onChange={(e) => setNotifications({...notifications, expenseAlerts: e.target.checked})}
+                      checked={expenseAlerts}
+                      onChange={(e) => setExpenseAlerts(e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -250,8 +273,8 @@ export default function Settings() {
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      checked={privacy.analytics}
-                      onChange={(e) => setPrivacy({...privacy, analytics: e.target.checked})}
+                      checked={shareAnalytics}
+                      onChange={(e) => setShareAnalytics(e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -265,8 +288,8 @@ export default function Settings() {
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      checked={privacy.dataSharing}
-                      onChange={(e) => setPrivacy({...privacy, dataSharing: e.target.checked})}
+                      checked={dataSharing}
+                      onChange={(e) => setDataSharing(e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -277,11 +300,15 @@ export default function Settings() {
                 <h3 className="settings-card-title">Account Security</h3>
                 <div className="setting-item">
                   <span>Password</span>
-                  <button className="btn-secondary">Change Password</button>
+                  <button className="btn-secondary" onClick={() => setShowPasswordModal(true)}>
+                    Change Password
+                  </button>
                 </div>
                 <div className="setting-item">
                   <span>Two-Factor Authentication</span>
-                  <button className="btn-secondary">Enable 2FA</button>
+                  <button className="btn-secondary" onClick={() => setShow2FAModal(true)}>
+                    Enable 2FA
+                  </button>
                 </div>
               </div>
             </div>
@@ -355,6 +382,322 @@ export default function Settings() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />}
+
+      {/* 2FA Modal */}
+      {show2FAModal && <TwoFactorModal onClose={() => setShow2FAModal(false)} />}
+    </div>
+  )
+}
+
+// Change Password Modal Component
+function ChangePasswordModal({ onClose }) {
+  const { updatePassword } = useAuthStore()
+  const [formData, setFormData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  })
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      setError('New passwords do not match')
+      return
+    }
+
+    if (formData.newPassword.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
+    setLoading(true)
+    const result = await updatePassword(formData.newPassword)
+    setLoading(false)
+
+    if (result.success) {
+      setSuccess(true)
+      setTimeout(() => onClose(), 2000)
+    } else {
+      setError(result.error || 'Failed to update password')
+    }
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2 style={{ marginBottom: '24px', color: 'var(--theme-text)' }}>Change Password</h2>
+
+        {success ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px 20px',
+            color: 'var(--theme-success)'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>✓</div>
+            <p>Password updated successfully!</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            {error && (
+              <div style={{
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid #ef4444',
+                color: '#fca5a5',
+                padding: '12px',
+                borderRadius: '8px',
+                marginBottom: '20px',
+                fontSize: '14px'
+              }}>
+                {error}
+              </div>
+            )}
+
+            <div className="form-group" style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--theme-text)' }}>
+                Current Password
+              </label>
+              <input
+                type="password"
+                value={formData.currentPassword}
+                onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+                required
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: 'var(--theme-text)',
+                  fontSize: '14px'
+                }}
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--theme-text)' }}>
+                New Password
+              </label>
+              <input
+                type="password"
+                value={formData.newPassword}
+                onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                required
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: 'var(--theme-text)',
+                  fontSize: '14px'
+                }}
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', color: 'var(--theme-text)' }}>
+                Confirm New Password
+              </label>
+              <input
+                type="password"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                required
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: 'var(--theme-text)',
+                  fontSize: '14px'
+                }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn-secondary"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={loading}
+              >
+                {loading ? 'Updating...' : 'Update Password'}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Two-Factor Authentication Modal Component
+function TwoFactorModal({ onClose }) {
+  const [qrCode, setQrCode] = useState('')
+  const [secret, setSecret] = useState('')
+  const [verificationCode, setVerificationCode] = useState('')
+  const [step, setStep] = useState(1) // 1: Show QR, 2: Verify code, 3: Success
+  const [error, setError] = useState('')
+
+  // Generate a mock QR code and secret (in production, this would come from your backend)
+  const generateMock2FA = () => {
+    const mockSecret = 'JBSWY3DPEHPK3PXP' // Mock secret for demo
+    setSecret(mockSecret)
+    // In production, you'd generate an actual QR code URL
+    setQrCode('https://via.placeholder.com/200x200?text=QR+Code')
+  }
+
+  const handleVerify = () => {
+    if (verificationCode.length !== 6) {
+      setError('Please enter a 6-digit code')
+      return
+    }
+
+    // Mock verification (in production, verify with backend)
+    if (verificationCode === '123456' || verificationCode.length === 6) {
+      setStep(3)
+      setTimeout(() => onClose(), 2000)
+    } else {
+      setError('Invalid verification code')
+    }
+  }
+
+  if (!secret) {
+    generateMock2FA()
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2 style={{ marginBottom: '24px', color: 'var(--theme-text)' }}>Enable Two-Factor Authentication</h2>
+
+        {step === 1 && (
+          <div>
+            <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '24px' }}>
+              Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)
+            </p>
+
+            <div style={{
+              background: '#fff',
+              padding: '20px',
+              borderRadius: '12px',
+              textAlign: 'center',
+              marginBottom: '24px'
+            }}>
+              <img src={qrCode} alt="QR Code" style={{ width: '200px', height: '200px' }} />
+            </div>
+
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              padding: '16px',
+              borderRadius: '8px',
+              marginBottom: '24px'
+            }}>
+              <p style={{ color: 'var(--theme-text-secondary)', fontSize: '14px', marginBottom: '8px' }}>
+                Or enter this code manually:
+              </p>
+              <code style={{
+                color: 'var(--theme-primary)',
+                fontSize: '16px',
+                fontWeight: '600',
+                letterSpacing: '2px'
+              }}>
+                {secret}
+              </code>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button onClick={onClose} className="btn-secondary">
+                Cancel
+              </button>
+              <button onClick={() => setStep(2)} className="btn-primary">
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div>
+            <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '24px' }}>
+              Enter the 6-digit code from your authenticator app to complete setup
+            </p>
+
+            {error && (
+              <div style={{
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid #ef4444',
+                color: '#fca5a5',
+                padding: '12px',
+                borderRadius: '8px',
+                marginBottom: '20px',
+                fontSize: '14px'
+              }}>
+                {error}
+              </div>
+            )}
+
+            <input
+              type="text"
+              placeholder="000000"
+              maxLength="6"
+              value={verificationCode}
+              onChange={(e) => {
+                setError('')
+                setVerificationCode(e.target.value.replace(/\D/g, ''))
+              }}
+              style={{
+                width: '100%',
+                padding: '16px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '8px',
+                color: 'var(--theme-text)',
+                fontSize: '24px',
+                textAlign: 'center',
+                letterSpacing: '8px',
+                marginBottom: '24px'
+              }}
+            />
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button onClick={() => setStep(1)} className="btn-secondary">
+                Back
+              </button>
+              <button onClick={handleVerify} className="btn-primary">
+                Verify & Enable
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px 20px',
+            color: 'var(--theme-success)'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>✓</div>
+            <p>Two-Factor Authentication enabled successfully!</p>
+          </div>
+        )}
       </div>
     </div>
   )
