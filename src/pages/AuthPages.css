@@ -119,6 +119,26 @@
   color: #d4d4d8;
 }
 
+.success-container {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.success-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.error-container {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.error-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
 @media (max-width: 480px) {
   .auth-container {
     padding: 32px 24px;
