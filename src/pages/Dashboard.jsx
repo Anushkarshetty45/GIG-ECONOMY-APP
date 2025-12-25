@@ -1,9 +1,11 @@
 import { useFinanceStore } from '../store/financeStore'
+import { useSettingsStore } from '../store/settingsStore'
 import { LayoutDashboard, DollarSign, CreditCard, FileText, Target, Heart, Zap, TrendingUp } from 'lucide-react'
 import './DashboardPages.css'
 
 export default function Dashboard() {
   const { incomes, expenses, goals, getTotalIncome, getTotalExpenses, getNetIncome } = useFinanceStore()
+  const { formatCurrency } = useSettingsStore()
 
   const totalIncome = getTotalIncome()
   const totalExpenses = getTotalExpenses()
@@ -26,25 +28,25 @@ export default function Dashboard() {
       <div className="summary-cards">
         <div className="summary-card">
           <div className="card-label">Total Income</div>
-          <div className="card-value income">${totalIncome.toFixed(2)}</div>
+          <div className="card-value income">{formatCurrency(totalIncome)}</div>
           <div className="card-sublabel">All time</div>
         </div>
 
         <div className="summary-card">
           <div className="card-label">Total Expenses</div>
-          <div className="card-value expense">${totalExpenses.toFixed(2)}</div>
+          <div className="card-value expense">{formatCurrency(totalExpenses)}</div>
           <div className="card-sublabel">All time</div>
         </div>
 
         <div className="summary-card">
           <div className="card-label">Net Income</div>
-          <div className="card-value net">${netIncome.toFixed(2)}</div>
+          <div className="card-value net">{formatCurrency(netIncome)}</div>
           <div className="card-sublabel">After expenses</div>
         </div>
 
         <div className="summary-card">
           <div className="card-label">Tax Estimate</div>
-          <div className="card-value tax">${taxEstimate.toFixed(2)}</div>
+          <div className="card-value tax">{formatCurrency(taxEstimate)}</div>
           <div className="card-sublabel">25% rate</div>
         </div>
       </div>
@@ -70,7 +72,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className={`transaction-amount ${transaction.type}`}>
-                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                    {transaction.type === 'income' ? '+' : '-'}{formatCurrency(Math.abs(transaction.amount))}
                   </div>
                 </div>
               ))
