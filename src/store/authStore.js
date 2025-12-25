@@ -55,6 +55,7 @@ export const useAuthStore = create(
             password,
             options: {
               data: userData,
+              emailRedirectTo: `${window.location.origin}/login`,
             },
           })
 
