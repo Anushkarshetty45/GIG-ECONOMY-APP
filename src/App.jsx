@@ -5,6 +5,7 @@ import { useThemeStore } from './store/themeStore'
 import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
+import EmailConfirmed from './pages/EmailConfirmed'
 import ThemeSelector from './pages/ThemeSelector'
 import HelpCenter from './pages/HelpCenter'
 import Privacy from './pages/Privacy'
@@ -50,6 +51,7 @@ function App() {
         <Route path="/" element={!user ? <HomePage /> : <Navigate to={hasSelectedTheme ? "/dashboard" : "/theme-selection"} />} />
         <Route path="/register" element={!user ? <RegisterPage /> : <Navigate to={hasSelectedTheme ? "/dashboard" : "/theme-selection"} />} />
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to={hasSelectedTheme ? "/dashboard" : "/theme-selection"} />} />
+        <Route path="/email-confirmed" element={<EmailConfirmed />} />
 
         {/* Public Pages */}
         <Route path="/help" element={<HelpCenter />} />
