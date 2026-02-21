@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useFinanceStore } from '../store/financeStore'
 import Tesseract from 'tesseract.js'
 import './DashboardPages.css'
@@ -8,8 +8,20 @@ export default function Receipts() {
   const [uploading, setUploading] = useState(false)
   const [selectedReceipt, setSelectedReceipt] = useState(null)
   const [ocrProgress, setOcrProgress] = useState(0)
+  const workerRef = useRef(null)
 
-  // Optimized image preprocessing for receipt OCR with error handling
+  // Cleanup worker on unmount
+  useEffect(() => {
+    return () => {
+      if (workerRef.current) {
+        console.log('Terminating Tesseract worker...')
+        workerRef.current.terminate()
+        workerRef.current = null
+      }
+    }
+  }, [])
+
+  // Simplified preprocessing for better OCR accuracy
   const preprocessImage = (imageUri) => {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -22,11 +34,19 @@ export default function Receipts() {
           const canvas = document.createElement('canvas')
           const ctx = canvas.getContext('2d')
 
-          // Scale to 2400px (good balance of quality and performance)
-          const maxDimension = 2400
-          const scale = Math.max(1, maxDimension / Math.max(img.width, img.height))
-          canvas.width = Math.floor(img.width * scale)
-          canvas.height = Math.floor(img.height * scale)
+          // Scale to reasonable size for OCR (2000px works well)
+          const maxDimension = 2000
+          const scale = maxDimension / Math.max(img.width, img.height)
+
+          if (scale > 1) {
+            // Image is small, scale up
+            canvas.width = Math.floor(img.width * scale)
+            canvas.height = Math.floor(img.height * scale)
+          } else {
+            // Image is large, scale down
+            canvas.width = Math.floor(img.width * scale)
+            canvas.height = Math.floor(img.height * scale)
+          }
 
           console.log('   Scaled to:', canvas.width, 'x', canvas.height)
 
@@ -40,85 +60,20 @@ export default function Receipts() {
           const data = imageData.data
           const len = data.length
 
-          console.log('   Converting to high-contrast black & white...')
+          console.log('   Enhancing contrast...')
 
-          // Step 1: Convert to grayscale
+          // Convert to grayscale and increase contrast
           for (let i = 0; i < len; i += 4) {
-            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3
-            data[i] = data[i + 1] = data[i + 2] = avg
-          }
+            // Grayscale
+            const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114
 
-          // Step 2: Calculate average brightness for threshold
-          let sum = 0
-          for (let i = 0; i < len; i += 4) {
-            sum += data[i]
-          }
-          const avgBrightness = sum / (len / 4)
-          const threshold = avgBrightness * 0.75  // Adaptive threshold
+            // Increase contrast
+            const contrast = 1.5
+            const factor = (259 * (contrast + 1)) / (259 - contrast)
+            const adjusted = factor * (gray - 128) + 128
 
-          console.log('   Brightness threshold:', threshold.toFixed(0))
-
-          // Step 3: Apply threshold (convert to pure black/white)
-          for (let i = 0; i < len; i += 4) {
-            const value = data[i] > threshold ? 255 : 0
-            data[i] = data[i + 1] = data[i + 2] = value
-          }
-
-          // Step 4: Simple denoising - remove isolated pixels
-          const width = canvas.width
-          const height = canvas.height
-          const cleaned = new Uint8ClampedArray(data)
-
-          for (let y = 1; y < height - 1; y++) {
-            for (let x = 1; x < width - 1; x++) {
-              const idx = (y * width + x) * 4
-
-              if (data[idx] === 0) {  // Black pixel
-                // Count black neighbors
-                let blackCount = 0
-                for (let dy = -1; dy <= 1; dy++) {
-                  for (let dx = -1; dx <= 1; dx++) {
-                    const nIdx = ((y + dy) * width + (x + dx)) * 4
-                    if (data[nIdx] === 0) blackCount++
-                  }
-                }
-                // Remove if too few black neighbors (likely noise)
-                if (blackCount < 3) {
-                  cleaned[idx] = cleaned[idx + 1] = cleaned[idx + 2] = 255
-                }
-              }
-            }
-          }
-
-          // Apply cleaned data
-          for (let i = 0; i < len; i++) {
-            data[i] = cleaned[i]
-          }
-
-          // Step 5: Slight sharpening for text clarity
-          console.log('   Sharpening text...')
-          const sharpened = new Uint8ClampedArray(data)
-
-          for (let y = 1; y < height - 1; y++) {
-            for (let x = 1; x < width - 1; x++) {
-              const idx = (y * width + x) * 4
-
-              // Simple sharpening kernel
-              const center = data[idx] * 5
-              const edges =
-                data[((y-1) * width + x) * 4] +      // top
-                data[((y+1) * width + x) * 4] +      // bottom
-                data[(y * width + (x-1)) * 4] +      // left
-                data[(y * width + (x+1)) * 4]        // right
-
-              const value = Math.min(255, Math.max(0, center - edges))
-              sharpened[idx] = sharpened[idx + 1] = sharpened[idx + 2] = value
-            }
-          }
-
-          // Apply sharpened data
-          for (let i = 0; i < len; i++) {
-            data[i] = sharpened[i]
+            const final = Math.min(255, Math.max(0, adjusted))
+            data[i] = data[i + 1] = data[i + 2] = final
           }
 
           ctx.putImageData(imageData, 0, 0)
@@ -139,7 +94,7 @@ export default function Receipts() {
         reject(new Error('Failed to load image'))
       }
 
-      img.crossOrigin = 'anonymous'  // Enable CORS if needed
+      img.crossOrigin = 'anonymous'
       img.src = imageUri
     })
   }
@@ -162,15 +117,15 @@ export default function Receipts() {
 
     // Strategy 1A: Look for explicit TOTAL keywords with various formats (HIGHEST PRIORITY)
     const totalKeywordPatterns = [
-      // Most explicit patterns first
-      { pattern: /(?:grand[\s\-_]*total|total[\s\-_]*amount|final[\s\-_]*total|amount[\s\-_]*due|balance[\s\-_]*due|total[\s\-_]*price)[:\s=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 100, label: 'Grand/Final Total' },
-      { pattern: /(?:total|ttl)[\s]*[:\-=][\s]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 95, label: 'Total with separator' },
-      { pattern: /\btotal\b[\s]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 90, label: 'Simple Total' },
-      { pattern: /(?:sub[\s]*total|subtotal)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 85, label: 'Subtotal' },
+      // Most explicit patterns first - support various currency symbols and formats
+      { pattern: /(?:grand[\s\-_]*total|total[\s\-_]*amount|final[\s\-_]*total|amount[\s\-_]*due|balance[\s\-_]*due|total[\s\-_]*price)[:\s=]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{2})/gi, confidence: 100, label: 'Grand/Final Total' },
+      { pattern: /(?:total|ttl)[\s]*[:\-=][\s]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{2})/gi, confidence: 95, label: 'Total with separator' },
+      { pattern: /\btotal\b[\s]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{2})/gi, confidence: 90, label: 'Simple Total' },
+      { pattern: /(?:sub[\s]*total|subtotal)[\s:=]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{2})/gi, confidence: 85, label: 'Subtotal' },
       // Payment/charge related
-      { pattern: /(?:amount[\s]*charged|payment[\s]*total|total[\s]*charge)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 95, label: 'Payment Total' },
+      { pattern: /(?:amount[\s]*charged|payment[\s]*total|total[\s]*charge)[\s:=]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{2})/gi, confidence: 95, label: 'Payment Total' },
       // Common receipt variations
-      { pattern: /(?:net[\s]*total|gross[\s]*total)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/gi, confidence: 92, label: 'Net/Gross Total' },
+      { pattern: /(?:net[\s]*total|gross[\s]*total)[\s:=]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{2})/gi, confidence: 92, label: 'Net/Gross Total' },
     ]
 
     for (const { pattern, confidence, label } of totalKeywordPatterns) {
@@ -180,12 +135,32 @@ export default function Receipts() {
 
         // If multiple totals, prefer the last one (usually GRAND TOTAL or final amount)
         const match = matches[matches.length - 1]
-        const extractedAmount = match[1].replace(/,/g, '').replace(/\s/g, '')
+
+        // Clean the extracted amount
+        let extractedAmount = match[1].trim()
+
+        // Check if this looks like a space-separated decimal (e.g., "54 50" should be "54.50")
+        // Pattern: 1-4 digits, space, exactly 2 digits
+        if (/^\d{1,4}\s\d{2}$/.test(extractedAmount)) {
+          extractedAmount = extractedAmount.replace(/\s/, '.')
+          console.log(`   Detected space-separated decimal: "${match[1]}" → "${extractedAmount}"`)
+        } else {
+          // Normal processing
+          extractedAmount = extractedAmount
+            .replace(/\s/g, '')  // Remove all spaces
+            .replace(/,/g, '.')  // Replace comma with period
+
+          // Handle European format with period as thousands separator (e.g., 1.234,56)
+          if ((extractedAmount.match(/\./g) || []).length > 1) {
+            extractedAmount = extractedAmount.replace(/\./g, '').replace(',', '.')
+          }
+        }
+
         const numValue = parseFloat(extractedAmount)
 
         if (numValue > 0 && numValue < 100000) {
           if (confidence > amountConfidence) {
-            amount = extractedAmount
+            amount = numValue.toFixed(2)
             amountConfidence = confidence
             console.log(`✅ BEST MATCH: ${label} with ${confidence}% confidence: $${amount}`)
             console.log(`   Full match: "${match[0]}"`)
@@ -198,22 +173,57 @@ export default function Receipts() {
     if (!amount || amountConfidence < 85) {
       console.log('🔍 Checking for multi-line TOTAL format...')
       for (let i = 0; i < lines.length - 1; i++) {
-        // Check if line contains "total" but no number
-        if (/\b(?:total|ttl|grand\s*total|final\s*total)\b/i.test(lines[i]) && !/\d{1,6}[.,]\d{2}/.test(lines[i])) {
-          // Check next line for amount
-          const nextLine = lines[i + 1]
-          const amountMatch = nextLine.match(/\$?\s*(\d{1,6}[.,]\d{2})/)
+        // Check if line contains "total" but no number, OR has total with currency code
+        if (/\b(?:total|ttl|grand\s*total|final\s*total)\b/i.test(lines[i])) {
+          // Check same line first for amount with currency codes (DF, CHF, EUR, etc.)
+          const sameLine = lines[i]
+          const sameLineMatch = sameLine.match(/[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{1,2})/i)
 
-          if (amountMatch) {
-            const extractedAmount = amountMatch[1].replace(/,/g, '').replace(/\s/g, '')
+          if (sameLineMatch) {
+            let extractedAmount = sameLineMatch[1].trim()
+
+            // Check for space-separated decimal
+            if (/^\d{1,4}\s\d{2}$/.test(extractedAmount)) {
+              extractedAmount = extractedAmount.replace(/\s/, '.')
+            } else {
+              extractedAmount = extractedAmount.replace(/\s/g, '').replace(/,/g, '.')
+            }
+
             const numValue = parseFloat(extractedAmount)
 
-            if (numValue > 0 && numValue < 100000 && 85 > amountConfidence) {
-              amount = extractedAmount
-              amountConfidence = 85
-              console.log(`✅ Found TOTAL on line: "${lines[i]}"`)
-              console.log(`   Amount on next line: $${amount} (85% confidence)`)
+            if (numValue > 0 && numValue < 100000 && 90 > amountConfidence) {
+              amount = numValue.toFixed(2)
+              amountConfidence = 90
+              console.log(`✅ Found TOTAL with amount on same line: "${lines[i]}"`)
+              console.log(`   Amount: $${amount} (90% confidence)`)
               break
+            }
+          }
+
+          // Check next line for amount
+          if (i < lines.length - 1) {
+            const nextLine = lines[i + 1]
+            const amountMatch = nextLine.match(/[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{1,2})/)
+
+            if (amountMatch) {
+              let extractedAmount = amountMatch[1].trim()
+
+              // Check for space-separated decimal
+              if (/^\d{1,4}\s\d{2}$/.test(extractedAmount)) {
+                extractedAmount = extractedAmount.replace(/\s/, '.')
+              } else {
+                extractedAmount = extractedAmount.replace(/\s/g, '').replace(/,/g, '.')
+              }
+
+              const numValue = parseFloat(extractedAmount)
+
+              if (numValue > 0 && numValue < 100000 && 85 > amountConfidence) {
+                amount = numValue.toFixed(2)
+                amountConfidence = 85
+                console.log(`✅ Found TOTAL on line: "${lines[i]}"`)
+                console.log(`   Amount on next line: $${amount} (85% confidence)`)
+                break
+              }
             }
           }
         }
@@ -227,14 +237,22 @@ export default function Receipts() {
       const bottomText = bottomPortion.join('\n')
 
       // Look for any total-like keyword in bottom
-      const bottomTotalMatch = bottomText.match(/(?:total|balance|amount\s*due)[\s:=]*\$?\s*(\d{1,6}[.,]\d{2})/i)
+      const bottomTotalMatch = bottomText.match(/(?:total|balance|amount\s*due)[\s:=]*[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{1,2})/i)
 
       if (bottomTotalMatch) {
-        const extractedAmount = bottomTotalMatch[1].replace(/,/g, '').replace(/\s/g, '')
+        let extractedAmount = bottomTotalMatch[1].trim()
+
+        // Check for space-separated decimal
+        if (/^\d{1,4}\s\d{2}$/.test(extractedAmount)) {
+          extractedAmount = extractedAmount.replace(/\s/, '.')
+        } else {
+          extractedAmount = extractedAmount.replace(/\s/g, '').replace(/,/g, '.')
+        }
+
         const numValue = parseFloat(extractedAmount)
 
         if (numValue > 0 && numValue < 100000 && 75 > amountConfidence) {
-          amount = extractedAmount
+          amount = numValue.toFixed(2)
           amountConfidence = 75
           console.log(`✅ Found total in bottom section: $${amount} (75% confidence)`)
           console.log(`   From: "${bottomTotalMatch[0]}"`)
@@ -248,12 +266,22 @@ export default function Receipts() {
       const bottomPortion = lines.slice(-Math.ceil(lines.length * 0.4))
       const bottomText = bottomPortion.join('\n')
 
-      const amountMatches = [...bottomText.matchAll(/\$?\s*(\d{1,6}[.,]\d{2})/g)]
+      // Match amounts with optional currency symbols and handle spaces
+      const amountMatches = [...bottomText.matchAll(/[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{1,2})/g)]
 
       if (amountMatches.length > 0) {
         const amounts = amountMatches
-          .map(m => parseFloat(m[1].replace(/,/g, '').replace(/\s/g, '')))
-          .filter(a => a > 0 && a < 100000)
+          .map(m => {
+            let cleaned = m[1].trim()
+            // Check for space-separated decimal
+            if (/^\d{1,4}\s\d{2}$/.test(cleaned)) {
+              cleaned = cleaned.replace(/\s/, '.')
+            } else {
+              cleaned = cleaned.replace(/\s/g, '').replace(/,/g, '.')
+            }
+            return parseFloat(cleaned)
+          })
+          .filter(a => !isNaN(a) && a > 0 && a < 100000)
 
         if (amounts.length > 0) {
           const maxAmount = Math.max(...amounts)
@@ -270,9 +298,18 @@ export default function Receipts() {
     // Strategy 4: Last resort - pick the largest amount from entire receipt
     if (!amount || amountConfidence < 40) {
       console.log('🔍 Fallback: Finding largest amount in entire receipt...')
-      const allAmounts = [...text.matchAll(/\$?\s*(\d{1,6}[.,]\d{2})/g)]
-        .map(m => parseFloat(m[1].replace(/,/g, '').replace(/\s/g, '')))
-        .filter(a => a > 0 && a < 100000)
+      const allAmounts = [...text.matchAll(/[$€£¥₹CHF\s]*[A-Z]{0,3}\s*(\d{1,6}[\s.,]\d{1,2})/g)]
+        .map(m => {
+          let cleaned = m[1].trim()
+          // Check for space-separated decimal
+          if (/^\d{1,4}\s\d{2}$/.test(cleaned)) {
+            cleaned = cleaned.replace(/\s/, '.')
+          } else {
+            cleaned = cleaned.replace(/\s/g, '').replace(/,/g, '.')
+          }
+          return parseFloat(cleaned)
+        })
+        .filter(a => !isNaN(a) && a > 0 && a < 100000)
 
       if (allAmounts.length > 0) {
         allAmounts.sort((a, b) => b - a)
@@ -708,6 +745,14 @@ export default function Receipts() {
     setUploading(true)
     setOcrProgress(0)
 
+    // Add timeout protection
+    const timeoutId = setTimeout(() => {
+      if (uploading) {
+        console.error('OCR operation timed out')
+        alert('Receipt processing is taking too long. This might be due to:\n\n1. Slow internet connection (downloading OCR libraries)\n2. Large image file\n3. Browser compatibility issue\n\nTry refreshing the page and using a smaller/clearer image.')
+      }
+    }, 60000) // 60 second timeout
+
     const reader = new FileReader()
 
     reader.onload = async (event) => {
@@ -726,22 +771,41 @@ export default function Receipts() {
         console.log('🔍 Starting OCR text recognition...')
         setOcrProgress(10)
 
-        // Perform OCR with optimized settings
-        const result = await Tesseract.recognize(
-          processedImage,
-          'eng',
-          {
-            logger: (m) => {
-              if (m.status === 'recognizing text') {
-                const progress = 10 + Math.round(m.progress * 80)  // 10-90%
-                setOcrProgress(progress)
-                if (progress % 20 === 0) {
-                  console.log(`   OCR: ${progress}%`)
-                }
-              }
-            }
+        // Create worker if it doesn't exist
+        let worker = workerRef.current
+
+        if (!worker) {
+          console.log('Creating new Tesseract worker...')
+          setOcrProgress(15)
+
+          try {
+            worker = await Tesseract.createWorker('eng')
+
+            console.log('Worker created and initialized successfully')
+            workerRef.current = worker
+            setOcrProgress(20)
+          } catch (error) {
+            console.error('Worker initialization error:', error)
+            throw new Error(`Failed to initialize OCR: ${error.message}`)
           }
-        )
+        }
+
+        // Perform OCR with worker
+        console.log('Running OCR recognition on image...')
+        setOcrProgress(30)
+
+        // Show progress increments while processing
+        const progressInterval = setInterval(() => {
+          setOcrProgress(prev => {
+            if (prev < 90) return prev + 5
+            return prev
+          })
+        }, 500)
+
+        const result = await worker.recognize(processedImage)
+
+        clearInterval(progressInterval)
+        console.log('Recognition complete!')
 
         setOcrProgress(95)
 
@@ -813,6 +877,9 @@ export default function Receipts() {
 
         setOcrProgress(100)
 
+        // Clear timeout
+        clearTimeout(timeoutId)
+
         // Show success message
         setTimeout(() => {
           alert(`✓ Receipt scanned successfully!\n\nStore: ${extractedData.storeName}\nAmount: $${extractedData.amount}\nCategory: ${category}\n\nSaved to expenses!`)
@@ -833,6 +900,19 @@ export default function Receipts() {
         console.error('Error message:', error.message)
         console.error('Error stack:', error.stack)
 
+        // Clear timeout
+        clearTimeout(timeoutId)
+
+        // Terminate worker on error to allow retry
+        if (workerRef.current) {
+          try {
+            await workerRef.current.terminate()
+          } catch (e) {
+            console.error('Worker termination error:', e)
+          }
+          workerRef.current = null
+        }
+
         setUploading(false)
         setOcrProgress(0)
 
@@ -844,6 +924,7 @@ export default function Receipts() {
       console.error('=== FILE READER ERROR ===')
       console.error('Reader error:', error)
 
+      clearTimeout(timeoutId)
       setUploading(false)
       setOcrProgress(0)
 
