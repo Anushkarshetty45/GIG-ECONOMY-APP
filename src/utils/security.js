@@ -300,3 +300,184 @@ export const maskSensitiveData = (data, visibleChars = 4) => {
 
   return masked + visible
 }
+
+/**
+ * Validate password strength
+ * @param {string} password - Password to validate
+ * @returns {object} - {valid: boolean, strength: number, errors: Array}
+ */
+export const validatePassword = (password) => {
+  const errors = []
+  let strength = 0
+
+  if (!password || password.length < 8) {
+    errors.push('Password must be at least 8 characters long')
+  } else {
+    strength += 1
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter')
+  } else {
+    strength += 1
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter')
+  } else {
+    strength += 1
+  }
+
+  if (!/[0-9]/.test(password)) {
+    errors.push('Password must contain at least one number')
+  } else {
+    strength += 1
+  }
+
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errors.push('Password must contain at least one special character')
+  } else {
+    strength += 1
+  }
+
+  // Check for common passwords
+  const commonPasswords = ['password', '12345678', 'qwerty', 'abc123', 'password123', 'admin', 'letmein']
+  if (commonPasswords.some(common => password.toLowerCase().includes(common))) {
+    errors.push('Password is too common. Please choose a more unique password.')
+    strength = Math.max(0, strength - 2)
+  }
+
+  return {
+    valid: errors.length === 0,
+    strength: Math.min(5, strength),
+    errors
+  }
+}
+
+/**
+ * Generate CSRF token
+ * @returns {string} - CSRF token
+ */
+export const generateCSRFToken = () => {
+  const array = new Uint8Array(32)
+  crypto.getRandomValues(array)
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
+}
+
+/**
+ * Audit logging for security events
+ */
+const auditLog = []
+
+export const logSecurityEvent = (action, details = {}) => {
+  const event = {
+    timestamp: new Date().toISOString(),
+    action,
+    details,
+    userAgent: navigator.userAgent,
+    url: window.location.href
+  }
+
+  auditLog.push(event)
+
+  // Log to console in development
+  if (import.meta.env.DEV) {
+    console.log('🔒 Security Event:', event)
+  }
+
+  // Keep only last 100 events to prevent memory issues
+  if (auditLog.length > 100) {
+    auditLog.shift()
+  }
+
+  // In production, you should send to server
+  // sendToServer('/api/audit-log', event)
+}
+
+export const getAuditLog = (limit = 50) => {
+  return auditLog.slice(-limit)
+}
+
+/**
+ * Secure session storage with expiration
+ */
+export const secureSessionStorage = {
+  set: (key, value, expiresInMs = 60 * 60 * 1000) => {
+    try {
+      const item = {
+        value,
+        expires: Date.now() + expiresInMs,
+        checksum: generateChecksum(JSON.stringify(value))
+      }
+      sessionStorage.setItem(`sec_${key}`, JSON.stringify(item))
+      return true
+    } catch (error) {
+      console.error('Error writing to sessionStorage:', error)
+      return false
+    }
+  },
+
+  get: (key) => {
+    try {
+      const itemStr = sessionStorage.getItem(`sec_${key}`)
+      if (!itemStr) return null
+
+      const item = JSON.parse(itemStr)
+
+      // Check expiration
+      if (Date.now() > item.expires) {
+        sessionStorage.removeItem(`sec_${key}`)
+        return null
+      }
+
+      // Verify checksum
+      const currentChecksum = generateChecksum(JSON.stringify(item.value))
+      if (currentChecksum !== item.checksum) {
+        console.warn('Session data integrity check failed')
+        sessionStorage.removeItem(`sec_${key}`)
+        return null
+      }
+
+      return item.value
+    } catch (error) {
+      console.error('Error reading from sessionStorage:', error)
+      return null
+    }
+  },
+
+  remove: (key) => {
+    try {
+      sessionStorage.removeItem(`sec_${key}`)
+      return true
+    } catch (error) {
+      console.error('Error removing from sessionStorage:', error)
+      return false
+    }
+  }
+}
+
+/**
+ * Generate simple checksum for data integrity
+ */
+function generateChecksum(str) {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return hash.toString(36)
+}
+
+/**
+ * Sanitize filename for safe file operations
+ */
+export const sanitizeFilename = (filename) => {
+  if (typeof filename !== 'string') return ''
+
+  return filename
+    .replace(/[^a-zA-Z0-9.-]/g, '_') // Replace special chars
+    .replace(/\.{2,}/g, '.') // Prevent directory traversal
+    .replace(/^\./, '') // Remove leading dot
+    .slice(0, 255) // Limit length
+}
