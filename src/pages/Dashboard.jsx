@@ -1,6 +1,6 @@
 import { useFinanceStore } from '../store/financeStore'
 import { useSettingsStore } from '../store/settingsStore'
-import { LayoutDashboard, DollarSign, CreditCard, FileText, Target, Heart, Zap, TrendingUp } from 'lucide-react'
+import { LayoutDashboard, DollarSign, CreditCard, FileText, Target, Heart } from 'lucide-react'
 import './DashboardPages.css'
 
 export default function Dashboard() {
@@ -159,23 +159,6 @@ export default function Dashboard() {
              financialHealthScore >= 25 ? 'Getting started. Focus on reducing expenses.' :
              'Start by tracking your income and expenses regularly.'}
           </p>
-        </div>
-      </div>
-
-      <div className="quick-actions">
-        <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Zap size={20} /> Quick Actions
-        </h2>
-        <div className="action-buttons">
-          <button className="action-button" onClick={() => window.location.href = '/dashboard/income'} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <DollarSign size={18} /> Add Income
-          </button>
-          <button className="action-button" onClick={() => window.location.href = '/dashboard/expenses'} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <CreditCard size={18} /> Add Expense
-          </button>
-          <button className="action-button" onClick={() => window.location.href = '/dashboard/analytics'} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <TrendingUp size={18} /> View Analytics
-          </button>
         </div>
       </div>
     </div>
