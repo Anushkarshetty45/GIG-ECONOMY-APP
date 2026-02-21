@@ -7,7 +7,7 @@ import './Settings.css'
 
 export default function Settings() {
   const { user, signOut, updatePassword } = useAuthStore()
-  const { currentTheme, toggleThemeSwitcher } = useThemeStore()
+  const { currentTheme, setTheme } = useThemeStore()
   const {
     currency,
     dateFormat,
@@ -131,21 +131,65 @@ export default function Settings() {
               <h2 className="settings-section-title">Preferences</h2>
               
               <div className="settings-card">
-                <h3 className="settings-card-title">Theme</h3>
-                <div className="setting-item">
-                  <div className="setting-label">
-                    <Palette size={18} style={{ color: 'var(--theme-primary)' }} />
-                    <span>Current Theme</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div className="theme-badge">
-                      <span style={{ fontSize: '20px' }}>{themePresets[currentTheme]?.emoji}</span>
-                      <span>{themePresets[currentTheme]?.name}</span>
+                <h3 className="settings-card-title">
+                  <Palette size={20} style={{ color: 'var(--theme-primary)', marginRight: '8px' }} />
+                  Theme
+                </h3>
+                <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '16px', fontSize: '14px' }}>
+                  Choose your preferred theme
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '12px' }}>
+                  {Object.entries(themePresets).map(([id, theme]) => (
+                    <div
+                      key={id}
+                      onClick={() => setTheme(id, true)}
+                      style={{
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: `2px solid ${currentTheme === id ? theme.colors.primary : theme.colors.border}`,
+                        background: theme.colors.surface,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        position: 'relative'
+                      }}
+                    >
+                      {currentTheme === id && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '8px',
+                          right: '8px',
+                          background: theme.colors.primary,
+                          color: theme.colors.text,
+                          borderRadius: '50%',
+                          width: '24px',
+                          height: '24px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '14px',
+                          fontWeight: 'bold'
+                        }}>
+                          ✓
+                        </div>
+                      )}
+                      <div style={{ fontSize: '32px', marginBottom: '8px', textAlign: 'center' }}>
+                        {theme.emoji}
+                      </div>
+                      <div style={{
+                        color: theme.colors.text,
+                        fontWeight: '600',
+                        textAlign: 'center',
+                        marginBottom: '8px'
+                      }}>
+                        {theme.name}
+                      </div>
+                      <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                        <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: theme.colors.primary }} />
+                        <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: theme.colors.success }} />
+                        <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: theme.colors.warning }} />
+                      </div>
                     </div>
-                    <button className="btn-primary" onClick={toggleThemeSwitcher}>
-                      Change Theme
-                    </button>
-                  </div>
+                  ))}
                 </div>
               </div>
 
