@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useFinanceStore } from '../store/financeStore'
 import Tesseract from 'tesseract.js'
 import './DashboardPages.css'

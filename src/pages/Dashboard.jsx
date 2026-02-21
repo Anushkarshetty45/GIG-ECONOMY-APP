@@ -1,3 +1,4 @@
+import React from 'react'
 import { useFinanceStore } from '../store/financeStore'
 import { useSettingsStore } from '../store/settingsStore'
 import { LayoutDashboard, DollarSign, CreditCard, FileText, Target, Heart } from 'lucide-react'

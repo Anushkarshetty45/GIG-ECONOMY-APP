@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useFinanceStore } from '../store/financeStore'
 import { Download, FileText, FileSpreadsheet, Calendar, DollarSign, Settings, Zap, Receipt, TrendingUp, BarChart3, PieChart } from 'lucide-react'
 import './DashboardPages.css'

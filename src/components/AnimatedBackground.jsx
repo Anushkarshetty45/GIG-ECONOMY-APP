@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useThemeStore } from '../store/themeStore'
 import './AnimatedBackground.css'
 

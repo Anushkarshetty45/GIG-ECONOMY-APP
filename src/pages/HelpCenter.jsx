@@ -1,3 +1,4 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, HelpCircle, MessageCircle, Book, Mail, Github, Search } from 'lucide-react'
 import './DashboardPages.css'

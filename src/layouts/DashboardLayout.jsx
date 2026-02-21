@@ -1,3 +1,4 @@
+import React from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { LayoutDashboard, DollarSign, CreditCard, Target, TrendingUp, Camera, Download, Calculator, Shield, Settings, LogOut } from 'lucide-react'

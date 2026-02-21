@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useAuthStore } from '../store/authStore'
 import { useThemeStore, themePresets } from '../store/themeStore'
 import { useSettingsStore, currencies, dateFormats } from '../store/settingsStore'

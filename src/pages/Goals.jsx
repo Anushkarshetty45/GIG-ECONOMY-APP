@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useFinanceStore } from '../store/financeStore'
 import { Target, PiggyBank, Home, Car, GraduationCap, Plane, Heart, Laptop, TrendingUp, Shield, Gift, Trophy, Wallet, FileText } from 'lucide-react'
 import './DashboardPages.css'

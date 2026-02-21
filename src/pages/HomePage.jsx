@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TrendingUp, DollarSign, Target, Shield, BarChart3, Receipt, Clock, FileText, CheckCircle, CreditCard } from 'lucide-react'
 import './HomePage.css'

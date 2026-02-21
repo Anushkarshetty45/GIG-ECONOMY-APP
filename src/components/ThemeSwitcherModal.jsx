@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useThemeStore, themePresets } from '../store/themeStore'
 import { Palette, X } from 'lucide-react'
 import './ThemeSwitcherModal.css'

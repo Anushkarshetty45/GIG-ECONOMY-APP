@@ -1,3 +1,4 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Shield, Lock, Eye, Database, UserX, FileText } from 'lucide-react'
 import './DashboardPages.css'
