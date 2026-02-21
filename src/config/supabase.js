@@ -5,11 +5,17 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Validate that environment variables are present
+// Validate that environment variables are present (unless in dev mode)
+const isDevMode = import.meta.env.VITE_DEV_MODE === 'true'
+
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('⚠️ CRITICAL: Supabase credentials missing!')
-  console.error('Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY')
-  throw new Error('Supabase configuration missing. Check .env file.')
+  if (isDevMode) {
+    console.warn('⚠️ Supabase credentials missing, but running in DEV MODE')
+  } else {
+    console.error('⚠️ CRITICAL: Supabase credentials missing!')
+    console.error('Please create a .env file with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY')
+    throw new Error('Supabase configuration missing. Check .env file.')
+  }
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
