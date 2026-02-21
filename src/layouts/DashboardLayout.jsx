@@ -1,7 +1,6 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { LayoutDashboard, DollarSign, CreditCard, Target, TrendingUp, Camera, Download, Calculator, Shield, Settings, LogOut } from 'lucide-react'
-import ThemeSwitcherModal from '../components/ThemeSwitcherModal'
 import AnimatedBackground from '../components/AnimatedBackground'
 import './DashboardLayout.css'
 
@@ -62,8 +61,6 @@ export default function DashboardLayout() {
       <main className="main-content">
         <Outlet />
       </main>
-
-      <ThemeSwitcherModal />
     </div>
   )
 }
