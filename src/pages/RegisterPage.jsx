@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { supabase } from '../config/supabase'
 import './AuthPages.css'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
-  const { loading, error, setError } = useAuthStore()
+  const { signUp, loading, error } = useAuthStore()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,26 +15,14 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    try {
-      // Sign up with Supabase - no email confirmation required
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            full_name: formData.fullName
-          },
-          emailRedirectTo: `${window.location.origin}/login`,
-        }
-      })
+    const result = await signUp(formData.email, formData.password, {
+      full_name: formData.fullName
+    })
 
-      if (error) throw error
-
+    if (result.success) {
       // Registration successful - redirect to login
       alert('Account created successfully! Please login with your credentials.')
       navigate('/login')
-    } catch (err) {
-      setError(err.message)
     }
   }
 
