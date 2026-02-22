@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import './AuthPages.css'
@@ -10,21 +10,6 @@ export default function LoginPage() {
     email: '',
     password: ''
   })
-  const [emailConfirmed, setEmailConfirmed] = useState(false)
-
-  useEffect(() => {
-    // Check if user just confirmed their email (hash params from Supabase)
-    const hashParams = new URLSearchParams(window.location.hash.substring(1))
-    const type = hashParams.get('type')
-
-    if (type === 'signup' || type === 'email') {
-      setEmailConfirmed(true)
-      // Clear the success message after 5 seconds
-      setTimeout(() => setEmailConfirmed(false), 5000)
-      // Clear the hash from URL
-      window.history.replaceState(null, '', window.location.pathname)
-    }
-  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -44,19 +29,6 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          {emailConfirmed && (
-            <div style={{
-              background: 'rgba(52, 211, 153, 0.1)',
-              border: '1px solid #34d399',
-              color: '#34d399',
-              padding: '12px',
-              borderRadius: '8px',
-              marginBottom: '20px',
-              fontSize: '14px'
-            }}>
-              ✅ Email verified successfully! You can now log in.
-            </div>
-          )}
           {error && <div className="error-message">{error}</div>}
 
           <div className="form-group">
