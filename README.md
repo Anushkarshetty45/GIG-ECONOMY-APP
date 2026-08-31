@@ -33,26 +33,26 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 Gig Economy Finance Tracker is a modern, beautifully designed web application that helps freelancers, gig workers, and independent contractors take control of their finances. With features like income tracking, expense management, tax calculation, insurance recommendations, and stunning customizable themes, it's the all-in-one financial companion for the modern gig worker.
 
 ### Why This App?
 
-- 📊 **Smart Analytics** - Visualize your financial health with interactive charts
-- 💰 **Income Tracking** - Track earnings from 30+ gig platforms (Uber, DoorDash, Fiverr, etc.)
-- 💸 **Expense Management** - Categorize spending across 25+ categories
-- 🎯 **Goal Setting** - Set and track savings goals with visual progress
-- 📋 **Tax Tools** - Calculate quarterly tax estimates with deduction tracking
-- 🛡️ **Insurance Advisor** - Get personalized insurance recommendations
-- 🎨 **9 Beautiful Themes** - Customize your experience with stunning visual themes
-- 🔒 **Secure & Private** - Your data is encrypted and protected
+-  **Smart Analytics** - Visualize your financial health with interactive charts
+-  **Income Tracking** - Track earnings from 30+ gig platforms (Uber, DoorDash, Fiverr, etc.)
+-  **Expense Management** - Categorize spending across 25+ categories
+-  **Goal Setting** - Set and track savings goals with visual progress
+-  **Tax Tools** - Calculate quarterly tax estimates with deduction tracking
+-  **Insurance Advisor** - Get personalized insurance recommendations
+-  **9 Beautiful Themes** - Customize your experience with stunning visual themes
+-  **Secure & Private** - Your data is encrypted and protected
 
 ---
 
-## 🌐 Live Demo
+##  Live Demo
 
-**🚀 Live Application:** [https://gigeconomy-xi.vercel.app](https://gigeconomy-xi.vercel.app)
+** Live Application:** [https://gigeconomy-xi.vercel.app](https://gigeconomy-xi.vercel.app)
 
 Try it out now! Create an account and explore all the features.
 
@@ -62,7 +62,7 @@ Try it out now! Create an account and explore all the features.
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Dashboard Overview
 ![Dashboard](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Dashboard+Overview)
@@ -92,62 +92,62 @@ Try it out now! Create an account and explore all the features.
 
 ---
 
-## ✨ Features
+##  Features
 
-### 💵 **Financial Management**
+### **Financial Management**
 - **Income Tracking**: Log earnings from multiple platforms with date, amount, and notes
 - **Expense Tracking**: Categorize expenses with 25+ categories (Gas, Food, Equipment, etc.)
 - **Net Income Calculation**: Real-time calculation of profits
 - **Financial Health Score**: Dashboard showing your overall financial status
 
-### 📊 **Analytics & Insights**
+### **Analytics & Insights**
 - **Interactive Charts**: Visualize income/expense trends with Recharts
 - **Category Breakdown**: See spending patterns by category
 - **Platform Analysis**: Track which gig platforms earn you the most
 - **Monthly Trends**: Identify seasonal patterns in your income
 
-### 🎯 **Goal Management**
+### **Goal Management**
 - **Savings Goals**: Set target amounts with deadlines
 - **Visual Progress**: Track goal completion with progress bars
 - **Multiple Goals**: Manage emergency funds, vacation savings, equipment purchases, etc.
 - **Goal Completion**: Celebrate achievements when goals are met
 
-### 💼 **Tax Tools**
+### **Tax Tools**
 - **Quarterly Calculator**: Break down tax obligations by quarter (Q1-Q4)
 - **Deduction Tracker**: Track deductible expenses (Gas, Equipment, Software, etc.)
 - **Tax Estimates**: Calculate estimated tax bills at 25% rate
 - **Tax Checklist**: Prepare for tax season with guided checklist
 - **Year Selection**: View tax data for multiple years (2022-2025)
 
-### 🛡️ **Insurance Advisor**
+### **Insurance Advisor**
 - **Smart Recommendations**: Get personalized insurance suggestions based on income
 - **9 Insurance Types**: Health, Auto, Liability, Disability, Life, Equipment, Professional, Cyber, Umbrella
 - **Affordability Analysis**: See if insurance fits your budget
 - **Priority Levels**: High/Medium/Low priority based on your financial situation
 - **Policy Management**: Track active policies, costs, and renewal dates
 
-### 📸 **Receipt Management**
+### **Receipt Management**
 - **Image Upload**: Store receipt photos for tax deductions
 - **Categorization**: Link receipts to expense categories
 - **Organization**: Search and filter receipts
 - **Cloud Storage**: Powered by Supabase Storage
 
-### 📤 **Export & Reports**
+### **Export & Reports**
 - **CSV Export**: Download data for Excel/Google Sheets
 - **PDF Reports**: Generate professional financial reports
 - **Custom Date Ranges**: Export specific time periods
 
-### 🎨 **Customizable Themes**
+### **Customizable Themes**
 **9 Beautiful Themes:**
-1. ⚪ **Pure White** - Clean, minimal, professional
-2. ⚫ **Midnight Black** - OLED-friendly dark mode
-3. 🌸 **Soft Pastels** - Dreamy vintage aesthetic
-4. 🌅 **Coral Sunset** - Warm tropical vibes
-5. 💜 **Lavender Dream** - Calming purple tones
-6. 🌿 **Mint Fresh** - Natural and refreshing
-7. 🌊 **Ocean Breeze** - Coastal tranquility with animated waves
-8. ☕ **Midnight Latte** - Cozy coffee shop dark mode
-9. 🌍 **Seasonal** - Auto-changes with seasons (Spring/Summer/Fall/Winter)
+1.  **Pure White** - Clean, minimal, professional
+2.  **Midnight Black** - OLED-friendly dark mode
+3.  **Soft Pastels** - Dreamy vintage aesthetic
+4.  **Coral Sunset** - Warm tropical vibes
+5.  **Lavender Dream** - Calming purple tones
+6.  **Mint Fresh** - Natural and refreshing
+7.  **Ocean Breeze** - Coastal tranquility with animated waves
+8.  **Midnight Latte** - Cozy coffee shop dark mode
+9.  **Seasonal** - Auto-changes with seasons (Spring/Summer/Fall/Winter)
 
 **Theme Features:**
 - Animated particle backgrounds (snowflakes, petals, waves)
@@ -157,7 +157,7 @@ Try it out now! Create an account and explore all the features.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### **Core Framework & Build Tools**
 
@@ -585,7 +585,7 @@ The app can be deployed to:
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Environment Variables
 
@@ -606,10 +606,10 @@ VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
 **Important Security Notes:**
-- ✅ `.env` is in `.gitignore` - never commit it
-- ✅ Use `VITE_` prefix for all frontend variables
-- ⚠️ Never expose secret keys in client-side code
-
+-  `.env` is in `.gitignore` - never commit it
+-  Use `VITE_` prefix for all frontend variables
+-  Never expose secret keys in client-side code
+  
 ### Building for Production
 
 ```bash
@@ -624,54 +624,54 @@ Output will be in `dist/` directory
 
 ---
 
-## 🎨 Themes
+##  Themes
 
 The app features 9 professionally designed themes with animated backgrounds:
 
 | Theme | Mode | Description | Special Effects |
 |-------|------|-------------|-----------------|
-| ⚪ Pure White | Light | Clean, minimal, professional | None |
-| ⚫ Midnight Black | Dark | OLED-friendly true blacks | White sparkles |
-| 🌸 Soft Pastels | Light | Dreamy vintage aesthetic | Pink petals |
-| 🌅 Coral Sunset | Light | Warm tropical vibes | Orange gradient orbs |
-| 💜 Lavender Dream | Light | Calming purple fields | Purple petals |
-| 🌿 Mint Fresh | Light | Natural and refreshing | Green leaves |
-| 🌊 Ocean Breeze | Light | Coastal tranquility | Animated waves |
-| ☕ Midnight Latte | Dark | Cozy coffee shop | Steam wisps |
-| 🌍 Seasonal | Dynamic | Auto-changes with seasons | Season-specific |
+|  Pure White | Light | Clean, minimal, professional | None |
+|  Midnight Black | Dark | OLED-friendly true blacks | White sparkles |
+|  Soft Pastels | Light | Dreamy vintage aesthetic | Pink petals |
+|  Coral Sunset | Light | Warm tropical vibes | Orange gradient orbs |
+|  Lavender Dream | Light | Calming purple fields | Purple petals |
+|  Mint Fresh | Light | Natural and refreshing | Green leaves |
+|  Ocean Breeze | Light | Coastal tranquility | Animated waves |
+|  Midnight Latte | Dark | Cozy coffee shop | Steam wisps |
+|  Seasonal | Dynamic | Auto-changes with seasons | Season-specific |
 
 **Seasonal Theme Changes:**
-- 🌸 **Spring** (Mar 20 - Jun 20): Pink cherry blossoms
-- ☀️ **Summer** (Jun 21 - Sep 22): Golden sunshine
-- 🍁 **Fall** (Sep 23 - Dec 20): Autumn leaves
-- ❄️ **Winter** (Dec 21 - Mar 19): Snowy twilight
+-  **Spring** (Mar 20 - Jun 20): Pink cherry blossoms
+-  **Summer** (Jun 21 - Sep 22): Golden sunshine
+-  **Fall** (Sep 23 - Dec 20): Autumn leaves
+-  **Winter** (Dec 21 - Mar 19): Snowy twilight
 
 ---
 
-## 🔒 Security
+##  Security
 
 ### Implemented Security Features
 
-✅ **Authentication**
+ **Authentication**
 - JWT token-based sessions (Supabase Auth)
 - Secure password hashing (bcrypt)
 - Email verification support
 - Password reset functionality
 
-✅ **Data Protection**
+ **Data Protection**
 - Row Level Security (RLS) in Supabase
 - Users can only access their own data
 - Environment variables for secrets
 - No hardcoded credentials
 
-✅ **Frontend Security**
+ **Frontend Security**
 - Content Security Policy (CSP)
 - XSS protection headers
 - HTTPS/SSL encryption
 - Input validation & sanitization
 - Secure localStorage wrapper
 
-✅ **Code Security**
+ **Code Security**
 - No sensitive data in git history
 - `.env` in `.gitignore`
 - npm audit for vulnerabilities
@@ -692,7 +692,7 @@ import {
 } from './utils/security'
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 gig-economy-app/
@@ -737,7 +737,7 @@ gig-economy-app/
 
 ---
 
-## 👨‍💻 Role & Responsibilities
+##  Role & Responsibilities
 
 ### Project Development
 
@@ -745,7 +745,7 @@ gig-economy-app/
 
 #### Key Responsibilities:
 
-**🎨 Frontend Development**
+** Frontend Development**
 - Designed and implemented responsive UI using React 18.2 and modern CSS
 - Built 15+ interactive pages (Dashboard, Income, Expenses, Goals, Analytics, etc.)
 - Created reusable component library with 20+ custom components
@@ -753,7 +753,7 @@ gig-economy-app/
 - Integrated Recharts for data visualization with custom styling
 - Developed mobile-first responsive design supporting all screen sizes
 
-**⚙️ Backend & Database**
+** Backend & Database**
 - Set up and configured Supabase backend (PostgreSQL database)
 - Designed database schema with 5+ tables (incomes, expenses, goals, insurance, receipts)
 - Implemented Row Level Security (RLS) policies for data protection
@@ -761,7 +761,7 @@ gig-economy-app/
 - Set up authentication system with JWT tokens
 - Configured file storage for receipt image uploads
 
-**🔐 Security Implementation**
+** Security Implementation**
 - Implemented Content Security Policy (CSP) headers
 - Built rate limiting system (login/signup protection)
 - Created input sanitization and validation utilities
@@ -769,20 +769,20 @@ gig-economy-app/
 - Implemented audit logging for security events
 - Set up environment variable management for secrets
 
-**📊 State Management**
+** State Management**
 - Architected global state management using Zustand
 - Created 4 state stores (auth, finance, theme, settings)
 - Implemented localStorage persistence for offline support
 - Designed clean data flow patterns
 
-**🚀 DevOps & Deployment**
+** DevOps & Deployment**
 - Configured Vite build system for optimal performance
 - Set up CI/CD pipeline with Vercel deployment
 - Implemented environment variable management
 - Optimized bundle size with code splitting and tree shaking
 - Configured production builds with security headers
 
-**🧪 Testing & Quality Assurance**
+** Testing & Quality Assurance**
 - Conducted end-to-end testing of all features
 - Performed security audits and vulnerability scanning
 - Optimized performance (lighthouse scores 90+)
@@ -790,14 +790,14 @@ gig-economy-app/
 
 #### Technical Achievements:
 
-✅ Built complete full-stack application in React + Supabase
-✅ Implemented secure authentication with rate limiting
-✅ Created 9 custom themes with animated backgrounds
-✅ Integrated 3rd-party APIs (Plaid, Stripe - ready for production)
-✅ Implemented OCR receipt scanning with Tesseract.js
-✅ Achieved responsive design across mobile, tablet, and desktop
-✅ Deployed to production with zero downtime
-✅ Maintained clean, documented, and scalable codebase
+ Built complete full-stack application in React + Supabase
+ Implemented secure authentication with rate limiting
+ Created 9 custom themes with animated backgrounds
+ Integrated 3rd-party APIs (Plaid, Stripe - ready for production)
+ Implemented OCR receipt scanning with Tesseract.js
+ Achieved responsive design across mobile, tablet, and desktop
+ Deployed to production with zero downtime
+ Maintained clean, documented, and scalable codebase
 
 #### Technologies Used:
 
@@ -809,7 +809,7 @@ gig-economy-app/
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Here's how you can help:
 
@@ -838,13 +838,13 @@ Contributions are welcome! Here's how you can help:
 
 ---
 
-## 📝 License
+##  License
 
 This project is licensed under the MIT License.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **Supabase** - For the amazing backend-as-a-service platform
 - **Vite** - For the lightning-fast build tool
@@ -857,7 +857,6 @@ This project is licensed under the MIT License.
 
 <div align="center">
 
-**Made with ❤️ for the gig economy community**
 
 [⬆ Back to Top](#-gig-economy-finance-tracker)
 
