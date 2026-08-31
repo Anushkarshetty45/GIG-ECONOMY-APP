@@ -48,49 +48,9 @@ Gig Economy Finance Tracker is a modern, beautifully designed web application th
 -  **9 Beautiful Themes** - Customize your experience with stunning visual themes
 -  **Secure & Private** - Your data is encrypted and protected
 
----
-
-##  Live Demo
-
-** Live Application:** [https://gigeconomy-xi.vercel.app](https://gigeconomy-xi.vercel.app)
-
-Try it out now! Create an account and explore all the features.
-
-**Test Credentials (Optional):**
-- Email: demo@gigeconomy.com
-- Password: Demo123!@#
 
 ---
 
-## Screenshots
-
-### Dashboard Overview
-![Dashboard](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Dashboard+Overview)
-*Main dashboard showing financial summary, recent transactions, and quick stats*
-
-### Income Tracking
-![Income](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Income+Tracking)
-*Track earnings from 30+ gig platforms with detailed analytics*
-
-### Analytics & Charts
-![Analytics](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Analytics+%26+Charts)
-*Interactive charts showing income/expense trends and category breakdowns*
-
-### Goal Management
-![Goals](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Goal+Management)
-*Set and track savings goals with visual progress indicators*
-
-### Tax Calculator
-![Tax Tools](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Tax+Calculator)
-*Quarterly tax calculator with deduction tracking and estimates*
-
-### Theme Customization
-![Themes](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=9+Beautiful+Themes)
-*Choose from 9 stunning themes including animated backgrounds*
-
-> **Note:** Replace placeholder images with actual screenshots of your application
-
----
 
 ##  Features
 
