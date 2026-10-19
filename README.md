@@ -57,6 +57,7 @@ Gig Economy Finance Tracker is a modern, beautifully designed web application th
 Try it out now! Create an account and explore all the features.
 
 **Test Credentials (Optional):**
+
 - Email: demo@gigeconomy.com
 - Password: Demo123!@#
 
@@ -65,28 +66,34 @@ Try it out now! Create an account and explore all the features.
 ## 📸 Screenshots
 
 ### Dashboard Overview
+
 ![Dashboard](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Dashboard+Overview)
-*Main dashboard showing financial summary, recent transactions, and quick stats*
+_Main dashboard showing financial summary, recent transactions, and quick stats_
 
 ### Income Tracking
+
 ![Income](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Income+Tracking)
-*Track earnings from 30+ gig platforms with detailed analytics*
+_Track earnings from 30+ gig platforms with detailed analytics_
 
 ### Analytics & Charts
+
 ![Analytics](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Analytics+%26+Charts)
-*Interactive charts showing income/expense trends and category breakdowns*
+_Interactive charts showing income/expense trends and category breakdowns_
 
 ### Goal Management
+
 ![Goals](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Goal+Management)
-*Set and track savings goals with visual progress indicators*
+_Set and track savings goals with visual progress indicators_
 
 ### Tax Calculator
+
 ![Tax Tools](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Tax+Calculator)
-*Quarterly tax calculator with deduction tracking and estimates*
+_Quarterly tax calculator with deduction tracking and estimates_
 
 ### Theme Customization
+
 ![Themes](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=9+Beautiful+Themes)
-*Choose from 9 stunning themes including animated backgrounds*
+_Choose from 9 stunning themes including animated backgrounds_
 
 > **Note:** Replace placeholder images with actual screenshots of your application
 
@@ -95,24 +102,28 @@ Try it out now! Create an account and explore all the features.
 ## ✨ Features
 
 ### 💵 **Financial Management**
+
 - **Income Tracking**: Log earnings from multiple platforms with date, amount, and notes
 - **Expense Tracking**: Categorize expenses with 25+ categories (Gas, Food, Equipment, etc.)
 - **Net Income Calculation**: Real-time calculation of profits
 - **Financial Health Score**: Dashboard showing your overall financial status
 
 ### 📊 **Analytics & Insights**
+
 - **Interactive Charts**: Visualize income/expense trends with Recharts
 - **Category Breakdown**: See spending patterns by category
 - **Platform Analysis**: Track which gig platforms earn you the most
 - **Monthly Trends**: Identify seasonal patterns in your income
 
 ### 🎯 **Goal Management**
+
 - **Savings Goals**: Set target amounts with deadlines
 - **Visual Progress**: Track goal completion with progress bars
 - **Multiple Goals**: Manage emergency funds, vacation savings, equipment purchases, etc.
 - **Goal Completion**: Celebrate achievements when goals are met
 
 ### 💼 **Tax Tools**
+
 - **Quarterly Calculator**: Break down tax obligations by quarter (Q1-Q4)
 - **Deduction Tracker**: Track deductible expenses (Gas, Equipment, Software, etc.)
 - **Tax Estimates**: Calculate estimated tax bills at 25% rate
@@ -120,6 +131,7 @@ Try it out now! Create an account and explore all the features.
 - **Year Selection**: View tax data for multiple years (2022-2025)
 
 ### 🛡️ **Insurance Advisor**
+
 - **Smart Recommendations**: Get personalized insurance suggestions based on income
 - **9 Insurance Types**: Health, Auto, Liability, Disability, Life, Equipment, Professional, Cyber, Umbrella
 - **Affordability Analysis**: See if insurance fits your budget
@@ -127,18 +139,22 @@ Try it out now! Create an account and explore all the features.
 - **Policy Management**: Track active policies, costs, and renewal dates
 
 ### 📸 **Receipt Management**
+
 - **Image Upload**: Store receipt photos for tax deductions
 - **Categorization**: Link receipts to expense categories
 - **Organization**: Search and filter receipts
 - **Cloud Storage**: Powered by Supabase Storage
 
 ### 📤 **Export & Reports**
+
 - **CSV Export**: Download data for Excel/Google Sheets
 - **PDF Reports**: Generate professional financial reports
 - **Custom Date Ranges**: Export specific time periods
 
 ### 🎨 **Customizable Themes**
+
 **9 Beautiful Themes:**
+
 1. ⚪ **Pure White** - Clean, minimal, professional
 2. ⚫ **Midnight Black** - OLED-friendly dark mode
 3. 🌸 **Soft Pastels** - Dreamy vintage aesthetic
@@ -150,6 +166,7 @@ Try it out now! Create an account and explore all the features.
 9. 🌍 **Seasonal** - Auto-changes with seasons (Spring/Summer/Fall/Winter)
 
 **Theme Features:**
+
 - Animated particle backgrounds (snowflakes, petals, waves)
 - Smooth transitions (0.4s ease)
 - LocalStorage persistence
@@ -162,6 +179,7 @@ Try it out now! Create an account and explore all the features.
 ### **Core Framework & Build Tools**
 
 #### **React 18.2.0**
+
 - **What it is**: A JavaScript library for building user interfaces
 - **Why we use it**:
   - Component-based architecture for reusable UI elements
@@ -174,6 +192,7 @@ Try it out now! Create an account and explore all the features.
   - No class components (modern approach)
 
 #### **Vite 5.0.8**
+
 - **What it is**: Next-generation frontend build tool
 - **Why we use it**:
   - Lightning-fast Hot Module Replacement (HMR) - see changes instantly
@@ -187,6 +206,7 @@ Try it out now! Create an account and explore all the features.
   - Built-in TypeScript support
 
 #### **React Router DOM 6.20.0**
+
 - **What it is**: Client-side routing library for React
 - **Why we use it**:
   - Single Page Application (SPA) navigation without page reloads
@@ -203,6 +223,7 @@ Try it out now! Create an account and explore all the features.
 ### **Backend & Database**
 
 #### **Supabase 2.45.0**
+
 - **What it is**: Open-source Firebase alternative (Backend-as-a-Service)
 - **Why we use it**:
   - PostgreSQL database (enterprise-grade SQL database)
@@ -226,6 +247,7 @@ Try it out now! Create an account and explore all the features.
 ### **State Management**
 
 #### **Zustand 4.5.0**
+
 - **What it is**: Lightweight state management library
 - **Why we use it**:
   - Simple API (easier than Redux)
@@ -247,6 +269,7 @@ Try it out now! Create an account and explore all the features.
 ### **UI Components & Styling**
 
 #### **Lucide React 0.300.0**
+
 - **What it is**: Beautiful, consistent icon library
 - **Why we use it**:
   - 1000+ professionally designed icons
@@ -259,6 +282,7 @@ Try it out now! Create an account and explore all the features.
   - Visual indicators (Check, X, Alert icons)
 
 #### **Recharts 2.10.0**
+
 - **What it is**: Composable charting library built on React components
 - **Why we use it**:
   - React-friendly API (components not canvas)
@@ -272,6 +296,7 @@ Try it out now! Create an account and explore all the features.
   - Area charts for cumulative data
 
 #### **Custom CSS with CSS Variables**
+
 - **What it is**: Dynamic styling using CSS custom properties
 - **Why we use it**:
   - Theme switching without reloading (instant color changes)
@@ -289,6 +314,7 @@ Try it out now! Create an account and explore all the features.
 ### **AI & Machine Learning**
 
 #### **Tesseract.js 7.0.0**
+
 - **What it is**: Pure JavaScript OCR (Optical Character Recognition) library
 - **Why we use it**:
   - Scans receipt images and extracts text
@@ -309,6 +335,7 @@ Try it out now! Create an account and explore all the features.
 ### **Development Tools**
 
 #### **ESLint 8.55.0**
+
 - **What it is**: JavaScript linting tool for code quality
 - **Why we use it**:
   - Catches bugs before runtime
@@ -320,6 +347,7 @@ Try it out now! Create an account and explore all the features.
   - `eslint-plugin-react-refresh` - HMR compatibility
 
 #### **TypeScript Types**
+
 - **What it is**: Type definitions for better IDE autocomplete
 - **Why we use it**:
   - Better intellisense in VS Code
@@ -332,6 +360,7 @@ Try it out now! Create an account and explore all the features.
 ### **Security Features**
 
 #### **Content Security Policy (CSP)**
+
 - **What it is**: HTTP header that prevents XSS attacks
 - **Implementation**: Meta tag in `index.html`
 - **Features**:
@@ -341,6 +370,7 @@ Try it out now! Create an account and explore all the features.
   - Upgrades insecure requests to HTTPS
 
 #### **Rate Limiting**
+
 - **What it is**: Limits number of requests to prevent abuse
 - **Implementation**: `src/utils/security.js`
 - **Features**:
@@ -349,6 +379,7 @@ Try it out now! Create an account and explore all the features.
   - Prevents brute force attacks
 
 #### **Input Sanitization**
+
 - **What it is**: Removes dangerous characters from user input
 - **Implementation**: `sanitizeString()`, `validatePassword()`
 - **Prevents**:
@@ -357,6 +388,7 @@ Try it out now! Create an account and explore all the features.
   - HTML injection
 
 #### **Password Validation**
+
 - **What it is**: Enforces strong password requirements
 - **Requirements**:
   - Minimum 8 characters
@@ -367,6 +399,7 @@ Try it out now! Create an account and explore all the features.
   - Blocks common passwords (password123, etc.)
 
 #### **Audit Logging**
+
 - **What it is**: Tracks security events
 - **Events logged**:
   - Login attempts (success/failure)
@@ -381,6 +414,7 @@ Try it out now! Create an account and explore all the features.
 ### **Architecture Patterns**
 
 #### **Component Structure**
+
 ```
 src/
 ├── components/     # Reusable UI components
@@ -393,11 +427,13 @@ src/
 ```
 
 #### **State Management Pattern**
+
 - **Global state**: Zustand stores (auth, finance, theme)
 - **Local state**: React useState for component-specific data
 - **Persistence**: LocalStorage via Zustand persist middleware
 
 #### **Data Flow**
+
 1. User interacts with UI component
 2. Component calls Zustand store action
 3. Store action makes Supabase API call
@@ -440,7 +476,8 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 VITE_DEV_MODE=true  # Bypass auth in development
 ```
 
-**Why VITE_ prefix?**
+**Why VITE\_ prefix?**
+
 - Vite only exposes variables with `VITE_` prefix to client
 - Prevents accidental exposure of server secrets
 - Build-time variable replacement
@@ -450,6 +487,7 @@ VITE_DEV_MODE=true  # Bypass auth in development
 ### **Deployment**
 
 The app can be deployed to:
+
 - **Vercel** (recommended) - Zero config deployment
 - **Netlify** - Built-in CI/CD
 - **GitHub Pages** - Free static hosting
@@ -471,22 +509,26 @@ The app can be deployed to:
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/gig-economy-app.git
    cd gig-economy-app
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
 
    Edit `.env` and add your Supabase credentials:
+
    ```env
    VITE_SUPABASE_URL=your_supabase_project_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -497,6 +539,7 @@ The app can be deployed to:
    Create the following tables in your Supabase project:
 
    **incomes**
+
    ```sql
    CREATE TABLE incomes (
      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -510,6 +553,7 @@ The app can be deployed to:
    ```
 
    **expenses**
+
    ```sql
    CREATE TABLE expenses (
      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -523,6 +567,7 @@ The app can be deployed to:
    ```
 
    **goals**
+
    ```sql
    CREATE TABLE goals (
      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -537,6 +582,7 @@ The app can be deployed to:
    ```
 
    **insurance**
+
    ```sql
    CREATE TABLE insurance (
      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -554,6 +600,7 @@ The app can be deployed to:
 5. **Enable Row Level Security (RLS)**
 
    For each table, run:
+
    ```sql
    ALTER TABLE incomes ENABLE ROW LEVEL SECURITY;
    ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
@@ -574,6 +621,7 @@ The app can be deployed to:
    ```
 
 6. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -606,6 +654,7 @@ VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
 **Important Security Notes:**
+
 - ✅ `.env` is in `.gitignore` - never commit it
 - ✅ Use `VITE_` prefix for all frontend variables
 - ⚠️ Never expose secret keys in client-side code
@@ -628,19 +677,20 @@ Output will be in `dist/` directory
 
 The app features 9 professionally designed themes with animated backgrounds:
 
-| Theme | Mode | Description | Special Effects |
-|-------|------|-------------|-----------------|
-| ⚪ Pure White | Light | Clean, minimal, professional | None |
-| ⚫ Midnight Black | Dark | OLED-friendly true blacks | White sparkles |
-| 🌸 Soft Pastels | Light | Dreamy vintage aesthetic | Pink petals |
-| 🌅 Coral Sunset | Light | Warm tropical vibes | Orange gradient orbs |
-| 💜 Lavender Dream | Light | Calming purple fields | Purple petals |
-| 🌿 Mint Fresh | Light | Natural and refreshing | Green leaves |
-| 🌊 Ocean Breeze | Light | Coastal tranquility | Animated waves |
-| ☕ Midnight Latte | Dark | Cozy coffee shop | Steam wisps |
-| 🌍 Seasonal | Dynamic | Auto-changes with seasons | Season-specific |
+| Theme             | Mode    | Description                  | Special Effects      |
+| ----------------- | ------- | ---------------------------- | -------------------- |
+| ⚪ Pure White     | Light   | Clean, minimal, professional | None                 |
+| ⚫ Midnight Black | Dark    | OLED-friendly true blacks    | White sparkles       |
+| 🌸 Soft Pastels   | Light   | Dreamy vintage aesthetic     | Pink petals          |
+| 🌅 Coral Sunset   | Light   | Warm tropical vibes          | Orange gradient orbs |
+| 💜 Lavender Dream | Light   | Calming purple fields        | Purple petals        |
+| 🌿 Mint Fresh     | Light   | Natural and refreshing       | Green leaves         |
+| 🌊 Ocean Breeze   | Light   | Coastal tranquility          | Animated waves       |
+| ☕ Midnight Latte | Dark    | Cozy coffee shop             | Steam wisps          |
+| 🌍 Seasonal       | Dynamic | Auto-changes with seasons    | Season-specific      |
 
 **Seasonal Theme Changes:**
+
 - 🌸 **Spring** (Mar 20 - Jun 20): Pink cherry blossoms
 - ☀️ **Summer** (Jun 21 - Sep 22): Golden sunshine
 - 🍁 **Fall** (Sep 23 - Dec 20): Autumn leaves
@@ -653,18 +703,21 @@ The app features 9 professionally designed themes with animated backgrounds:
 ### Implemented Security Features
 
 ✅ **Authentication**
+
 - JWT token-based sessions (Supabase Auth)
 - Secure password hashing (bcrypt)
 - Email verification support
 - Password reset functionality
 
 ✅ **Data Protection**
+
 - Row Level Security (RLS) in Supabase
 - Users can only access their own data
 - Environment variables for secrets
 - No hardcoded credentials
 
 ✅ **Frontend Security**
+
 - Content Security Policy (CSP)
 - XSS protection headers
 - HTTPS/SSL encryption
@@ -672,6 +725,7 @@ The app features 9 professionally designed themes with animated backgrounds:
 - Secure localStorage wrapper
 
 ✅ **Code Security**
+
 - No sensitive data in git history
 - `.env` in `.gitignore`
 - npm audit for vulnerabilities
@@ -683,13 +737,13 @@ The app includes security helper functions in `src/utils/security.js`:
 
 ```javascript
 import {
-  sanitizeString,      // Remove HTML/script tags
-  validateAmount,      // Validate money amounts
-  validateEmail,       // Check email format
-  validateFile,        // Validate file uploads
-  secureStorage,       // Safe localStorage wrapper
-  maskSensitiveData    // Hide sensitive info
-} from './utils/security'
+  sanitizeString, // Remove HTML/script tags
+  validateAmount, // Validate money amounts
+  validateEmail, // Check email format
+  validateFile, // Validate file uploads
+  secureStorage, // Safe localStorage wrapper
+  maskSensitiveData, // Hide sensitive info
+} from "./utils/security";
 ```
 
 ## 📁 Project Structure
@@ -741,11 +795,12 @@ gig-economy-app/
 
 ### Project Development
 
-**Full-Stack Developer** | *Solo Project*
+**Full-Stack Developer** | _ a team of 2_
 
 #### Key Responsibilities:
 
 **🎨 Frontend Development**
+
 - Designed and implemented responsive UI using React 18.2 and modern CSS
 - Built 15+ interactive pages (Dashboard, Income, Expenses, Goals, Analytics, etc.)
 - Created reusable component library with 20+ custom components
@@ -754,6 +809,7 @@ gig-economy-app/
 - Developed mobile-first responsive design supporting all screen sizes
 
 **⚙️ Backend & Database**
+
 - Set up and configured Supabase backend (PostgreSQL database)
 - Designed database schema with 5+ tables (incomes, expenses, goals, insurance, receipts)
 - Implemented Row Level Security (RLS) policies for data protection
@@ -762,6 +818,7 @@ gig-economy-app/
 - Configured file storage for receipt image uploads
 
 **🔐 Security Implementation**
+
 - Implemented Content Security Policy (CSP) headers
 - Built rate limiting system (login/signup protection)
 - Created input sanitization and validation utilities
@@ -770,12 +827,14 @@ gig-economy-app/
 - Set up environment variable management for secrets
 
 **📊 State Management**
+
 - Architected global state management using Zustand
 - Created 4 state stores (auth, finance, theme, settings)
 - Implemented localStorage persistence for offline support
 - Designed clean data flow patterns
 
 **🚀 DevOps & Deployment**
+
 - Configured Vite build system for optimal performance
 - Set up CI/CD pipeline with Vercel deployment
 - Implemented environment variable management
@@ -783,6 +842,7 @@ gig-economy-app/
 - Configured production builds with security headers
 
 **🧪 Testing & Quality Assurance**
+
 - Conducted end-to-end testing of all features
 - Performed security audits and vulnerability scanning
 - Optimized performance (lighthouse scores 90+)

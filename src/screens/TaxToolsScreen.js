@@ -11,6 +11,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../store/themeStore';
 import { useFinanceStore } from '../store/financeStore';
 import { GlassCard } from '../components/common/GlassCard';
+import {
+  calculateQuarterlyTaxSummaries,
+  calculateTaxSummary,
+} from '../utils/financialCalculations';
 
 const QUARTERS = [
   { id: 'Q1', label: 'Q1', months: [0, 1, 2], name: 'Jan - Mar' },
@@ -30,8 +34,8 @@ const TAX_CHECKLIST = [
 
 const TAX_TIPS = [
   {
-    title: 'Self-Employment Tax',
-    description: 'As a gig worker, you\'ll pay ~15.3% self-employment tax on net earnings',
+    title: 'Simplified Estimate',
+    description: 'This planning estimate applies a flat 25% rate to taxable profit and is not a tax calculation',
     icon: 'info',
   },
   {
@@ -53,70 +57,28 @@ const TAX_TIPS = [
 
 export const TaxToolsScreen = ({ navigation }) => {
   const { theme } = useThemeStore();
-  const { incomes, expenses, getExpensesByCategory } = useFinanceStore();
+  const { incomes, expenses } = useFinanceStore();
 
   const currentYear = new Date().getFullYear();
 
   const yearlyData = useMemo(() => {
-    const yearIncome = incomes
-      .filter(income => new Date(income.date).getFullYear() === currentYear)
-      .reduce((sum, income) => sum + income.amount, 0);
-
-    const yearExpenses = expenses
-      .filter(expense => new Date(expense.date).getFullYear() === currentYear)
-      .reduce((sum, expense) => sum + expense.amount, 0);
-
-    const netIncome = yearIncome - yearExpenses;
-    const selfEmploymentTax = netIncome * 0.153;
-    const estimatedIncomeTax = netIncome * 0.12;
-    const totalEstimatedTax = selfEmploymentTax + estimatedIncomeTax;
-
+    const summary = calculateTaxSummary({ incomes, expenses, year: currentYear });
     return {
-      income: yearIncome,
-      expenses: yearExpenses,
-      netIncome,
-      selfEmploymentTax,
-      estimatedIncomeTax,
-      totalEstimatedTax,
+      income: summary.totalIncome,
+      expenses: summary.totalExpenses,
+      netIncome: summary.taxableIncome,
+      deductions: summary.totalDeductions,
+      deductionCategories: summary.deductionCategories,
+      totalEstimatedTax: summary.totalEstimatedTax,
     };
   }, [incomes, expenses, currentYear]);
 
   const quarterlyData = useMemo(() => {
-    return QUARTERS.map(quarter => {
-      const quarterIncome = incomes
-        .filter(income => {
-          const date = new Date(income.date);
-          return date.getFullYear() === currentYear && quarter.months.includes(date.getMonth());
-        })
-        .reduce((sum, income) => sum + income.amount, 0);
-
-      const quarterExpenses = expenses
-        .filter(expense => {
-          const date = new Date(expense.date);
-          return date.getFullYear() === currentYear && quarter.months.includes(date.getMonth());
-        })
-        .reduce((sum, expense) => sum + expense.amount, 0);
-
-      const netIncome = quarterIncome - quarterExpenses;
-      const estimatedTax = netIncome * 0.273;
-
-      return {
-        ...quarter,
-        income: quarterIncome,
-        expenses: quarterExpenses,
-        netIncome,
-        estimatedTax,
-      };
-    });
+    return calculateQuarterlyTaxSummaries({ incomes, expenses, year: currentYear }).map(
+      (summary, index) => ({ ...QUARTERS[index], ...summary })
+    );
   }, [incomes, expenses, currentYear]);
-
-  const deductionsByCategory = useMemo(() => {
-    const categoryData = getExpensesByCategory();
-    return categoryData.map(item => ({
-      category: item.category,
-      amount: item.amount,
-    }));
-  }, [expenses]);
+  const deductionsByCategory = yearlyData.deductionCategories;
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
@@ -155,7 +117,12 @@ export const TaxToolsScreen = ({ navigation }) => {
             </View>
             <View style={styles.summaryDivider} />
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, styles.summaryLabelBold]}>Net Income</Text>
+              <Text style={styles.summaryLabel}>Deductible Expenses</Text>
+              <Text style={styles.summaryValue}>-{formatCurrency(yearlyData.deductions)}</Text>
+            </View>
+            <View style={styles.summaryDivider} />
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, styles.summaryLabelBold]}>Taxable Net Income</Text>
               <Text style={[styles.summaryValue, styles.summaryValueBold]}>
                 {formatCurrency(yearlyData.netIncome)}
               </Text>
@@ -164,16 +131,9 @@ export const TaxToolsScreen = ({ navigation }) => {
 
           <GlassCard intensity="medium" style={styles.taxCard}>
             <MaterialIcons name="account-balance" size={32} color="#ffffff" />
-            <Text style={styles.taxLabel}>Estimated Tax Owed</Text>
+            <Text style={styles.taxLabel}>Simplified Tax Estimate (25%)</Text>
             <Text style={styles.taxAmount}>{formatCurrency(yearlyData.totalEstimatedTax)}</Text>
-            <View style={styles.taxBreakdown}>
-              <Text style={styles.taxBreakdownText}>
-                Self-Employment Tax: {formatCurrency(yearlyData.selfEmploymentTax)}
-              </Text>
-              <Text style={styles.taxBreakdownText}>
-                Income Tax (est.): {formatCurrency(yearlyData.estimatedIncomeTax)}
-              </Text>
-            </View>
+            <Text style={styles.taxBreakdownText}>Estimate only—not an actual tax liability.</Text>
           </GlassCard>
         </View>
 
@@ -212,7 +172,7 @@ export const TaxToolsScreen = ({ navigation }) => {
                 </View>
                 <View style={[styles.quarterTax, { backgroundColor: theme.colors.primary + '20' }]}>
                   <Text style={[styles.quarterTaxLabel, { color: theme.colors.text }]}>
-                    Est. Tax:
+                    Tax estimate adjustment:
                   </Text>
                   <Text style={[styles.quarterTaxValue, { color: theme.colors.primary }]}>
                     {formatCurrency(quarter.estimatedTax)}

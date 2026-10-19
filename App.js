@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { useThemeStore } from './src/store/themeStore';
 import { useAuthStore } from './src/store/authStore';
+import { useFinanceStore } from './src/store/financeStore';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 
 // Create React Query client
@@ -21,7 +22,8 @@ const queryClient = new QueryClient({
 
 function AppContent() {
   const { mode } = useThemeStore();
-  const { initialize, loading } = useAuthStore();
+  const { initialize, loading, user } = useAuthStore();
+  const syncWithSupabase = useFinanceStore((state) => state.syncWithSupabase);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -38,6 +40,12 @@ function AppContent() {
     };
     init();
   }, []);
+
+  useEffect(() => {
+    syncWithSupabase(user?.id || null).catch((error) => {
+      console.error('Unable to synchronize financial data:', error);
+    });
+  }, [syncWithSupabase, user?.id]);
 
   if (!isReady) {
     return (

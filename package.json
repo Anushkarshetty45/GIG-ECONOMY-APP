@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite --port 3008",
     "build": "vite build",
+    "test": "node --test",
     "preview": "vite preview",
     "lint": "eslint src --ext js,jsx",
     "deploy": "npm run build && gh-pages -d dist"
