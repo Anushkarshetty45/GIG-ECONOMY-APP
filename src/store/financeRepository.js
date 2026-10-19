@@ -1,5 +1,5 @@
 import { isSupabaseConfigured, supabase } from '../config/supabase'
-import { normalizeInsuranceType } from '../utils/financialCalculations'
+import { getInsurancePolicyStatus, normalizeInsuranceType } from '../utils/financialCalculations'
 
 function toTransactionRow(record, type, userId) {
   return {
@@ -43,169 +43,211 @@ function fromTransactionRow(row) {
   }
 }
 
-function toInsuranceRow(policy, userId) {
+export async function assertAuthenticatedOwner(userId, auth = supabase.auth) {
+  if (!userId) throw new Error('An authenticated user is required to access financial records.')
+  const { data, error } = await auth.getSession()
+  if (error) throw error
+  if (data?.session?.user?.id !== userId) {
+    throw new Error('The requested records do not belong to the authenticated user.')
+  }
+}
+
+export function toInsuranceRow(policy, userId) {
+  const frequency = policy.paymentFrequency || policy.frequency || 'monthly'
+  const frequencyMonths = { monthly: 1, quarterly: 3, yearly: 12 }[frequency] || 1
+  const monthlyCost = Number(policy.monthlyCost)
+  const premiumAmount = Number(policy.premiumAmount)
+
   return {
     user_id: userId,
     client_id: String(policy.id),
     plan_name: policy.type || 'other',
     provider: policy.provider || null,
     type: normalizeInsuranceType(policy.type),
-    premium_amount: Number(policy.monthlyCost) || 0,
-    monthly_cost: Number(policy.monthlyCost) || 0,
+    premium_amount: Number.isFinite(premiumAmount)
+      ? premiumAmount
+      : (Number.isFinite(monthlyCost) ? monthlyCost : 0) * frequencyMonths,
+    monthly_cost: Number.isFinite(monthlyCost)
+      ? monthlyCost
+      : (Number.isFinite(premiumAmount) ? premiumAmount : 0) / frequencyMonths,
     coverage_amount: Number(policy.coverageAmount) || null,
     coverage_details: policy.coverageAmount || policy.coverage || null,
     policy_number: policy.policyNumber || null,
-    frequency: 'monthly',
+    frequency,
     renewal_date: policy.renewalDate || null,
     start_date: policy.startDate || null,
     end_date: null,
-    status: policy.status || 'active',
+    status: getInsurancePolicyStatus(policy),
     updated_at: policy.updatedAt || policy.createdAt || new Date().toISOString(),
   }
 }
 
-function fromInsuranceRow(row) {
-  const premium = Number(row.monthly_cost ?? row.premium_amount) || 0
-  const frequencyDivisor = { monthly: 1, quarterly: 3, yearly: 12 }[row.frequency] || 1
+export function fromInsuranceRow(row) {
+  const paymentFrequency = ['monthly', 'quarterly', 'yearly'].includes(row.frequency)
+    ? row.frequency
+    : 'monthly'
+  const frequencyMonths = { monthly: 1, quarterly: 3, yearly: 12 }[paymentFrequency]
+  const intervalPremium = Number(row.premium_amount)
+  const monthlyCost = row.monthly_cost == null
+    ? (Number.isFinite(intervalPremium) ? intervalPremium / frequencyMonths : 0)
+    : Number(row.monthly_cost)
+  const legacyStatus = String(row.status || 'active').toLowerCase()
+
   return {
     id: row.client_id || row.id,
     type: normalizeInsuranceType(row.type || row.plan_name),
     provider: row.provider || '',
     policyNumber: row.policy_number || '',
-    monthlyCost: row.monthly_cost == null ? premium / frequencyDivisor : premium,
+    premiumAmount: Number.isFinite(intervalPremium)
+      ? intervalPremium
+      : monthlyCost * frequencyMonths,
+    paymentFrequency,
+    monthlyCost: Number.isFinite(monthlyCost) ? monthlyCost : 0,
     coverageAmount: row.coverage_details || row.coverage_amount || '',
     coverage: row.coverage_details || '',
     renewalDate: row.renewal_date || row.end_date || '',
     startDate: row.start_date || '',
-    status: row.status || 'active',
+    status: legacyStatus === 'inactive' ? 'cancelled' : legacyStatus,
     createdAt: row.created_at,
     updatedAt: row.updated_at || row.created_at,
   }
 }
 
-async function getTransactions(userId) {
-  const { data, error } = await supabase
-    .from('transactions')
-    .select('*, categories(name)')
-    .eq('user_id', userId)
-
-  if (error) throw error
-  return (data || []).map(fromTransactionRow)
-}
-
-async function getInsurance(userId) {
-  const { data, error } = await supabase
-    .from('insurance_plans')
-    .select('*')
-    .eq('user_id', userId)
-
-  if (error) throw error
-  return (data || []).map(fromInsuranceRow)
-}
-
-export const financeRepository = {
-  isConfigured() {
-    return Boolean(isSupabaseConfigured())
-  },
-
-  async load(userId) {
-    const [transactionRows, policies] = await Promise.all([
-      getTransactions(userId),
-      getInsurance(userId),
-    ])
-    return {
-      incomes: transactionRows.filter((record) => record.type === 'income'),
-      expenses: transactionRows.filter((record) => record.type === 'expense'),
-      insurance: policies,
-    }
-  },
-
-  async loadRecords(userId) {
-    const { data, error } = await supabase
+export function createFinanceRepository(client = supabase) {
+  async function getTransactions(userId) {
+    await assertAuthenticatedOwner(userId, client.auth)
+    const { data, error } = await client
       .from('transactions')
       .select('*, categories(name)')
       .eq('user_id', userId)
 
     if (error) throw error
-    return (data || []).map((row) => ({ ...fromTransactionRow(row), type: row.type }))
-  },
+    return (data || []).map(fromTransactionRow)
+  }
 
-  async saveTransaction(record, type, userId) {
-    const { error } = await supabase
-      .from('transactions')
-      .upsert(toTransactionRow(record, type, userId), {
-        onConflict: 'user_id,client_id',
-      })
-
-    if (error) throw error
-  },
-
-  async deleteTransaction(id, userId) {
-    const { error } = await supabase
-      .from('transactions')
-      .delete()
-      .eq('user_id', userId)
-      .eq('client_id', String(id))
-
-    if (error) throw error
-  },
-
-  async saveInsurance(policy, userId) {
-    const { error } = await supabase
+  async function getInsurance(userId) {
+    await assertAuthenticatedOwner(userId, client.auth)
+    const { data, error } = await client
       .from('insurance_plans')
-      .upsert(toInsuranceRow(policy, userId), {
-        onConflict: 'user_id,client_id',
-      })
-
-    if (error) throw error
-  },
-
-  async deleteInsurance(id, userId) {
-    const { error } = await supabase
-      .from('insurance_plans')
-      .delete()
+      .select('*')
       .eq('user_id', userId)
-      .eq('client_id', String(id))
 
     if (error) throw error
-  },
+    return (data || []).map(fromInsuranceRow)
+  }
 
-  async migrateLocalRecords(userId, { incomes, expenses, insurance }) {
-    const [remoteTransactions, remotePolicies] = await Promise.all([
-      financeRepository.loadRecords(userId),
-      getInsurance(userId),
-    ])
-    const remoteTransactionsById = new Map(
-      remoteTransactions.map((record) => [String(record.id), record])
-    )
-    const remotePoliciesById = new Map(
-      remotePolicies.map((policy) => [String(policy.id), policy])
-    )
-    const isNewerLocalRecord = (localRecord, remoteRecord) => {
-      if (!remoteRecord) return true
-      const localDate = Date.parse(localRecord.updatedAt || localRecord.createdAt || '')
-      const remoteDate = Date.parse(remoteRecord.updatedAt || remoteRecord.createdAt || '')
-      return Number.isFinite(localDate) && (!Number.isFinite(remoteDate) || localDate > remoteDate)
-    }
+  const repository = {
+    isConfigured() {
+      return client === supabase ? Boolean(isSupabaseConfigured()) : true
+    },
 
-    await Promise.all([
-      ...incomes
-        .filter((record) =>
-          isNewerLocalRecord(record, remoteTransactionsById.get(String(record.id)))
-        )
-        .map((record) => financeRepository.saveTransaction(record, 'income', userId)),
-      ...expenses
-        .filter((record) =>
-          isNewerLocalRecord(record, remoteTransactionsById.get(String(record.id)))
-        )
-        .map((record) => financeRepository.saveTransaction(record, 'expense', userId)),
-      ...insurance
-        .filter((policy) =>
-          isNewerLocalRecord(policy, remotePoliciesById.get(String(policy.id)))
-        )
-        .map((policy) => financeRepository.saveInsurance(policy, userId)),
-    ])
+    async load(userId) {
+      const [transactionRows, policies] = await Promise.all([
+        getTransactions(userId),
+        getInsurance(userId),
+      ])
+      return {
+        incomes: transactionRows.filter((record) => record.type === 'income'),
+        expenses: transactionRows.filter((record) => record.type === 'expense'),
+        insurance: policies,
+      }
+    },
 
-    return financeRepository.load(userId)
-  },
+    async loadRecords(userId) {
+      await assertAuthenticatedOwner(userId, client.auth)
+      const { data, error } = await client
+        .from('transactions')
+        .select('*, categories(name)')
+        .eq('user_id', userId)
+
+      if (error) throw error
+      return (data || []).map((row) => ({ ...fromTransactionRow(row), type: row.type }))
+    },
+
+    async saveTransaction(record, type, userId) {
+      await assertAuthenticatedOwner(userId, client.auth)
+      const { error } = await client
+        .from('transactions')
+        .upsert(toTransactionRow(record, type, userId), {
+          onConflict: 'user_id,client_id',
+        })
+
+      if (error) throw error
+    },
+
+    async deleteTransaction(id, userId) {
+      await assertAuthenticatedOwner(userId, client.auth)
+      const { error } = await client
+        .from('transactions')
+        .delete()
+        .eq('user_id', userId)
+        .eq('client_id', String(id))
+
+      if (error) throw error
+    },
+
+    async saveInsurance(policy, userId) {
+      await assertAuthenticatedOwner(userId, client.auth)
+      const { error } = await client
+        .from('insurance_plans')
+        .upsert(toInsuranceRow(policy, userId), {
+          onConflict: 'user_id,client_id',
+        })
+
+      if (error) throw error
+    },
+
+    async deleteInsurance(id, userId) {
+      await assertAuthenticatedOwner(userId, client.auth)
+      const { error } = await client
+        .from('insurance_plans')
+        .delete()
+        .eq('user_id', userId)
+        .eq('client_id', String(id))
+
+      if (error) throw error
+    },
+
+    async migrateLocalRecords(userId, { incomes, expenses, insurance }) {
+      const [remoteTransactions, remotePolicies] = await Promise.all([
+        repository.loadRecords(userId),
+        getInsurance(userId),
+      ])
+      const remoteTransactionsById = new Map(
+        remoteTransactions.map((record) => [String(record.id), record])
+      )
+      const remotePoliciesById = new Map(
+        remotePolicies.map((policy) => [String(policy.id), policy])
+      )
+      const isNewerLocalRecord = (localRecord, remoteRecord) => {
+        if (!remoteRecord) return true
+        const localDate = Date.parse(localRecord.updatedAt || localRecord.createdAt || '')
+        const remoteDate = Date.parse(remoteRecord.updatedAt || remoteRecord.createdAt || '')
+        return Number.isFinite(localDate) && (!Number.isFinite(remoteDate) || localDate > remoteDate)
+      }
+
+      await Promise.all([
+        ...incomes
+          .filter((record) =>
+            isNewerLocalRecord(record, remoteTransactionsById.get(String(record.id)))
+          )
+          .map((record) => repository.saveTransaction(record, 'income', userId)),
+        ...expenses
+          .filter((record) =>
+            isNewerLocalRecord(record, remoteTransactionsById.get(String(record.id)))
+          )
+          .map((record) => repository.saveTransaction(record, 'expense', userId)),
+        ...insurance
+          .filter((policy) =>
+            isNewerLocalRecord(policy, remotePoliciesById.get(String(policy.id)))
+          )
+          .map((policy) => repository.saveInsurance(policy, userId)),
+      ])
+
+      return repository.load(userId)
+    },
+  }
+  return repository
 }
+
+export const financeRepository = createFinanceRepository()

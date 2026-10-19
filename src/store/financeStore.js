@@ -1,7 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { financeRepository } from './financeRepository';
-import { normalizeInsuranceType } from '../utils/financialCalculations';
+import {
+  calculateMonthlyPremium,
+  getInsurancePolicyStatus,
+  normalizeInsuranceType,
+} from '../utils/financialCalculations';
 
 let activeFinanceUserId = null;
 let cachedFinanceUserId = null;
@@ -9,10 +13,35 @@ let financeSyncRequest = 0;
 const inMemoryFinanceSnapshots = new Map();
 
 function normalizePolicy(policy) {
+  const paymentFrequency = ['monthly', 'quarterly', 'yearly'].includes(
+    policy.paymentFrequency || policy.frequency
+  )
+    ? policy.paymentFrequency || policy.frequency
+    : 'monthly';
+  const legacyMonthlyCost = Number(policy.monthlyCost) || 0;
+  const premiumAmount = policy.premiumAmount != null && Number.isFinite(Number(policy.premiumAmount))
+    ? Number(policy.premiumAmount)
+    : policy.premium_amount != null && Number.isFinite(Number(policy.premium_amount))
+      ? Number(policy.premium_amount)
+      : legacyMonthlyCost * { monthly: 1, quarterly: 3, yearly: 12 }[paymentFrequency];
+  const legacyStatus = String(policy.status || 'active').toLowerCase();
+  const status = legacyStatus === 'inactive'
+    ? 'cancelled'
+    : legacyStatus === 'pending'
+      ? 'active'
+      : ['active', 'expired', 'cancelled', 'pending'].includes(legacyStatus)
+        ? legacyStatus
+        : 'active';
+
   return {
     ...policy,
     type: normalizeInsuranceType(policy.type),
-    monthlyCost: Number(policy.monthlyCost) || 0,
+    paymentFrequency,
+    premiumAmount,
+    monthlyCost: policy.monthlyCost != null && Number.isFinite(Number(policy.monthlyCost))
+      ? legacyMonthlyCost
+      : calculateMonthlyPremium(premiumAmount, paymentFrequency),
+    status,
   };
 }
 
@@ -26,6 +55,7 @@ function queueRemoteWrite(set, operation, callback) {
   const userId = activeFinanceUserId;
   Promise.resolve()
     .then(() => callback(userId))
+    .then(() => set({ financeSyncError: null }))
     .catch((error) => reportSyncFailure(set, operation, error));
 }
 
@@ -346,13 +376,10 @@ export const useFinanceStore = create(
 
       getTotalInsuranceCost: () => {
         const { insurance } = get();
-        return insurance.reduce(
-          (sum, policy) =>
-            (policy.status || 'active') === 'active'
-              ? sum + (Number(policy.monthlyCost) || 0)
-              : sum,
-          0
-        );
+        return insurance.reduce((sum, policy) =>
+          getInsurancePolicyStatus(policy) === 'active'
+            ? sum + (Number(policy.monthlyCost) || 0)
+            : sum, 0);
       },
 
       syncWithSupabase: async (userId) => {
@@ -376,26 +403,35 @@ export const useFinanceStore = create(
                 JSON.stringify({
                   incomes: localRecords.incomes,
                   expenses: localRecords.expenses,
-                  insurance: localRecords.insurance,
                 })
               );
               const accountSnapshot = localStorage.getItem(`finance-storage-user:${userId}`);
-              localRecords = accountSnapshot
-                ? JSON.parse(accountSnapshot)
-                : { incomes: [], expenses: [], insurance: [] };
+              if (accountSnapshot) {
+                localRecords = JSON.parse(accountSnapshot);
+                if (!localRecords.insurance) localRecords.insurance = [];
+                const snapshotWithoutInsurance = { ...localRecords };
+                if (Object.prototype.hasOwnProperty.call(localRecords, 'insurance')) {
+                  delete snapshotWithoutInsurance.insurance;
+                  localStorage.setItem(
+                    `finance-storage-user:${userId}`,
+                    JSON.stringify(snapshotWithoutInsurance)
+                  );
+                }
+              } else {
+                localRecords = { incomes: [], expenses: [], insurance: [] };
+              }
             }
             localStorage.setItem(ownerKey, userId);
           } else if (cachedFinanceUserId && cachedFinanceUserId !== userId) {
             inMemoryFinanceSnapshots.set(cachedFinanceUserId, {
               incomes: localRecords.incomes,
               expenses: localRecords.expenses,
-              insurance: localRecords.insurance,
             });
             localRecords = inMemoryFinanceSnapshots.get(userId) || {
               incomes: [],
               expenses: [],
-              insurance: [],
             };
+            localRecords.insurance = [];
           }
 
           set({
@@ -449,6 +485,7 @@ export const useFinanceStore = create(
     }),
     {
       name: 'finance-storage',
+      partialize: ({ insurance, ...state }) => state,
       merge: (persistedState, currentState) => ({
         ...currentState,
         ...persistedState,

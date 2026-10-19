@@ -16,63 +16,26 @@ import { useFinanceStore } from '../store/financeStore';
 import { GlassCard } from '../components/common/GlassCard';
 import { Button } from '../components/common/Button';
 import {
+  INSURANCE_CATALOGUE,
+  INSURANCE_PAYMENT_FREQUENCIES,
+  INSURANCE_POLICY_STATUSES,
+} from '../data/insuranceCatalogue';
+import {
+  calculateMonthlyPremium,
   calculateMonthlyAverages,
-  getInsurancePriority,
   getInsuranceAffordability,
-  hasEquipmentExpenses,
-  hasVehicleRelatedExpenses,
+  getInsurancePolicyStatus,
+  generateInsuranceRecommendations,
 } from '../utils/financialCalculations';
 
-const INSURANCE_TYPES = [
-  {
-    id: 'health',
-    name: 'Health Insurance',
-    icon: 'local-hospital',
-    color: '#ef4444',
-    description: 'Medical, dental, and vision coverage',
-    avgCost: '$450/month',
-  },
-  {
-    id: 'auto',
-    name: 'Auto Insurance',
-    icon: 'directions-car',
-    color: '#3b82f6',
-    description: 'Vehicle coverage for rideshare/delivery',
-    avgCost: '$200/month',
-  },
-  {
-    id: 'liability',
-    name: 'Liability Insurance',
-    icon: 'security',
-    color: '#8b5cf6',
-    description: 'Professional liability protection',
-    avgCost: '$50/month',
-  },
-  {
-    id: 'disability',
-    name: 'Disability Insurance',
-    icon: 'healing',
-    color: '#f59e0b',
-    description: 'Income protection if unable to work',
-    avgCost: '$100/month',
-  },
-  {
-    id: 'life',
-    name: 'Life Insurance',
-    icon: 'favorite',
-    color: '#ec4899',
-    description: 'Financial protection for dependents',
-    avgCost: '$75/month',
-  },
-  {
-    id: 'equipment',
-    name: 'Equipment Insurance',
-    icon: 'devices',
-    color: '#10b981',
-    description: 'Coverage for tools, cameras, laptops',
-    avgCost: '$30/month',
-  },
-];
+const INSURANCE_TYPES = INSURANCE_CATALOGUE.map((type) => ({
+  id: type.value,
+  name: type.label,
+  icon: type.materialIcon,
+  color: type.iconColor,
+  description: type.description,
+  avgCost: `$${type.estimatedMonthlyPremium}/month`,
+}));
 
 const INSURANCE_TIPS = [
   {
@@ -114,45 +77,60 @@ export const InsuranceScreen = ({ navigation }) => {
     type: 'health',
     provider: '',
     policyNumber: '',
-    monthlyCost: '',
+    premiumAmount: '',
+    paymentFrequency: 'monthly',
     coverage: '',
     startDate: new Date().toISOString().split('T')[0],
     renewalDate: '',
+    status: 'active',
   });
 
   const handleOpenModal = (policy = null, initialType = 'health') => {
     if (policy) {
+      const paymentFrequency = INSURANCE_PAYMENT_FREQUENCIES.includes(policy.paymentFrequency)
+        ? policy.paymentFrequency
+        : 'monthly';
       setEditingPolicy(policy);
       setFormData({
-        ...formData,
         ...policy,
+        premiumAmount: String(
+          policy.premiumAmount
+          ?? (Number(policy.monthlyCost) || 0) * { monthly: 1, quarterly: 3, yearly: 12 }[paymentFrequency]
+        ),
+        paymentFrequency,
         coverage: policy.coverage || policy.coverageAmount || '',
+        status: getInsurancePolicyStatus(policy),
       });
     } else {
+      const estimate = INSURANCE_CATALOGUE.find((type) => type.value === initialType)
+        ?.estimatedMonthlyPremium || 0;
       setEditingPolicy(null);
       setFormData({
         type: initialType,
         provider: '',
         policyNumber: '',
-        monthlyCost: '',
+        premiumAmount: String(estimate),
+        paymentFrequency: 'monthly',
         coverage: '',
         startDate: new Date().toISOString().split('T')[0],
         renewalDate: '',
+        status: 'active',
       });
     }
     setModalVisible(true);
   };
 
   const handleSave = () => {
-    const monthlyCost = Number(formData.monthlyCost);
-    if (!formData.provider.trim() || !Number.isFinite(monthlyCost) || monthlyCost <= 0) {
-      Alert.alert('Error', 'Please fill in provider and monthly cost');
+    const premiumAmount = Number(formData.premiumAmount);
+    if (!formData.provider.trim() || !Number.isFinite(premiumAmount) || premiumAmount <= 0) {
+      Alert.alert('Error', 'Please fill in provider and a positive premium amount');
       return;
     }
 
     const policyData = {
       ...formData,
-      monthlyCost,
+      premiumAmount,
+      monthlyCost: calculateMonthlyPremium(premiumAmount, formData.paymentFrequency),
       coverageAmount: formData.coverage,
     };
 
@@ -191,15 +169,19 @@ export const InsuranceScreen = ({ navigation }) => {
   const totalYearlyCost = totalMonthlyCost * 12;
   const { monthlyIncome, monthlyExpenses } = calculateMonthlyAverages(incomes, expenses);
   const monthlyDisposableIncome = monthlyIncome - monthlyExpenses - totalMonthlyCost;
-  const hasVehicleExpenses = hasVehicleRelatedExpenses(expenses);
-  const hasEquipment = hasEquipmentExpenses(expenses);
+  const recommendations = generateInsuranceRecommendations({
+    monthlyIncome,
+    monthlyExpenses,
+    expenses,
+    policies: myPolicies,
+  });
 
   const getInsuranceTypeDetails = (typeId) => {
     return INSURANCE_TYPES.find(t => t.id === typeId) || INSURANCE_TYPES[0];
   };
 
   const hasPolicyType = (typeId) => {
-    return myPolicies.some(p => p.type === typeId && (p.status || 'active') === 'active');
+    return myPolicies.some(p => p.type === typeId && getInsurancePolicyStatus(p) === 'active');
   };
 
   return (
@@ -274,9 +256,17 @@ export const InsuranceScreen = ({ navigation }) => {
                   <View style={styles.policyDetails}>
                     <View style={styles.policyDetail}>
                       <Text style={[styles.policyDetailLabel, { color: theme.colors.textSecondary }]}>
-                        Monthly Cost
+                        Premium / {policy.paymentFrequency || 'monthly'}
                       </Text>
                       <Text style={[styles.policyDetailValue, { color: theme.colors.primary }]}>
+                        {formatCurrency(policy.premiumAmount ?? policy.monthlyCost)}
+                      </Text>
+                    </View>
+                    <View style={styles.policyDetail}>
+                      <Text style={[styles.policyDetailLabel, { color: theme.colors.textSecondary }]}>
+                        Monthly equivalent · {getInsurancePolicyStatus(policy)}
+                      </Text>
+                      <Text style={[styles.policyDetailValue, { color: theme.colors.text }]}>
                         {formatCurrency(policy.monthlyCost)}
                       </Text>
                     </View>
@@ -319,12 +309,8 @@ export const InsuranceScreen = ({ navigation }) => {
           <View style={styles.insuranceGrid}>
             {INSURANCE_TYPES.map((type) => {
               const hasPolicy = hasPolicyType(type.id);
-              const priority = getInsurancePriority({
-                type: type.id,
-                monthlyIncome,
-                hasVehicleExpenses,
-                hasEquipmentExpenses: hasEquipment,
-              });
+              const recommendation = recommendations.find((item) => item.type === type.id);
+              const priority = recommendation?.priority || 'low';
               const importance = { high: 'Critical', medium: 'Recommended', low: 'Optional' }[priority];
               return (
                 <TouchableOpacity
@@ -357,6 +343,9 @@ export const InsuranceScreen = ({ navigation }) => {
                     <Text style={[styles.insuranceTypeDescription, { color: theme.colors.textSecondary }]}>
                       {type.description}
                     </Text>
+                    <Text style={[styles.insuranceTypeDescription, { color: theme.colors.textSecondary }]}>
+                      {recommendation?.reasons[0]}
+                    </Text>
                     <View style={styles.insuranceTypeMeta}>
                       <View style={[
                         styles.importanceBadge,
@@ -382,7 +371,7 @@ export const InsuranceScreen = ({ navigation }) => {
                         </Text>
                       </View>
                       <Text style={[styles.avgCost, { color: theme.colors.textTertiary }]}>
-                        {type.avgCost}
+                        Est. {type.avgCost} · not a quote
                       </Text>
                       <Text style={[styles.avgCost, { color: theme.colors.textSecondary }]}>
                         {getInsuranceAffordability(
@@ -534,9 +523,9 @@ export const InsuranceScreen = ({ navigation }) => {
                 />
               </View>
 
-              {/* Monthly Cost */}
+              {/* Premium Amount */}
               <View style={styles.formGroup}>
-                <Text style={[styles.label, { color: theme.colors.text }]}>Monthly Cost *</Text>
+                <Text style={[styles.label, { color: theme.colors.text }]}>Premium Amount Per Payment *</Text>
                 <TextInput
                   style={[styles.input, {
                     backgroundColor: theme.colors.background,
@@ -546,9 +535,42 @@ export const InsuranceScreen = ({ navigation }) => {
                   placeholder="450.00"
                   placeholderTextColor={theme.colors.textTertiary}
                   keyboardType="decimal-pad"
-                  value={formData.monthlyCost}
-                  onChangeText={(text) => setFormData({ ...formData, monthlyCost: text })}
+                  value={formData.premiumAmount}
+                  onChangeText={(text) => setFormData({ ...formData, premiumAmount: text })}
                 />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={[styles.label, { color: theme.colors.text }]}>Payment Frequency</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                  {INSURANCE_PAYMENT_FREQUENCIES.map((frequency) => (
+                    <TouchableOpacity
+                      key={frequency}
+                      onPress={() => setFormData({ ...formData, paymentFrequency: frequency })}
+                      style={{
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        borderRadius: 8,
+                        backgroundColor: formData.paymentFrequency === frequency
+                          ? theme.colors.primary
+                          : theme.colors.background,
+                        borderWidth: 1,
+                        borderColor: theme.colors.border,
+                      }}
+                    >
+                      <Text style={{ color: formData.paymentFrequency === frequency ? '#ffffff' : theme.colors.text }}>
+                        {frequency[0].toUpperCase() + frequency.slice(1)}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                <Text style={[styles.label, { color: theme.colors.textSecondary, marginTop: 8 }]}>
+                  Monthly equivalent: {formatCurrency(
+                    Number(formData.premiumAmount) > 0
+                      ? calculateMonthlyPremium(Number(formData.premiumAmount), formData.paymentFrequency)
+                      : 0
+                  )}
+                </Text>
               </View>
 
               {/* Coverage */}
@@ -581,6 +603,32 @@ export const InsuranceScreen = ({ navigation }) => {
                   value={formData.renewalDate}
                   onChangeText={(text) => setFormData({ ...formData, renewalDate: text })}
                 />
+              </View>
+
+              <View style={styles.formGroup}>
+                <Text style={[styles.label, { color: theme.colors.text }]}>Policy Status</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                  {INSURANCE_POLICY_STATUSES.map((status) => (
+                    <TouchableOpacity
+                      key={status}
+                      onPress={() => setFormData({ ...formData, status })}
+                      style={{
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        borderRadius: 8,
+                        backgroundColor: formData.status === status
+                          ? theme.colors.primary
+                          : theme.colors.background,
+                        borderWidth: 1,
+                        borderColor: theme.colors.border,
+                      }}
+                    >
+                      <Text style={{ color: formData.status === status ? '#ffffff' : theme.colors.text }}>
+                        {status[0].toUpperCase() + status.slice(1)}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
 
               <Button

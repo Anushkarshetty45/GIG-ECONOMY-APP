@@ -34,6 +34,10 @@ export default function TaxTools() {
   )
   const checkedItems = useTaxChecklistStore((state) => state.checkedItems)
   const toggleTask = useTaxChecklistStore((state) => state.toggleTask)
+  const syncTaxChecklist = useTaxChecklistStore((state) => state.syncWithSupabase)
+  const checklistStatus = useTaxChecklistStore((state) => state.syncStatus)
+  const checklistError = useTaxChecklistStore((state) => state.syncError)
+  const activeChecklistUserId = useTaxChecklistStore((state) => state.activeUserId)
 
   const taxSummary = useMemo(
     () => calculateTaxSummary({ incomes, expenses, year: selectedYear }),
@@ -205,9 +209,35 @@ export default function TaxTools() {
         }}>
           <h2 className="section-title">Tax Preparation Checklist</h2>
           <span style={{ color: 'var(--theme-text-secondary)', fontSize: '13px' }}>
-            {completedTasks} of {TAX_CHECKLIST_ITEMS.length} complete · saved on this device
+            {completedTasks} of {TAX_CHECKLIST_ITEMS.length} complete ·{' '}
+            {checklistStatus === 'synced'
+              ? 'saved to your account'
+              : checklistStatus === 'saving'
+                ? 'saving…'
+                : checklistStatus === 'syncing'
+                  ? 'loading account checklist…'
+                  : checklistStatus === 'error'
+                    ? 'sync unavailable'
+                    : 'waiting for account sync'}
           </span>
         </div>
+        {checklistError && (
+          <div role="alert" style={{ color: 'var(--theme-error)', marginBottom: '12px' }}>
+            Tax checklist could not be saved or loaded: {checklistError}
+            {activeChecklistUserId && (
+              <button
+                type="button"
+                className="btn-edit"
+                style={{ marginLeft: '12px' }}
+                onClick={() => syncTaxChecklist(activeChecklistUserId).catch((error) => {
+                  console.error('Unable to retry tax checklist synchronization:', error)
+                })}
+              >
+                Retry
+              </button>
+            )}
+          </div>
+        )}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {TAX_CHECKLIST_ITEMS.map((task) => {
             const checked = Boolean(checkedItems[task.id])
@@ -216,7 +246,10 @@ export default function TaxTools() {
                 key={task.id}
                 type="button"
                 aria-pressed={checked}
-                onClick={() => toggleTask(task.id)}
+                onClick={() => toggleTask(task.id).catch((error) => {
+                  console.error('Unable to save tax checklist task:', error)
+                })}
+                disabled={checklistStatus !== 'synced'}
                 className="summary-card"
                 style={{
                   display: 'flex',
@@ -225,7 +258,8 @@ export default function TaxTools() {
                   padding: '16px 20px',
                   color: 'var(--theme-text)',
                   textAlign: 'left',
-                  cursor: 'pointer',
+                  cursor: checklistStatus === 'synced' ? 'pointer' : 'not-allowed',
+                  opacity: checklistStatus === 'synced' ? 1 : 0.65,
                 }}
               >
                 {checked

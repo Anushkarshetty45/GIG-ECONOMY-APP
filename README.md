@@ -4,7 +4,7 @@
 
 **A comprehensive financial tracking and analytics platform built for gig economy workers**
 
-[![React](https://img.shields.io/badge/React-18.3+-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
@@ -43,10 +43,10 @@ Gig Economy Finance Tracker is a modern, beautifully designed web application th
 - 💰 **Income Tracking** - Track earnings from 30+ gig platforms (Uber, DoorDash, Fiverr, etc.)
 - 💸 **Expense Management** - Categorize spending across 25+ categories
 - 🎯 **Goal Setting** - Set and track savings goals with visual progress
-- 📋 **Tax Tools** - Calculate quarterly tax estimates with deduction tracking
-- 🛡️ **Insurance Advisor** - Get personalized insurance recommendations
+- 📋 **Tax Tools** - Review year-selectable 2022–2025 simplified 25% estimates and quarterly totals, deduction eligibility, and an account-level preparation checklist
+- 🛡️ **Insurance Advisor** - Review explainable rules-based suggestions, budget comparisons, and saved policy records
 - 🎨 **9 Beautiful Themes** - Customize your experience with stunning visual themes
-- 🔒 **Secure & Private** - Your data is encrypted and protected
+- 🔒 **Account-scoped data** - Supabase RLS protects remote records; browser-side finance caches are not encrypted
 
 ---
 
@@ -125,25 +125,24 @@ _Choose from 9 stunning themes including animated backgrounds_
 ### 💼 **Tax Tools**
 
 - **Quarterly Calculator**: Break down tax obligations by quarter (Q1-Q4)
-- **Deduction Tracker**: Track deductible expenses (Gas, Equipment, Software, etc.)
-- **Tax Estimates**: Calculate estimated tax bills at 25% rate
-- **Tax Checklist**: Prepare for tax season with guided checklist
+- **Deduction Tracker**: Group expenses by category and show potentially eligible, review-required, or not-included status
+- **Tax Estimates**: Apply a simplified 25% rate to non-negative taxable profit; these are not actual tax liabilities
+- **Tax Checklist**: Toggle preparation tasks and save progress to the signed-in account
 - **Year Selection**: View tax data for multiple years (2022-2025)
 
 ### 🛡️ **Insurance Advisor**
 
-- **Smart Recommendations**: Get personalized insurance suggestions based on income
+- **Rules-Based Recommendations**: Explain priorities using available income, expenses, existing coverage, and optional user circumstances; this feature does not use AI
 - **9 Insurance Types**: Health, Auto, Liability, Disability, Life, Equipment, Professional, Cyber, Umbrella
-- **Affordability Analysis**: See if insurance fits your budget
-- **Priority Levels**: High/Medium/Low priority based on your financial situation
-- **Policy Management**: Track active policies, costs, and renewal dates
+- **Affordability Analysis**: Compare active policy costs and illustrative premium estimates with recorded monthly cash flow
+- **Priority Levels**: High/Medium/Low priorities use heuristics, not underwriting
+- **Policy Management**: Create, view, edit, and delete policies with provider, policy number, coverage, premium frequency, and renewal/status details
 
 ### 📸 **Receipt Management**
 
-- **Image Upload**: Store receipt photos for tax deductions
-- **Categorization**: Link receipts to expense categories
-- **Organization**: Search and filter receipts
-- **Cloud Storage**: Powered by Supabase Storage
+- **Browser OCR**: Extract receipt text with Tesseract.js and review the results before saving
+- **Expense Entry**: Save reviewed receipt details as an expense
+- **Local Storage**: Receipt records are held in browser-side finance storage; they are not uploaded to Supabase
 
 ### 📤 **Export & Reports**
 
@@ -228,19 +227,15 @@ _Choose from 9 stunning themes including animated backgrounds_
 - **Why we use it**:
   - PostgreSQL database (enterprise-grade SQL database)
   - Built-in authentication system
-  - Real-time subscriptions (live data updates)
   - RESTful API auto-generated from database schema
-  - File storage for receipt images
 - **Components we use**:
-  - **Supabase Database**: Store income, expenses, goals, insurance data
+  - **Supabase Database**: Store income and expense transactions, savings goals, insurance policies, and tax checklist progress
   - **Supabase Auth**: User signup, login, password reset
-  - **Supabase Storage**: Store receipt images
   - **Row Level Security (RLS)**: Users can only access their own data
-- **Key features**:
+- **Key features used by this app**:
   - JWT token-based authentication
-  - Real-time data sync across devices
   - Automatic API generation
-  - Built-in SQL editor
+  - Authenticated data access; receipts are not uploaded to Supabase Storage
 
 ---
 
@@ -256,7 +251,9 @@ _Choose from 9 stunning themes including animated backgrounds_
   - Works seamlessly with React hooks
 - **Stores in our app**:
   - `authStore.js` - User authentication state (login/logout)
-  - `financeStore.js` - Income, expenses, goals data
+  - `financeStore.js` - Income, expenses, receipts, and insurance policies
+  - `userStore.js` - Savings goals
+  - `taxChecklistStore.js` - Account-synced tax checklist progress
   - `themeStore.js` - Selected theme, theme preferences
   - `settingsStore.js` - App settings, currency, date format
 - **Key features**:
@@ -311,24 +308,22 @@ _Choose from 9 stunning themes including animated backgrounds_
 
 ---
 
-### **AI & Machine Learning**
+### **Receipt OCR**
 
 #### **Tesseract.js 7.0.0**
 
 - **What it is**: Pure JavaScript OCR (Optical Character Recognition) library
 - **Why we use it**:
-  - Scans receipt images and extracts text
-  - No server-side processing needed (runs in browser)
+  - Attempts to extract text from receipt images in the browser
+  - No server-side OCR processing
   - Supports 100+ languages
   - Free and open-source
 - **Usage in our app**:
-  - Receipt Scanner feature
-  - Automatically extracts store name, total amount, and date
-  - Converts images to text for expense tracking
+  - Receipt scanner proposes receipt fields for review before an expense is created
+  - Receipt records use browser-side finance storage; they are not backed up to Supabase
 - **Key features**:
-  - Web Worker support (doesn't block UI)
-  - Progress tracking during scan
-  - Confidence scores for accuracy
+  - OCR worker support and progress display
+  - Extracted values require user review and may be inaccurate
 
 ---
 
@@ -430,16 +425,11 @@ src/
 
 - **Global state**: Zustand stores (auth, finance, theme)
 - **Local state**: React useState for component-specific data
-- **Persistence**: LocalStorage via Zustand persist middleware
+- **Persistence**: Browser storage keeps local preferences and a finance cache; signed-in insurance policies and tax checklist progress persist in Supabase
 
 #### **Data Flow**
 
-1. User interacts with UI component
-2. Component calls Zustand store action
-3. Store action makes Supabase API call
-4. Supabase returns data
-5. Store updates state
-6. Components re-render with new data
+The finance store syncs income and expense transactions with Supabase and keeps a browser-side cache. Signed-in insurance policies and tax checklist progress load from and save to their Supabase tables. Other app state may remain local; browser storage is not a cross-device backup.
 
 ---
 
@@ -457,9 +447,9 @@ src/
 
 ### **Browser Support**
 
-- **Modern browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **Mobile**: iOS Safari 14+, Chrome Android 90+
-- **Not supported**: Internet Explorer (use modern browser)
+- **Supported target**: The responsive Vite web application in current desktop and mobile browsers.
+- **Native mobile app**: Expo/React Native source and configuration files are present, but the package manifest and lockfile do not include the required native runtime/dependencies or run scripts. The native app is not currently runnable or supported. Its tax screen also lacks the web year selector and interactive, persisted checklist; mobile feature parity is incomplete and unverified.
+- **Not supported**: Internet Explorer.
 
 ---
 
@@ -476,11 +466,17 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 VITE_DEV_MODE=true  # Bypass auth in development
 ```
 
-**Why VITE\_ prefix?**
+**Client-side security:** Vite embeds `VITE_` variables in the browser bundle. The Supabase URL and anon/publishable key are intended for client use and must be protected by Supabase RLS. Never put a service-role key, database password, or other secret in a `VITE_` variable.
 
-- Vite only exposes variables with `VITE_` prefix to client
-- Prevents accidental exposure of server secrets
-- Build-time variable replacement
+`VITE_DEV_MODE=true` enables a development-only auth bypass. The Supabase client still needs valid configuration to initialize; do not enable this flag in production.
+
+### Known Limitations
+
+- Tax calculations are simplified estimates using a flat 25% rate and the app's category-eligibility rules; they are not tax advice or actual liabilities.
+- Insurance priorities are explainable heuristics, and catalogue premiums are illustrative estimates rather than quotes or underwriting decisions.
+- Apply the schema or existing-project migration described above before using remote persistence. Live database behavior and cross-user RLS have not been verified against a deployed Supabase project.
+- Native mobile source is an incomplete, non-runnable scaffold; only the responsive web application is currently supported.
+- Receipt records remain in browser storage and are not synchronized or backed up in Supabase.
 
 ---
 
@@ -502,7 +498,7 @@ The app can be deployed to:
 
 ### Prerequisites
 
-- **Node.js** 16+ and npm
+- **Node.js** 18+ and npm
 - **Supabase Account** (free tier available)
 - **Git** (optional)
 
@@ -511,14 +507,14 @@ The app can be deployed to:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/gig-economy-app.git
-   cd gig-economy-app
+   git clone https://github.com/lakshmis0622/GIG-ECONOMY-APP.git
+   cd GIG-ECONOMY-APP
    ```
 
 2. **Install dependencies**
 
    ```bash
-   npm install
+   npm ci
    ```
 
 3. **Set up environment variables**
@@ -527,108 +523,35 @@ The app can be deployed to:
    cp .env.example .env
    ```
 
-   Edit `.env` and add your Supabase credentials:
+   On Windows PowerShell, use `Copy-Item .env.example .env`. Edit `.env` and set your Supabase project URL and anon key:
 
    ```env
    VITE_SUPABASE_URL=your_supabase_project_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-4. **Set up Supabase Database**
+4. **Configure the Supabase database**
 
-   Create the following tables in your Supabase project:
+   In the Supabase SQL Editor, run `supabase/schema.sql` for a new project. For an existing project that already has the base schema, run `supabase/finance_persistence_migration.sql`; it adds the transaction fields, insurance policy persistence, tax checklist persistence, and owner-scoped RLS policies while preserving existing records. Do not create separate `incomes`, `expenses`, or `insurance` tables: the app stores income and expense records in `transactions` and policies in `insurance_plans`.
 
-   **incomes**
+   Tax estimates are calculated from transactions. `tax_records` is present in the schema but is not used by the app; checklist progress is stored in `tax_checklist_progress`. RLS policies restrict these records to the authenticated owner. Live Supabase and cross-user RLS behavior must still be verified in the target project after applying the SQL.
 
-   ```sql
-   CREATE TABLE incomes (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     platform TEXT NOT NULL,
-     amount DECIMAL(10,2) NOT NULL,
-     date DATE NOT NULL,
-     notes TEXT,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
-
-   **expenses**
-
-   ```sql
-   CREATE TABLE expenses (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     category TEXT NOT NULL,
-     amount DECIMAL(10,2) NOT NULL,
-     date DATE NOT NULL,
-     notes TEXT,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
-
-   **goals**
-
-   ```sql
-   CREATE TABLE goals (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     name TEXT NOT NULL,
-     target_amount DECIMAL(10,2) NOT NULL,
-     current_amount DECIMAL(10,2) DEFAULT 0,
-     deadline DATE,
-     completed BOOLEAN DEFAULT FALSE,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
-
-   **insurance**
-
-   ```sql
-   CREATE TABLE insurance (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     type TEXT NOT NULL,
-     provider TEXT NOT NULL,
-     policy_number TEXT,
-     monthly_cost DECIMAL(10,2) NOT NULL,
-     coverage_amount TEXT,
-     renewal_date DATE,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
-
-5. **Enable Row Level Security (RLS)**
-
-   For each table, run:
-
-   ```sql
-   ALTER TABLE incomes ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE goals ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE insurance ENABLE ROW LEVEL SECURITY;
-
-   -- Users can only access their own data
-   CREATE POLICY "Users can view own data" ON incomes
-     FOR SELECT USING (auth.uid() = user_id);
-   CREATE POLICY "Users can insert own data" ON incomes
-     FOR INSERT WITH CHECK (auth.uid() = user_id);
-   CREATE POLICY "Users can update own data" ON incomes
-     FOR UPDATE USING (auth.uid() = user_id);
-   CREATE POLICY "Users can delete own data" ON incomes
-     FOR DELETE USING (auth.uid() = user_id);
-
-   -- Repeat for expenses, goals, insurance tables
-   ```
-
-6. **Start development server**
+5. **Start development server**
 
    ```bash
    npm run dev
    ```
 
-7. **Open in browser**
+6. **Open in browser**
    ```
-   http://localhost:5173
+   http://localhost:3008
+   ```
+
+7. **Run checks or build**
+
+   ```bash
+   npm test
+   npm run build
    ```
 
 ---
@@ -637,27 +560,20 @@ The app can be deployed to:
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the root directory. The app requires Supabase configuration:
 
 ```env
 # Supabase Configuration (Required)
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
-
-# Optional: Plaid (Bank Linking)
-VITE_PLAID_CLIENT_ID=your_plaid_client_id
-VITE_PLAID_SECRET=your_plaid_secret
-VITE_PLAID_ENV=sandbox
-
-# Optional: Stripe (Payments)
-VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
 **Important Security Notes:**
 
 - ✅ `.env` is in `.gitignore` - never commit it
-- ✅ Use `VITE_` prefix for all frontend variables
-- ⚠️ Never expose secret keys in client-side code
+- ⚠️ `VITE_` variables are exposed in the browser bundle; use only the Supabase anon/publishable key there, with RLS enabled
+- ⚠️ Never expose service-role keys, database passwords, or other secrets in client-side code
+- The Plaid and Stripe values shown in `.env.example` are placeholders; those integrations are not wired into the current application.
 
 ### Building for Production
 
@@ -711,9 +627,9 @@ The app features 9 professionally designed themes with animated backgrounds:
 
 ✅ **Data Protection**
 
-- Row Level Security (RLS) in Supabase
-- Users can only access their own data
-- Environment variables for secrets
+- Supabase RLS policies scope remote financial records to the authenticated user (apply the repository SQL and verify against your project)
+- Browser-side cached finance data is not encrypted
+- `VITE_` variables are public client configuration, not a place for secrets
 - No hardcoded credentials
 
 ✅ **Frontend Security**
@@ -741,7 +657,7 @@ import {
   validateAmount, // Validate money amounts
   validateEmail, // Check email format
   validateFile, // Validate file uploads
-  secureStorage, // Safe localStorage wrapper
+  secureStorage, // localStorage error-handling wrapper, not encryption
   maskSensitiveData, // Hide sensitive info
 } from "./utils/security";
 ```
