@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useThemeStore } from './store/themeStore'
 import { useFinanceStore } from './store/financeStore'
+import { useTaxChecklistStore } from './store/taxChecklistStore'
 import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
@@ -27,6 +28,7 @@ function App() {
   const { initialize, user, loading } = useAuthStore()
   const { hasSelectedTheme } = useThemeStore()
   const syncWithSupabase = useFinanceStore((state) => state.syncWithSupabase)
+  const syncTaxChecklist = useTaxChecklistStore((state) => state.syncWithSupabase)
 
   useEffect(() => {
     initialize()
@@ -37,6 +39,12 @@ function App() {
       console.error('Unable to synchronize financial data:', error)
     })
   }, [syncWithSupabase, user?.id])
+
+  useEffect(() => {
+    syncTaxChecklist(user?.id || null).catch((error) => {
+      console.error('Unable to synchronize tax checklist:', error)
+    })
+  }, [syncTaxChecklist, user?.id])
 
   if (loading) {
     return (

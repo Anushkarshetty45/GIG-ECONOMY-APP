@@ -1,13 +1,17 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createTaxChecklistStore } from '../src/store/taxChecklistStore.js'
 import {
   calculateMonthlyAverages,
+  calculateInsuranceBudget,
+  calculateMonthlyPremium,
   calculateQuarterlyTaxSummaries,
   calculateTaxSummary,
   estimateTax,
+  generateInsuranceRecommendations,
+  getActiveInsuranceMonthlyCost,
   getExpenseCategorySummary,
   getInsuranceAffordability,
+  getInsurancePolicyStatus,
   getInsurancePriority,
   getQuarterDateRange,
   hasEquipmentExpenses,
@@ -157,23 +161,6 @@ test('empty tax years return zero totals and no category rows', () => {
   ))
 })
 
-test('tax checklist progress persists across store re-creation', () => {
-  const values = new Map()
-  const storage = {
-    getItem: (key) => values.get(key) || null,
-    setItem: (key, value) => values.set(key, value),
-    removeItem: (key) => values.delete(key),
-  }
-  const firstSession = createTaxChecklistStore(storage)
-  firstSession.getState().toggleTask('receipts')
-  assert.equal(firstSession.getState().checkedItems.receipts, true)
-
-  const nextSession = createTaxChecklistStore(storage)
-  assert.equal(nextSession.getState().checkedItems.receipts, true)
-  nextSession.getState().toggleTask('receipts')
-  assert.equal(nextSession.getState().checkedItems.receipts, false)
-})
-
 test('monthly averages and premium affordability use consistent net cash flow', () => {
   const averages = calculateMonthlyAverages(
     [{ date: '2025-01-15', amount: 3000 }, { date: '2025-02-01', amount: 1000 }],
@@ -188,7 +175,8 @@ test('monthly averages and premium affordability use consistent net cash flow', 
   assert.equal(getInsuranceAffordability(50, 1000), 'affordable')
   assert.equal(getInsuranceAffordability(100, 1000), 'stretch')
   assert.equal(getInsuranceAffordability(101, 1000), 'difficult')
-  assert.equal(getInsuranceAffordability(50, 0), 'unknown')
+  assert.equal(getInsuranceAffordability(50, 0), 'difficult')
+  assert.equal(getInsuranceAffordability(0, Number.NaN), 'unknown')
   assert.equal(
     getInsurancePriority({ type: 'auto', monthlyIncome: 1000, hasVehicleExpenses: true }),
     'high'
@@ -199,4 +187,93 @@ test('monthly averages and premium affordability use consistent net cash flow', 
   )
   assert.equal(hasVehicleRelatedExpenses([{ category: 'Gas & Fuel' }]), true)
   assert.equal(hasEquipmentExpenses([{ category: 'Laptop' }]), true)
+})
+
+test('premium payment frequency converts billed amounts to a monthly equivalent', () => {
+  assert.equal(calculateMonthlyPremium(120, 'monthly'), 120)
+  assert.equal(calculateMonthlyPremium(300, 'quarterly'), 100)
+  assert.equal(calculateMonthlyPremium(1200, 'yearly'), 100)
+  assert.throws(() => calculateMonthlyPremium(-1, 'monthly'), RangeError)
+  assert.throws(() => calculateMonthlyPremium(10, 'weekly'), RangeError)
+})
+
+test('policy status respects cancellation, explicit expiry, and renewal date', () => {
+  const today = '2026-10-19'
+  assert.equal(getInsurancePolicyStatus({ status: 'active' }, today), 'active')
+  assert.equal(getInsurancePolicyStatus({ status: 'active', renewalDate: '2026-10-18' }, today), 'expired')
+  assert.equal(getInsurancePolicyStatus({ status: 'active', renewalDate: today }, today), 'active')
+  assert.equal(getInsurancePolicyStatus({ status: 'expired' }, today), 'expired')
+  assert.equal(getInsurancePolicyStatus({ status: 'cancelled' }, today), 'cancelled')
+  assert.equal(getInsurancePolicyStatus({ status: 'pending' }, today), 'pending')
+  assert.equal(getInsurancePolicyStatus({ status: 'inactive' }, today), 'cancelled')
+  assert.equal(getActiveInsuranceMonthlyCost([
+    { monthlyCost: 80, status: 'active' },
+    { monthlyCost: 20, status: 'expired' },
+    { monthlyCost: 30, status: 'cancelled' },
+    { monthlyCost: 15, status: 'pending' },
+    { monthlyCost: 40, status: 'active', renewalDate: '2026-10-18' },
+  ], today), 80)
+})
+
+test('insurance budget compares active policies against income less recorded expenses', () => {
+  const budget = calculateInsuranceBudget({
+    monthlyIncome: 4000,
+    monthlyExpenses: 2500,
+    policies: [
+      { monthlyCost: 200, status: 'active' },
+      { monthlyCost: 100, status: 'cancelled' },
+    ],
+  })
+  assert.deepEqual(budget, {
+    monthlySurplusBeforeInsurance: 1500,
+    activePolicyMonthlyCost: 200,
+    remainingMonthlyBudget: 1300,
+  })
+  assert.equal(getInsuranceAffordability(65, budget.remainingMonthlyBudget), 'affordable')
+  assert.equal(getInsuranceAffordability(100, budget.remainingMonthlyBudget), 'stretch')
+  assert.equal(getInsuranceAffordability(200, budget.remainingMonthlyBudget), 'difficult')
+})
+
+test('recommendations cover all nine types and explain profile, records, and active coverage rules', () => {
+  const recommendations = generateInsuranceRecommendations({
+    monthlyIncome: 6000,
+    monthlyExpenses: 3000,
+    expenses: [
+      { category: 'Gas & Fuel', amount: 100 },
+      { category: 'Equipment', amount: 100 },
+      { category: 'Software & Subscriptions', amount: 50 },
+      { category: 'Professional Services', amount: 100 },
+    ],
+    policies: [
+      { type: 'health', status: 'active' },
+      { type: 'auto', status: 'active', renewalDate: '2026-01-01' },
+    ],
+    circumstances: {
+      hasDependents: true,
+      doesClientWork: true,
+      handlesSensitiveData: true,
+    },
+    today: '2026-10-19',
+  })
+  const byType = Object.fromEntries(recommendations.map((recommendation) => [
+    recommendation.type,
+    recommendation,
+  ]))
+
+  assert.equal(recommendations.length, 9)
+  assert.deepEqual(
+    recommendations.map(({ type }) => type),
+    ['health', 'auto', 'liability', 'disability', 'life', 'equipment', 'professional', 'cyber', 'umbrella']
+  )
+  assert.equal(byType.health.covered, true)
+  assert.equal(byType.auto.covered, false)
+  assert.match(byType.auto.reasons[0], /[Vv]ehicle-related expenses/)
+  assert.equal(byType.liability.priority, 'high')
+  assert.equal(byType.disability.priority, 'high')
+  assert.equal(byType.life.priority, 'high')
+  assert.equal(byType.equipment.priority, 'high')
+  assert.equal(byType.professional.priority, 'high')
+  assert.equal(byType.cyber.priority, 'high')
+  assert.equal(byType.umbrella.priority, 'medium')
+  assert.ok(recommendations.every(({ reasons }) => reasons.length > 0))
 })

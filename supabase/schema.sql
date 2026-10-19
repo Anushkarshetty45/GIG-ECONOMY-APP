@@ -167,6 +167,32 @@ CREATE POLICY "Users can insert own tax records"
 
 CREATE POLICY "Users can update own tax records"
   ON public.tax_records FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- Tax preparation checklist progress is separate from calculated tax records.
+CREATE TABLE IF NOT EXISTS public.tax_checklist_progress (
+  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  checked_items JSONB NOT NULL DEFAULT '{}'::JSONB,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  CONSTRAINT tax_checklist_progress_checked_items_object
+    CHECK (jsonb_typeof(checked_items) = 'object')
+);
+
+ALTER TABLE public.tax_checklist_progress ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own tax checklist progress"
+  ON public.tax_checklist_progress FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own tax checklist progress"
+  ON public.tax_checklist_progress FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own tax checklist progress"
+  ON public.tax_checklist_progress FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can delete own tax checklist progress"
+  ON public.tax_checklist_progress FOR DELETE
   USING (auth.uid() = user_id);
 
 -- Insurance Plans table
@@ -186,7 +212,7 @@ CREATE TABLE IF NOT EXISTS public.insurance_plans (
   start_date DATE,
   end_date DATE,
   renewal_date DATE,
-  status TEXT CHECK (status IN ('active', 'inactive', 'pending')),
+  status TEXT CHECK (status IN ('active', 'expired', 'cancelled', 'pending')),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -212,6 +238,17 @@ ALTER TABLE public.insurance_plans
     'health', 'auto', 'liability', 'disability', 'life',
     'equipment', 'professional', 'cyber', 'umbrella', 'other'
   ));
+ALTER TABLE public.insurance_plans
+  DROP CONSTRAINT IF EXISTS insurance_plans_status_check;
+UPDATE public.insurance_plans
+SET status = CASE
+  WHEN status = 'inactive' THEN 'cancelled'
+  WHEN status IN ('active', 'expired', 'cancelled', 'pending') THEN status
+  ELSE 'active'
+END;
+ALTER TABLE public.insurance_plans
+  ADD CONSTRAINT insurance_plans_status_check
+  CHECK (status IN ('active', 'expired', 'cancelled', 'pending'));
 
 ALTER TABLE public.insurance_plans ENABLE ROW LEVEL SECURITY;
 
@@ -225,7 +262,8 @@ CREATE POLICY "Users can insert own insurance plans"
 
 CREATE POLICY "Users can update own insurance plans"
   ON public.insurance_plans FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete own insurance plans"
   ON public.insurance_plans FOR DELETE

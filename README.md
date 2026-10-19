@@ -1,3 +1,4 @@
+
 # Gig Economy Finance Tracker
 
 **A comprehensive financial tracking and analytics platform built for gig economy workers**
@@ -17,7 +18,7 @@
 - [Themes](#themes)
 - [Security](#security)
 - [Project Structure](#project-structure)
-- [Role & Responsibilities](#role--responsibilities)
+- [Role and Responsibilities](#role-and-responsibilities)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -29,14 +30,14 @@ Gig Economy Finance Tracker is a modern web application that helps freelancers, 
 
 ### Why This App?
 
-- **Smart Analytics** - Visualize financial health with interactive charts.
-- **Income Tracking** - Track earnings from multiple gig platforms.
-- **Expense Management** - Categorize spending across multiple categories.
-- **Goal Setting** - Set and track savings goals.
-- **Tax Tools** - Calculate quarterly tax estimates and track deductions.
-- **Insurance Advisor** - Get personalized insurance recommendations.
-- **Customizable Themes** - Choose from nine visual themes.
-- **Security** - Protect financial data with authentication and access controls.
+- **Smart Analytics**: Visualize your financial health with interactive charts.
+- **Income Tracking**: Track earnings from 30+ gig platforms, including Uber, DoorDash, and Fiverr.
+- **Expense Management**: Categorize spending across 25+ categories.
+- **Goal Setting**: Set and track savings goals with visual progress.
+- **Tax Tools**: Review year-selectable 2022 to 2025 simplified 25% estimates, quarterly totals, deduction eligibility, and an account-level preparation checklist.
+- **Insurance Advisor**: Review rules-based suggestions, budget comparisons, and saved policy records.
+- **9 Beautiful Themes**: Customize your experience with nine visual themes.
+- **Account-scoped data**: Supabase Row Level Security protects remote records when correctly configured. Browser-side finance caches are not encrypted.
 
 ---
 
@@ -52,67 +53,68 @@ Create an account and explore the application's features.
 
 ### Financial Management
 
-- **Income Tracking:** Log earnings from multiple platforms with dates, amounts, and notes.
-- **Expense Tracking:** Categorize expenses such as gas, food, and equipment.
-- **Net Income Calculation:** Calculate profits in real time.
-- **Financial Health Score:** View an overview of financial status.
+- **Income Tracking**: Log earnings from multiple platforms with dates, amounts, and notes.
+- **Expense Tracking**: Categorize expenses such as gas, food, and equipment.
+- **Net Income Calculation**: Calculate profits in real time.
+- **Financial Health Score**: View an overview of financial status.
 
 ### Analytics and Insights
 
-- **Interactive Charts:** Visualize income and expense trends using Recharts.
-- **Category Breakdown:** Analyze spending patterns by category.
-- **Platform Analysis:** Identify the highest-earning gig platforms.
-- **Monthly Trends:** Identify seasonal patterns in income.
+- **Interactive Charts**: Visualize income and expense trends using Recharts.
+- **Category Breakdown**: Analyze spending patterns by category.
+- **Platform Analysis**: Identify the highest-earning gig platforms.
+- **Monthly Trends**: Identify seasonal patterns in income.
 
 ### Goal Management
 
-- **Savings Goals:** Set target amounts and deadlines.
-- **Visual Progress:** Track goal completion with progress bars.
-- **Multiple Goals:** Manage emergency funds, vacation savings, and equipment purchases.
-- **Goal Completion:** Track progress toward financial goals.
+- **Savings Goals**: Set target amounts and deadlines.
+- **Visual Progress**: Track goal completion with progress bars.
+- **Multiple Goals**: Manage emergency funds, vacation savings, and equipment purchases.
+- **Goal Completion**: Track progress toward financial goals.
 
 ### Tax Tools
 
-- **Quarterly Calculator:** Calculate tax obligations by quarter.
-- **Deduction Tracker:** Track deductible expenses such as gas, equipment, and software.
-- **Tax Estimates:** Calculate estimated tax bills using a 25% rate.
-- **Tax Checklist:** Prepare for tax season using a checklist.
-- **Year Selection:** View tax data for different years.
+- **Quarterly Calculator**: Break down estimated tax obligations by quarter.
+- **Deduction Tracker**: Group expenses by category and show potentially eligible, review-required, or not-included status.
+- **Tax Estimates**: Apply a simplified 25% rate to non-negative taxable profit. These are not actual tax liabilities.
+- **Tax Checklist**: Toggle preparation tasks and save progress to the signed-in account.
+- **Year Selection**: View tax data for multiple years from 2022 to 2025.
 
 ### Insurance Advisor
 
-- **Smart Recommendations:** Receive insurance suggestions based on income.
-- **Insurance Types:** Explore health, auto, liability, disability, life, equipment, professional, cyber, and umbrella insurance.
-- **Affordability Analysis:** Evaluate insurance costs against your budget.
-- **Priority Levels:** Identify high-, medium-, and low-priority insurance needs.
-- **Policy Management:** Track active policies, costs, and renewal dates.
+- **Rules-Based Recommendations**: Explain priorities using available income, expenses, existing coverage, and optional user circumstances. This feature does not use AI.
+- **Insurance Types**: Explore health, auto, liability, disability, life, equipment, professional, cyber, and umbrella insurance.
+- **Affordability Analysis**: Compare active policy costs and illustrative premium estimates with recorded monthly cash flow.
+- **Priority Levels**: Review high, medium, and low priorities based on heuristics, not underwriting.
+- **Policy Management**: Create, view, edit, and delete policies with provider, policy number, coverage, premium frequency, and renewal or status details.
 
 ### Receipt Management
 
-- **Image Upload:** Store receipt photos for expense documentation.
-- **Categorization:** Link receipts to expense categories.
-- **Organization:** Search and filter receipts.
-- **Cloud Storage:** Store receipt images using Supabase Storage.
+- **Browser OCR**: Extract receipt text with Tesseract.js and review the results before saving.
+- **Expense Entry**: Save reviewed receipt details as an expense.
+- **Categorization**: Link receipts to expense categories.
+- **Organization**: Search and filter receipt records.
+- **Browser Storage**: Receipt records are stored in browser-side finance storage. They are not uploaded to Supabase Storage or backed up across devices.
 
 ### Export and Reports
 
-- **CSV Export:** Download financial data for Excel or Google Sheets.
-- **PDF Reports:** Generate financial reports.
-- **Custom Date Ranges:** Export data for specific periods.
+- **CSV Export**: Download financial data for Excel or Google Sheets.
+- **PDF Reports**: Generate financial reports.
+- **Custom Date Ranges**: Export data for specific periods.
 
 ### Customizable Themes
 
 The application includes nine themes:
 
-1. **Pure White** - Clean, minimal, professional.
-2. **Midnight Black** - Dark mode with OLED-friendly colors.
-3. **Soft Pastels** - Soft vintage-inspired colors.
-4. **Coral Sunset** - Warm tropical colors.
-5. **Lavender Dream** - Calming purple tones.
-6. **Mint Fresh** - Natural green tones.
-7. **Ocean Breeze** - Coastal colors with animated waves.
-8. **Midnight Latte** - Dark coffee-inspired colors.
-9. **Seasonal** - Changes according to the season.
+1. **Pure White**: Clean, minimal, professional.
+2. **Midnight Black**: Dark mode with OLED-friendly colors.
+3. **Soft Pastels**: Soft vintage-inspired colors.
+4. **Coral Sunset**: Warm tropical colors.
+5. **Lavender Dream**: Calming purple tones.
+6. **Mint Fresh**: Natural green tones.
+7. **Ocean Breeze**: Coastal colors with animated waves.
+8. **Midnight Latte**: Dark coffee-inspired colors.
+9. **Seasonal**: Changes according to the season.
 
 ### Theme Features
 
@@ -125,7 +127,7 @@ The application includes nine themes:
 
 ## Tech Stack
 
-### Core Framework and Build Tools
+### Frontend
 
 #### React 18
 
@@ -158,7 +160,7 @@ React Router DOM manages navigation within the application.
 **Features:**
 
 - Client-side navigation.
-- Protected routes.
+- Protected routes where configured.
 - Nested routes.
 - URL parameters and query strings.
 - Error-page handling.
@@ -175,15 +177,18 @@ Supabase provides backend services and a PostgreSQL database.
 - User authentication.
 - Real-time subscriptions.
 - Automatically generated APIs.
-- File storage.
+- File storage capabilities.
 - Row Level Security.
 
 **Components:**
 
-- **Supabase Database:** Stores income, expenses, goals, and insurance information.
-- **Supabase Auth:** Handles signup, login, and password recovery.
-- **Supabase Storage:** Stores receipt images.
-- **Row Level Security:** Restricts access to users' own data.
+- **Supabase Database**: Stores supported financial records.
+- **Supabase Auth**: Handles signup, login, and password recovery.
+- **Row Level Security**: Restricts access to users' own remote records when correctly configured.
+
+The application uses `transactions` for income and expense records, `insurance_plans` for insurance policies, and `tax_checklist_progress` for tax checklist progress.
+
+Receipt records are not uploaded to Supabase Storage.
 
 ### State Management
 
@@ -196,21 +201,25 @@ Zustand manages application state.
 - Simple API.
 - Minimal boilerplate.
 - Integration with React hooks.
-- Persistent state support.
+- Persistent state support where configured.
 - Lightweight implementation.
 
 **Stores used in the application:**
 
-- `authStore.js` - Authentication state.
-- `financeStore.js` - Income, expenses, and goals.
-- `themeStore.js` - Theme preferences.
-- `settingsStore.js` - Application settings.
+- `authStore.js`: Authentication state.
+- `financeStore.js`: Income, expenses, receipts, and insurance policies.
+- `userStore.js`: Savings goals, if present in the project.
+- `taxChecklistStore.js`: Tax checklist progress, if present in the project.
+- `themeStore.js`: Theme preferences.
+- `settingsStore.js`: Application settings, currency, and date format.
+
+The actual stores and their responsibilities should be verified against the repository.
 
 ### UI Components and Styling
 
 #### Lucide React
 
-Lucide React provides icons for navigation, actions, and interface elements.
+Lucide React provides interface icons for navigation and actions.
 
 #### Recharts
 
@@ -234,11 +243,11 @@ CSS variables support dynamic styling and theme customization.
 - Dark mode support.
 - Responsive styling.
 
-### AI and Machine Learning
+### Receipt Scanning
 
 #### Tesseract.js
 
-Tesseract.js provides Optical Character Recognition (OCR).
+Tesseract.js provides Optical Character Recognition.
 
 **Usage:**
 
@@ -247,6 +256,10 @@ Tesseract.js provides Optical Character Recognition (OCR).
 - Helps identify store names, totals, and dates.
 - Supports browser-based processing.
 - Provides progress information during scanning.
+
+Extracted values require user review and may be inaccurate.
+
+Receipt records remain in browser storage and are not synchronized or backed up in Supabase.
 
 ### Development Tools
 
@@ -271,28 +284,6 @@ Type annotations and JSDoc improve code documentation and editor assistance.
 - Improved code readability.
 - Earlier detection of type-related errors.
 
-### Security
-
-#### Content Security Policy
-
-Content Security Policy helps restrict which resources a browser can load.
-
-#### Rate Limiting
-
-Rate limiting restricts repeated authentication attempts.
-
-#### Input Sanitization
-
-Input sanitization helps prevent unsafe input from being processed.
-
-#### Password Validation
-
-Password validation enforces password requirements.
-
-#### Audit Logging
-
-Audit logging records security-related events.
-
 ---
 
 ## Architecture Patterns
@@ -312,18 +303,17 @@ src/
 
 ### State Management Pattern
 
-- **Global State:** Zustand stores for authentication, finance, and themes.
-- **Local State:** React `useState` for component-specific information.
-- **Persistence:** LocalStorage through Zustand persistence middleware.
+- **Global state**: Zustand stores for authentication, finance, and themes.
+- **Local state**: React `useState` for component-specific information.
+- **Persistence**: Browser storage keeps local preferences and a finance cache. Signed-in insurance policies and tax checklist progress can persist in Supabase.
 
 ### Data Flow
 
-1. The user interacts with a UI component.
-2. The component calls a Zustand store action.
-3. The store communicates with Supabase.
-4. Supabase returns the requested data.
-5. The store updates the application state.
-6. Components render the updated information.
+The finance store synchronizes income and expense transactions with Supabase and maintains a browser-side cache.
+
+Signed-in insurance policies and tax checklist progress can load from and save to their Supabase tables.
+
+Other application state may remain local. Browser storage is not a cross-device backup.
 
 ---
 
@@ -347,7 +337,11 @@ src/
 - Edge 90 and later.
 - Modern mobile browsers.
 
-Internet Explorer is not supported.
+**Supported target**: The responsive Vite web application in current desktop and mobile browsers.
+
+**Native mobile app**: Expo and React Native source and configuration files are present, but the package manifest and lockfile do not include the required native runtime dependencies or run scripts. The native app is not currently runnable or supported. Its tax screen also lacks the web year selector and interactive, persisted checklist. Mobile feature parity is incomplete and unverified.
+
+**Not supported**: Internet Explorer.
 
 ---
 
@@ -360,11 +354,25 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### Why Use the VITE_ Prefix?
+### Client-Side Security
 
-- Vite exposes variables with the `VITE_` prefix to client-side code.
-- Environment variables allow configuration without hardcoding values.
-- Secret credentials must never be exposed in frontend code.
+Vite embeds variables prefixed with `VITE_` in the browser bundle.
+
+The Supabase URL and anon or publishable key are intended for client use and must be protected by correctly configured Supabase RLS policies.
+
+Never put a service-role key, database password, or other private credential in a `VITE_` variable.
+
+`VITE_DEV_MODE=true` enables a development-only authentication bypass if implemented in the application. The Supabase client still needs valid configuration to initialize. Do not enable this flag in production.
+
+### Known Limitations
+
+- Tax calculations use a simplified flat 25% rate and the application's category eligibility rules. They are not tax advice or actual liabilities.
+- Insurance priorities use explainable heuristics. Catalogue premiums are illustrative estimates rather than quotes or underwriting decisions.
+- Apply the schema or existing-project migration before using remote persistence.
+- Live database behavior and cross-user RLS have not been verified against a deployed Supabase project.
+- Native mobile source is an incomplete, non-runnable scaffold. Only the responsive web application is currently supported.
+- Receipt records remain in browser storage and are not synchronized or backed up in Supabase.
+- Browser-side finance caches are not encrypted.
 
 ---
 
@@ -377,13 +385,13 @@ The application can be deployed using:
 - GitHub Pages.
 - AWS S3 and CloudFront.
 
-**Build command:**
+### Build Command
 
 ```bash
 npm run build
 ```
 
-**Output directory:**
+### Output Directory
 
 ```text
 dist/
@@ -395,21 +403,31 @@ dist/
 
 ### Prerequisites
 
-- Node.js 16 or later.
+- Node.js 18 or later.
 - npm.
-- A Supabase account.
+- A Supabase project.
 - Git, if cloning the repository.
 
 ### Step 1: Clone the Repository
 
+Use the repository URL for your copy of the project.
+
 ```bash
-git clone https://github.com/yourusername/gig-economy-app.git
-cd gig-economy-app
+git clone <repository-url>
+cd <repository-directory>
 ```
 
-Replace the repository URL with the actual repository URL.
+Replace the placeholders with the actual repository URL and directory name.
 
 ### Step 2: Install Dependencies
+
+If the repository includes a `package-lock.json`, run:
+
+```bash
+npm ci
+```
+
+Otherwise, run:
 
 ```bash
 npm install
@@ -417,128 +435,55 @@ npm install
 
 ### Step 3: Configure Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the project root and add your Supabase project URL and anon or publishable key.
 
 ```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-Replace the example values with your Supabase project credentials.
+Replace the example values with your own project credentials.
 
-### Step 4: Set Up the Supabase Database
+Do not place service-role keys, database passwords, or other private credentials in `VITE_` variables because Vite exposes them to browser code.
 
-Create the following tables in your Supabase project.
+### Step 4: Configure the Supabase Database
 
-#### Incomes
+For a new project, run `supabase/schema.sql` in the Supabase SQL Editor.
 
-```sql
-CREATE TABLE incomes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users NOT NULL,
-  platform TEXT NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  date DATE NOT NULL,
-  notes TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+For an existing project that already has the base schema, run `supabase/finance_persistence_migration.sql` if required by the repository's current schema.
 
-#### Expenses
+Review the SQL before applying it to a database containing existing data.
 
-```sql
-CREATE TABLE expenses (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users NOT NULL,
-  category TEXT NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  date DATE NOT NULL,
-  notes TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+The application uses:
 
-#### Goals
+- `transactions` for income and expense records.
+- `insurance_plans` for insurance policy records.
+- `tax_checklist_progress` for tax checklist progress.
 
-```sql
-CREATE TABLE goals (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users NOT NULL,
-  name TEXT NOT NULL,
-  target_amount DECIMAL(10,2) NOT NULL,
-  current_amount DECIMAL(10,2) DEFAULT 0,
-  deadline DATE,
-  completed BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+The `tax_records` table is present in the schema but is not used by the application.
 
-#### Insurance
+Receipt records remain in browser storage.
 
-```sql
-CREATE TABLE insurance (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users NOT NULL,
-  type TEXT NOT NULL,
-  provider TEXT NOT NULL,
-  policy_number TEXT,
-  monthly_cost DECIMAL(10,2) NOT NULL,
-  coverage_amount TEXT,
-  renewal_date DATE,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+Verify the deployed database and RLS policies in your own Supabase project.
 
-### Step 5: Enable Row Level Security
-
-Enable Row Level Security on the tables.
-
-```sql
-ALTER TABLE incomes ENABLE ROW LEVEL SECURITY;
-ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
-ALTER TABLE goals ENABLE ROW LEVEL SECURITY;
-ALTER TABLE insurance ENABLE ROW LEVEL SECURITY;
-```
-
-Create policies to restrict access to each user's own data. For example:
-
-```sql
-CREATE POLICY "Users can view own income"
-ON incomes
-FOR SELECT
-USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert own income"
-ON incomes
-FOR INSERT
-WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can update own income"
-ON incomes
-FOR UPDATE
-USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can delete own income"
-ON incomes
-FOR DELETE
-USING (auth.uid() = user_id);
-```
-
-Apply equivalent policies to the other tables.
-
-### Step 6: Start the Development Server
+### Step 5: Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-### Step 7: Open the Application
+Open the local URL printed in the terminal. The configured Vite port may differ from the default.
 
-Open the local URL displayed in the terminal. With the default Vite configuration, this is usually:
+### Step 6: Run Checks and Build
 
-```text
-http://localhost:5173
+Run the scripts available in `package.json`.
+
+```bash
+npm test
+npm run build
 ```
+
+If the project does not define a `test` script, omit `npm test`.
 
 ---
 
@@ -546,27 +491,22 @@ http://localhost:5173
 
 ### Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the project root. The application requires Supabase configuration.
 
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
-
-VITE_PLAID_CLIENT_ID=your_plaid_client_id
-VITE_PLAID_SECRET=your_plaid_secret
-VITE_PLAID_ENV=sandbox
-
-VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
 Only configure optional services if they are implemented and required by your application.
 
 ### Important Security Notes
 
-- Keep `.env` in `.gitignore`.
-- Never commit real credentials to GitHub.
-- Do not expose secret API keys in client-side code.
+- `.env` must be included in `.gitignore`. Never commit it.
+- `VITE_` variables are exposed in the browser bundle. Use only the Supabase anon or publishable key there, with RLS enabled.
+- Never expose service-role keys, database passwords, or other private credentials in client-side code.
 - Keep private service credentials on a secure backend.
+- The Plaid and Stripe values shown in `.env.example` are placeholders if those integrations are not wired into the current application.
 
 ### Building for Production
 
@@ -604,10 +544,10 @@ The application supports nine themes.
 
 ### Seasonal Theme Changes
 
-- **Spring:** Pink cherry blossoms.
-- **Summer:** Golden sunshine.
-- **Fall:** Autumn leaves.
-- **Winter:** Snowy twilight.
+- **Spring**: Pink cherry blossoms.
+- **Summer**: Golden sunshine.
+- **Fall**: Autumn leaves.
+- **Winter**: Snowy twilight.
 
 ---
 
@@ -617,22 +557,26 @@ The application supports nine themes.
 
 - JWT token-based sessions through Supabase Auth.
 - Password hashing handled by the authentication provider.
-- Email verification support.
-- Password reset functionality.
+- Email verification support where configured.
+- Password reset functionality where configured.
 
 ### Data Protection
 
 - Row Level Security in Supabase.
-- User-specific data access.
+- User-specific data access when database policies are correctly configured.
 - Environment variables for configuration.
 - No hardcoded credentials.
+- Browser-side cached finance data is not encrypted.
+- `VITE_` variables are public client configuration, not a place for secrets.
+
+Supabase RLS policies must be applied and verified against your project before relying on them to isolate financial records between users.
 
 ### Frontend Security
 
-- Content Security Policy.
-- Input validation and sanitization.
+- Content Security Policy where configured.
+- Input validation and sanitization where implemented.
 - HTTPS support through deployment configuration.
-- Secure handling of application data.
+- Review the deployed configuration before treating these protections as verified.
 
 ### Code Security
 
@@ -643,7 +587,7 @@ The application supports nine themes.
 
 ### Security Utilities
 
-The application includes security helper functions in `src/utils/security.js`.
+The application includes security helper functions in `src/utils/security.js` if these functions are present in the project.
 
 ```javascript
 import {
@@ -657,6 +601,8 @@ import {
 ```
 
 Ensure these functions exist in the project before documenting them as implemented features.
+
+The `secureStorage` helper is an error-handling wrapper for localStorage, not encryption.
 
 ---
 
@@ -694,7 +640,6 @@ gig-economy-app/
 │   │   └── security.js
 │   ├── App.jsx
 │   └── main.jsx
-├── .env
 ├── .env.example
 ├── .gitignore
 ├── index.html
@@ -702,6 +647,8 @@ gig-economy-app/
 ├── vite.config.js
 └── README.md
 ```
+
+This structure is illustrative. Verify the actual file names and directories in the repository.
 
 ---
 
@@ -725,17 +672,16 @@ gig-economy-app/
 #### Backend and Database
 
 - Configured the Supabase backend and PostgreSQL database.
-- Designed database tables for financial data.
-- Implemented Row Level Security policies.
+- Designed database structures for financial data.
+- Implemented or configured Row Level Security policies.
 - Integrated Supabase APIs.
 - Configured authentication.
-- Set up receipt image storage.
+- Implemented browser-based receipt scanning and receipt record handling.
 
 #### Security Implementation
 
 - Configured Content Security Policy where supported.
-- Implemented input validation and sanitization.
-- Added password validation.
+- Implemented input validation and sanitization where available.
 - Managed environment variables.
 - Worked on security-related logging and protections.
 
@@ -764,9 +710,9 @@ gig-economy-app/
 ### Technical Achievements
 
 - Developed a financial tracking application using React and Supabase.
-- Implemented authentication and data access controls.
+- Worked on authentication and data access controls.
 - Created customizable themes.
-- Worked on financial data visualization.
+- Implemented financial data visualization.
 - Integrated receipt scanning where supported by the application.
 - Built responsive interfaces.
 - Deployed the application.
@@ -774,15 +720,15 @@ gig-economy-app/
 
 ### Technologies Used
 
-**Frontend:** React, Vite, React Router, Zustand, Recharts, CSS.
+**Frontend**: React, Vite, React Router, Zustand, Recharts, CSS.
 
-**Backend:** Supabase, PostgreSQL, Supabase Auth, Supabase Storage.
+**Backend**: Supabase, PostgreSQL, Supabase Auth.
 
-**Security:** Content Security Policy, input validation, Row Level Security.
+**Security**: Content Security Policy, input validation, Row Level Security.
 
-**Deployment:** Vercel.
+**Deployment**: Vercel.
 
-**Tools:** Git, npm, VS Code, ESLint.
+**Tools**: Git, npm, VS Code, ESLint.
 
 ---
 
@@ -831,12 +777,12 @@ This project is licensed under the MIT License.
 
 ## Acknowledgments
 
-- **Supabase:** Backend and database services.
-- **Vite:** Frontend build tooling.
-- **Zustand:** State management.
-- **Lucide:** Icon library.
-- **Recharts:** Data visualization.
-- **React Community:** Documentation and ecosystem.
+- **Supabase**: Backend and database services.
+- **Vite**: Frontend build tooling.
+- **Zustand**: State management.
+- **Lucide**: Interface icon library.
+- **Recharts**: Data visualization.
+- **React Community**: Documentation and ecosystem.
 
 ---
 

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { taxChecklistRepository } from './taxChecklistRepository.js'
 
 export const TAX_CHECKLIST_ITEMS = [
   { id: 'income-forms', label: 'Gather income forms from all platforms' },
@@ -10,38 +10,79 @@ export const TAX_CHECKLIST_ITEMS = [
   { id: 'tax-professional', label: 'Consult a qualified tax professional' },
 ]
 
-const fallbackStorage = new Map()
-const memoryStorage = {
-  getItem: (key) => fallbackStorage.get(key) || null,
-  setItem: (key, value) => fallbackStorage.set(key, value),
-  removeItem: (key) => fallbackStorage.delete(key),
-}
+export function createTaxChecklistStore(repository = taxChecklistRepository) {
+  let syncRequest = 0
+  return create((set, get) => ({
+    checkedItems: {},
+    activeUserId: null,
+    syncStatus: 'local',
+    syncError: null,
 
-function getDefaultStorage() {
-  return typeof localStorage === 'undefined' ? memoryStorage : localStorage
-}
+    syncWithSupabase: async (userId) => {
+      const request = ++syncRequest
+      if (!userId) {
+        set({
+          checkedItems: {},
+          activeUserId: null,
+          syncStatus: 'local',
+          syncError: null,
+        })
+        return
+      }
 
-export function createTaxChecklistStore(storage) {
-  const persistOptions = {
-    name: 'tax-tools-checklist',
-    storage: createJSONStorage(() => storage || getDefaultStorage()),
-  }
-
-  return create(
-    persist(
-      (set) => ({
+      set({
         checkedItems: {},
-        toggleTask: (id) =>
-          set((state) => ({
-            checkedItems: {
-              ...state.checkedItems,
-              [id]: !state.checkedItems[id],
-            },
-          })),
-      }),
-      persistOptions
-    )
-  )
+        activeUserId: userId,
+        syncStatus: 'syncing',
+        syncError: null,
+      })
+      try {
+        const checkedItems = await repository.load(userId)
+        if (request !== syncRequest) return
+        set({ checkedItems, activeUserId: userId, syncStatus: 'synced', syncError: null })
+      } catch (error) {
+        if (request === syncRequest) {
+          set({
+            checkedItems: {},
+            activeUserId: userId,
+            syncStatus: 'error',
+            syncError: error?.message || String(error),
+          })
+        }
+        throw error
+      }
+    },
+
+    toggleTask: async (id) => {
+      const current = get()
+      if (!TAX_CHECKLIST_ITEMS.some((item) => item.id === id)) {
+        throw new Error(`Unknown tax checklist task: ${id}`)
+      }
+      if (!current.activeUserId || current.syncStatus !== 'synced') {
+        throw new Error('Tax checklist is not synchronized for the signed-in user.')
+      }
+
+      const userId = current.activeUserId
+      const checkedItems = {
+        ...current.checkedItems,
+        [id]: !current.checkedItems[id],
+      }
+      set({ syncStatus: 'saving', syncError: null })
+      try {
+        await repository.save(userId, checkedItems)
+        if (get().activeUserId !== userId) return
+        set({ checkedItems, syncStatus: 'synced', syncError: null })
+      } catch (error) {
+        if (get().activeUserId === userId) {
+          set({
+            syncStatus: 'error',
+            syncError: error?.message || String(error),
+          })
+        }
+        throw error
+      }
+    },
+  }))
 }
 
 export const useTaxChecklistStore = createTaxChecklistStore()
