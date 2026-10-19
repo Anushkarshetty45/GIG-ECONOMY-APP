@@ -15,6 +15,13 @@ import { useThemeStore } from '../store/themeStore';
 import { useFinanceStore } from '../store/financeStore';
 import { GlassCard } from '../components/common/GlassCard';
 import { Button } from '../components/common/Button';
+import {
+  calculateMonthlyAverages,
+  getInsurancePriority,
+  getInsuranceAffordability,
+  hasEquipmentExpenses,
+  hasVehicleRelatedExpenses,
+} from '../utils/financialCalculations';
 
 const INSURANCE_TYPES = [
   {
@@ -23,7 +30,6 @@ const INSURANCE_TYPES = [
     icon: 'local-hospital',
     color: '#ef4444',
     description: 'Medical, dental, and vision coverage',
-    importance: 'Critical',
     avgCost: '$450/month',
   },
   {
@@ -32,7 +38,6 @@ const INSURANCE_TYPES = [
     icon: 'directions-car',
     color: '#3b82f6',
     description: 'Vehicle coverage for rideshare/delivery',
-    importance: 'Critical',
     avgCost: '$200/month',
   },
   {
@@ -41,7 +46,6 @@ const INSURANCE_TYPES = [
     icon: 'security',
     color: '#8b5cf6',
     description: 'Professional liability protection',
-    importance: 'Recommended',
     avgCost: '$50/month',
   },
   {
@@ -50,7 +54,6 @@ const INSURANCE_TYPES = [
     icon: 'healing',
     color: '#f59e0b',
     description: 'Income protection if unable to work',
-    importance: 'Recommended',
     avgCost: '$100/month',
   },
   {
@@ -59,7 +62,6 @@ const INSURANCE_TYPES = [
     icon: 'favorite',
     color: '#ec4899',
     description: 'Financial protection for dependents',
-    importance: 'Optional',
     avgCost: '$75/month',
   },
   {
@@ -68,7 +70,6 @@ const INSURANCE_TYPES = [
     icon: 'devices',
     color: '#10b981',
     description: 'Coverage for tools, cameras, laptops',
-    importance: 'Optional',
     avgCost: '$30/month',
   },
 ];
@@ -98,7 +99,15 @@ const INSURANCE_TIPS = [
 
 export const InsuranceScreen = ({ navigation }) => {
   const { theme } = useThemeStore();
-  const [myPolicies, setMyPolicies] = useState([]);
+  const {
+    insurance: myPolicies,
+    addInsurance,
+    updateInsurance,
+    deleteInsurance,
+    getTotalInsuranceCost,
+    incomes,
+    expenses,
+  } = useFinanceStore();
   const [modalVisible, setModalVisible] = useState(false);
   const [editingPolicy, setEditingPolicy] = useState(null);
   const [formData, setFormData] = useState({
@@ -111,14 +120,18 @@ export const InsuranceScreen = ({ navigation }) => {
     renewalDate: '',
   });
 
-  const handleOpenModal = (policy = null) => {
+  const handleOpenModal = (policy = null, initialType = 'health') => {
     if (policy) {
       setEditingPolicy(policy);
-      setFormData(policy);
+      setFormData({
+        ...formData,
+        ...policy,
+        coverage: policy.coverage || policy.coverageAmount || '',
+      });
     } else {
       setEditingPolicy(null);
       setFormData({
-        type: 'health',
+        type: initialType,
         provider: '',
         policyNumber: '',
         monthlyCost: '',
@@ -131,21 +144,22 @@ export const InsuranceScreen = ({ navigation }) => {
   };
 
   const handleSave = () => {
-    if (!formData.provider || !formData.monthlyCost) {
+    const monthlyCost = Number(formData.monthlyCost);
+    if (!formData.provider.trim() || !Number.isFinite(monthlyCost) || monthlyCost <= 0) {
       Alert.alert('Error', 'Please fill in provider and monthly cost');
       return;
     }
 
     const policyData = {
-      id: editingPolicy ? editingPolicy.id : Date.now().toString(),
       ...formData,
-      monthlyCost: parseFloat(formData.monthlyCost),
+      monthlyCost,
+      coverageAmount: formData.coverage,
     };
 
     if (editingPolicy) {
-      setMyPolicies(myPolicies.map(p => p.id === editingPolicy.id ? policyData : p));
+      updateInsurance(editingPolicy.id, policyData);
     } else {
-      setMyPolicies([...myPolicies, policyData]);
+      addInsurance(policyData);
     }
 
     setModalVisible(false);
@@ -160,7 +174,7 @@ export const InsuranceScreen = ({ navigation }) => {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: () => setMyPolicies(myPolicies.filter(p => p.id !== id)),
+          onPress: () => deleteInsurance(id),
         },
       ]
     );
@@ -173,15 +187,19 @@ export const InsuranceScreen = ({ navigation }) => {
     }).format(amount);
   };
 
-  const totalMonthlyCost = myPolicies.reduce((sum, policy) => sum + policy.monthlyCost, 0);
+  const totalMonthlyCost = getTotalInsuranceCost();
   const totalYearlyCost = totalMonthlyCost * 12;
+  const { monthlyIncome, monthlyExpenses } = calculateMonthlyAverages(incomes, expenses);
+  const monthlyDisposableIncome = monthlyIncome - monthlyExpenses - totalMonthlyCost;
+  const hasVehicleExpenses = hasVehicleRelatedExpenses(expenses);
+  const hasEquipment = hasEquipmentExpenses(expenses);
 
   const getInsuranceTypeDetails = (typeId) => {
     return INSURANCE_TYPES.find(t => t.id === typeId) || INSURANCE_TYPES[0];
   };
 
   const hasPolicyType = (typeId) => {
-    return myPolicies.some(p => p.type === typeId);
+    return myPolicies.some(p => p.type === typeId && (p.status || 'active') === 'active');
   };
 
   return (
@@ -301,13 +319,19 @@ export const InsuranceScreen = ({ navigation }) => {
           <View style={styles.insuranceGrid}>
             {INSURANCE_TYPES.map((type) => {
               const hasPolicy = hasPolicyType(type.id);
+              const priority = getInsurancePriority({
+                type: type.id,
+                monthlyIncome,
+                hasVehicleExpenses,
+                hasEquipmentExpenses: hasEquipment,
+              });
+              const importance = { high: 'Critical', medium: 'Recommended', low: 'Optional' }[priority];
               return (
                 <TouchableOpacity
                   key={type.id}
                   onPress={() => {
                     if (!hasPolicy) {
-                      setFormData({ ...formData, type: type.id });
-                      handleOpenModal();
+                      handleOpenModal(null, type.id);
                     }
                   }}
                   style={styles.insuranceTypeButton}
@@ -337,9 +361,9 @@ export const InsuranceScreen = ({ navigation }) => {
                       <View style={[
                         styles.importanceBadge,
                         {
-                          backgroundColor: type.importance === 'Critical'
+                          backgroundColor: importance === 'Critical'
                             ? theme.colors.expense + '20'
-                            : type.importance === 'Recommended'
+                            : importance === 'Recommended'
                             ? theme.colors.warning + '20'
                             : theme.colors.textTertiary + '20'
                         }
@@ -347,18 +371,24 @@ export const InsuranceScreen = ({ navigation }) => {
                         <Text style={[
                           styles.importanceText,
                           {
-                            color: type.importance === 'Critical'
+                            color: importance === 'Critical'
                               ? theme.colors.expense
-                              : type.importance === 'Recommended'
+                              : importance === 'Recommended'
                               ? theme.colors.warning
                               : theme.colors.textSecondary
                           }
                         ]}>
-                          {type.importance}
+                          {importance}
                         </Text>
                       </View>
                       <Text style={[styles.avgCost, { color: theme.colors.textTertiary }]}>
                         {type.avgCost}
+                      </Text>
+                      <Text style={[styles.avgCost, { color: theme.colors.textSecondary }]}>
+                        {getInsuranceAffordability(
+                          Number(type.avgCost.replace(/[^0-9.]/g, '')),
+                          monthlyDisposableIncome
+                        )}
                       </Text>
                     </View>
                   </GlassCard>

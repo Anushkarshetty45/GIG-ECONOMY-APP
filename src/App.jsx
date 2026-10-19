@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './store/authStore'
 import { useThemeStore } from './store/themeStore'
+import { useFinanceStore } from './store/financeStore'
 import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
@@ -25,10 +26,17 @@ import Settings from './pages/Settings'
 function App() {
   const { initialize, user, loading } = useAuthStore()
   const { hasSelectedTheme } = useThemeStore()
+  const syncWithSupabase = useFinanceStore((state) => state.syncWithSupabase)
 
   useEffect(() => {
     initialize()
   }, [initialize])
+
+  useEffect(() => {
+    syncWithSupabase(user?.id || null).catch((error) => {
+      console.error('Unable to synchronize financial data:', error)
+    })
+  }, [syncWithSupabase, user?.id])
 
   if (loading) {
     return (

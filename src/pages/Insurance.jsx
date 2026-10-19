@@ -1,15 +1,22 @@
 import React, { useState, useMemo } from 'react'
 import { useFinanceStore } from '../store/financeStore'
+import {
+  calculateMonthlyAverages,
+  getInsuranceAffordability,
+  getInsurancePriority,
+  hasEquipmentExpenses,
+  hasVehicleRelatedExpenses,
+} from '../utils/financialCalculations'
 import { Shield, AlertTriangle, Info, CheckCircle, TrendingUp, DollarSign, Activity, Heart, Car, FileText, Briefcase, Users, Laptop, Lock, Umbrella, Plus } from 'lucide-react'
 import './DashboardPages.css'
 
 export default function Insurance() {
-  const { insurance, addInsurance, updateInsurance, deleteInsurance, getTotalInsuranceCost, getTotalIncome, getTotalExpenses, expenses, incomes } = useFinanceStore()
+  const { insurance, addInsurance, updateInsurance, deleteInsurance, getTotalInsuranceCost, expenses, incomes } = useFinanceStore()
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [selectedInsurance, setSelectedInsurance] = useState(null)
   const [formData, setFormData] = useState({
-    type: 'Health',
+    type: 'health',
     provider: '',
     policyNumber: '',
     monthlyCost: '',
@@ -17,65 +24,24 @@ export default function Insurance() {
     renewalDate: ''
   })
 
-  // Calculate actual monthly averages based on transaction date range
-  const { monthlyIncome, monthlyExpenses, dataMonths } = useMemo(() => {
-    if (incomes.length === 0 && expenses.length === 0) {
-      return { monthlyIncome: 0, monthlyExpenses: 0, dataMonths: 0 }
-    }
+  const { monthlyIncome, monthlyExpenses } = useMemo(
+    () => calculateMonthlyAverages(incomes, expenses),
+    [incomes, expenses]
+  )
+  const monthlyDisposableIncome =
+    monthlyIncome - monthlyExpenses - getTotalInsuranceCost()
 
-    // Get all transaction dates
-    const allDates = [
-      ...incomes.map(i => new Date(i.date)),
-      ...expenses.map(e => new Date(e.date))
-    ].filter(d => !isNaN(d.getTime()))
-
-    if (allDates.length === 0) {
-      return { monthlyIncome: 0, monthlyExpenses: 0, dataMonths: 0 }
-    }
-
-    // Find date range
-    const earliestDate = new Date(Math.min(...allDates))
-    const latestDate = new Date(Math.max(...allDates))
-
-    // Calculate months between dates (including partial months)
-    const monthsDiff = (latestDate.getFullYear() - earliestDate.getFullYear()) * 12 +
-                       (latestDate.getMonth() - earliestDate.getMonth()) + 1
-
-    const totalIncome = getTotalIncome()
-    const totalExpenses = getTotalExpenses()
-
-    return {
-      monthlyIncome: monthsDiff > 0 ? totalIncome / monthsDiff : totalIncome,
-      monthlyExpenses: monthsDiff > 0 ? totalExpenses / monthsDiff : totalExpenses,
-      dataMonths: monthsDiff
-    }
-  }, [incomes, expenses, getTotalIncome, getTotalExpenses])
-
-  const monthlySavings = monthlyIncome - monthlyExpenses
+  const monthlySavings = monthlyDisposableIncome
   const savingsRate = monthlyIncome > 0 ? (monthlySavings / monthlyIncome) * 100 : 0
 
   // Analyze expense patterns
-  const hasCarExpenses = useMemo(() => {
-    return expenses.some(e =>
-      e.category?.toLowerCase().includes('gas') ||
-      e.category?.toLowerCase().includes('car') ||
-      e.category?.toLowerCase().includes('vehicle') ||
-      e.category?.toLowerCase().includes('auto')
-    )
-  }, [expenses])
-
-  const hasBusinessEquipment = useMemo(() => {
-    return expenses.some(e =>
-      e.category?.toLowerCase().includes('equipment') ||
-      e.category?.toLowerCase().includes('laptop') ||
-      e.category?.toLowerCase().includes('computer')
-    )
-  }, [expenses])
+  const hasCarExpenses = useMemo(() => hasVehicleRelatedExpenses(expenses), [expenses])
+  const hasBusinessEquipment = useMemo(() => hasEquipmentExpenses(expenses), [expenses])
 
   // Comprehensive Insurance Types with detailed info and professional icons
   const insuranceTypes = [
     {
-      value: 'Health',
+      value: 'health',
       label: 'Health Insurance',
       icon: Heart,
       iconColor: '#ef4444',
@@ -84,11 +50,9 @@ export default function Insurance() {
       whyImportant: 'Medical emergencies can cost tens of thousands of dollars. As a gig worker without employer coverage, this is essential for financial security.',
       coverage: 'Doctor visits, hospital stays, preventive care, prescriptions, emergency services',
       recommended: 'Everyone needs health insurance, especially gig workers without employer benefits',
-      getPriority: () => 'high',
-      getAffordability: (income) => income >= 2000 ? 'affordable' : income >= 1000 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Auto',
+      value: 'auto',
       label: 'Auto Insurance',
       icon: Car,
       iconColor: '#3b82f6',
@@ -97,11 +61,9 @@ export default function Insurance() {
       whyImportant: 'Legally required for rideshare and delivery drivers. Protects you from devastating financial liability in accidents.',
       coverage: 'Liability, collision, comprehensive, uninsured motorist, medical payments',
       recommended: 'Critical for rideshare/delivery drivers. Standard coverage for personal vehicle owners.',
-      getPriority: (hasCarExpenses) => hasCarExpenses ? 'high' : 'medium',
-      getAffordability: (income) => income >= 1500 ? 'affordable' : income >= 800 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Liability',
+      value: 'liability',
       label: 'General Liability Insurance',
       icon: Shield,
       iconColor: '#10b981',
@@ -110,11 +72,9 @@ export default function Insurance() {
       whyImportant: 'One lawsuit can bankrupt your business. This shields your personal assets from business-related claims.',
       coverage: 'Bodily injury, property damage, advertising injury, legal defense costs',
       recommended: 'Essential for freelancers who work on client sites or interact with customers in person.',
-      getPriority: (_, income) => income >= 2000 ? 'high' : 'medium',
-      getAffordability: (income) => income >= 1000 ? 'affordable' : income >= 500 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Disability',
+      value: 'disability',
       label: 'Disability Insurance',
       icon: Briefcase,
       iconColor: '#f59e0b',
@@ -123,11 +83,9 @@ export default function Insurance() {
       whyImportant: 'Your ability to earn income is your most valuable asset. This protects it when you can\'t work.',
       coverage: 'Short-term disability (90 days-1 year), long-term disability (1+ years), partial disability benefits',
       recommended: 'Critical for self-employed individuals without employer disability coverage.',
-      getPriority: (_, income) => income >= 3000 ? 'high' : income >= 1500 ? 'medium' : 'low',
-      getAffordability: (income) => income >= 2000 ? 'affordable' : income >= 1200 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Life',
+      value: 'life',
       label: 'Life Insurance',
       icon: Users,
       iconColor: '#ec4899',
@@ -136,11 +94,9 @@ export default function Insurance() {
       whyImportant: 'Ensures your family can maintain their lifestyle and pay off debts if something happens to you.',
       coverage: 'Death benefit, optional living benefits, terminal illness riders, accidental death coverage',
       recommended: 'Essential if you have dependents, mortgage, or significant debt. Less urgent for singles without dependents.',
-      getPriority: (_, income, hasDependents) => hasDependents ? 'high' : income >= 3000 ? 'medium' : 'low',
-      getAffordability: (income) => income >= 1500 ? 'affordable' : income >= 800 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Equipment',
+      value: 'equipment',
       label: 'Equipment Insurance',
       icon: Laptop,
       iconColor: '#8b5cf6',
@@ -149,11 +105,9 @@ export default function Insurance() {
       whyImportant: 'Replacing expensive work equipment can drain your emergency fund. This ensures you can keep working.',
       coverage: 'Theft, damage, loss of business property, breakdown coverage, replacement cost',
       recommended: 'Important for freelancers with expensive equipment (photographers, videographers, designers, etc.).',
-      getPriority: (hasEquipment, income) => hasEquipment && income >= 1500 ? 'medium' : 'low',
-      getAffordability: (income) => income >= 1000 ? 'affordable' : income >= 500 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Professional',
+      value: 'professional',
       label: 'Professional Liability (E&O)',
       icon: FileText,
       iconColor: '#06b6d4',
@@ -162,11 +116,9 @@ export default function Insurance() {
       whyImportant: 'Even with perfect work, clients can sue. This covers legal costs and settlements from professional mistakes.',
       coverage: 'Errors & omissions, negligence claims, legal defense, court costs, settlements',
       recommended: 'Critical for consultants, accountants, designers, and anyone providing professional advice.',
-      getPriority: (_, income) => income >= 2500 ? 'high' : income >= 1500 ? 'medium' : 'low',
-      getAffordability: (income) => income >= 1500 ? 'affordable' : income >= 1000 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Cyber',
+      value: 'cyber',
       label: 'Cyber Liability Insurance',
       icon: Lock,
       iconColor: '#14b8a6',
@@ -175,11 +127,9 @@ export default function Insurance() {
       whyImportant: 'Data breaches can result in massive fines and lawsuits. This covers recovery costs and legal fees.',
       coverage: 'Data breach response, cyber extortion, business interruption, legal fees, notification costs',
       recommended: 'Important for businesses that handle sensitive client data or financial information.',
-      getPriority: (_, income) => income >= 3000 ? 'medium' : 'low',
-      getAffordability: (income) => income >= 1500 ? 'affordable' : income >= 1000 ? 'stretch' : 'difficult'
     },
     {
-      value: 'Umbrella',
+      value: 'umbrella',
       label: 'Umbrella Insurance',
       icon: Umbrella,
       iconColor: '#71717a',
@@ -188,48 +138,20 @@ export default function Insurance() {
       whyImportant: 'Provides additional coverage when your auto or homeowner\'s liability limits are exceeded.',
       coverage: 'Excess liability ($1M-$5M), protects personal assets, legal defense costs',
       recommended: 'Good for high earners or those with significant assets to protect.',
-      getPriority: (_, income) => income >= 5000 ? 'medium' : 'low',
-      getAffordability: (income) => income >= 3000 ? 'affordable' : income >= 2000 ? 'stretch' : 'difficult'
     }
   ]
 
   // Smart Priority Calculation
   const getSmartPriority = (insuranceType) => {
-    const baseIncome = monthlyIncome
-
-    switch(insuranceType.value) {
-      case 'Health':
-        return 'high'
-      case 'Auto':
-        return hasCarExpenses ? 'high' : 'medium'
-      case 'Liability':
-        return baseIncome >= 2000 ? 'high' : 'medium'
-      case 'Disability':
-        return baseIncome >= 3000 ? 'high' : baseIncome >= 1500 ? 'medium' : 'low'
-      case 'Professional':
-        return baseIncome >= 2500 ? 'high' : baseIncome >= 1500 ? 'medium' : 'low'
-      case 'Life':
-        return baseIncome >= 3000 ? 'medium' : 'low'
-      case 'Equipment':
-        return hasBusinessEquipment && baseIncome >= 1500 ? 'medium' : 'low'
-      case 'Cyber':
-        return baseIncome >= 3000 ? 'medium' : 'low'
-      case 'Umbrella':
-        return baseIncome >= 5000 ? 'medium' : 'low'
-      default:
-        return 'low'
-    }
+    return getInsurancePriority({
+      type: insuranceType.value,
+      monthlyIncome,
+      hasVehicleExpenses: hasCarExpenses,
+      hasEquipmentExpenses: hasBusinessEquipment,
+    })
   }
 
   // Calculate affordability
-  const getAffordability = (cost) => {
-    if (monthlyIncome === 0) return 'unknown'
-    const percentage = (cost / monthlyIncome) * 100
-    if (percentage <= 5) return 'affordable'
-    if (percentage <= 10) return 'stretch'
-    return 'difficult'
-  }
-
   // Categorize insurances by priority
   const categorizedInsurances = useMemo(() => {
     const high = []
@@ -238,8 +160,10 @@ export default function Insurance() {
 
     insuranceTypes.forEach(type => {
       const priority = getSmartPriority(type)
-      const hasThis = insurance.some(p => p.type === type.value)
-      const affordability = getAffordability(type.avgCost)
+      const hasThis = insurance.some(
+        (policy) => policy.type === type.value && (policy.status || 'active') === 'active'
+      )
+      const affordability = getInsuranceAffordability(type.avgCost, monthlyDisposableIncome)
 
       const item = { ...type, priority, hasThis, affordability }
 
@@ -249,16 +173,21 @@ export default function Insurance() {
     })
 
     return { high, medium, low }
-  }, [monthlyIncome, hasCarExpenses, hasBusinessEquipment, insurance])
+  }, [monthlyIncome, hasCarExpenses, hasBusinessEquipment, insurance, monthlyDisposableIncome])
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const monthlyCost = Number(formData.monthlyCost)
+    if (!formData.provider.trim() || !Number.isFinite(monthlyCost) || monthlyCost <= 0) {
+      console.error('Insurance policy requires a provider and a positive monthly cost.')
+      return
+    }
 
     const policyData = {
-      type: formData.type,
-      provider: formData.provider,
+      type: formData.type.toLowerCase(),
+      provider: formData.provider.trim(),
       policyNumber: formData.policyNumber,
-      monthlyCost: parseFloat(formData.monthlyCost),
+      monthlyCost,
       coverageAmount: formData.coverageAmount,
       renewalDate: formData.renewalDate
     }
@@ -271,7 +200,7 @@ export default function Insurance() {
     }
 
     setFormData({
-      type: 'Health',
+      type: 'health',
       provider: '',
       policyNumber: '',
       monthlyCost: '',
@@ -298,7 +227,7 @@ export default function Insurance() {
     setShowForm(false)
     setEditingId(null)
     setFormData({
-      type: 'Health',
+      type: 'health',
       provider: '',
       policyNumber: '',
       monthlyCost: '',
@@ -309,11 +238,13 @@ export default function Insurance() {
 
   const totalMonthlyCost = getTotalInsuranceCost()
   const totalAnnualCost = totalMonthlyCost * 12
-  const activePolicies = insurance.length
+  const activePolicies = insurance.filter(
+    (policy) => (policy.status || 'active') === 'active'
+  ).length
   const insuranceBudgetPercentage = monthlyIncome > 0 ? (totalMonthlyCost / monthlyIncome) * 100 : 0
 
   const getTypeInfo = (type) => {
-    return insuranceTypes.find(t => t.value === type) || insuranceTypes[0]
+    return insuranceTypes.find(t => t.value === String(type).toLowerCase()) || insuranceTypes[0]
   }
 
   const getPriorityColor = (priority) => {

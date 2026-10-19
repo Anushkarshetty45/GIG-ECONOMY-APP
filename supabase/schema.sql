@@ -63,10 +63,28 @@ CREATE TABLE IF NOT EXISTS public.transactions (
   type TEXT CHECK (type IN ('income', 'expense')) NOT NULL,
   amount NUMERIC(12, 2) NOT NULL,
   description TEXT,
+  client_id TEXT,
+  platform TEXT,
+  category_name TEXT,
+  payment_method TEXT,
   date DATE DEFAULT CURRENT_DATE,
   receipt_url TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+ALTER TABLE public.transactions ADD COLUMN IF NOT EXISTS client_id TEXT;
+ALTER TABLE public.transactions ADD COLUMN IF NOT EXISTS platform TEXT;
+ALTER TABLE public.transactions ADD COLUMN IF NOT EXISTS category_name TEXT;
+ALTER TABLE public.transactions ADD COLUMN IF NOT EXISTS payment_method TEXT;
+ALTER TABLE public.transactions ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE;
+UPDATE public.transactions
+SET client_id = id::TEXT
+WHERE client_id IS NULL;
+UPDATE public.transactions
+SET updated_at = created_at
+WHERE updated_at IS NULL;
+ALTER TABLE public.transactions ALTER COLUMN updated_at SET DEFAULT NOW();
 
 ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 
@@ -155,17 +173,45 @@ CREATE POLICY "Users can update own tax records"
 CREATE TABLE IF NOT EXISTS public.insurance_plans (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+  client_id TEXT,
   plan_name TEXT NOT NULL,
   provider TEXT,
   type TEXT CHECK (type IN ('health', 'life', 'disability', 'other')),
   premium_amount NUMERIC(12, 2) NOT NULL,
+  monthly_cost NUMERIC(12, 2),
   coverage_amount NUMERIC(12, 2),
+  coverage_details TEXT,
+  policy_number TEXT,
   frequency TEXT CHECK (frequency IN ('monthly', 'quarterly', 'yearly')),
   start_date DATE,
   end_date DATE,
+  renewal_date DATE,
   status TEXT CHECK (status IN ('active', 'inactive', 'pending')),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+ALTER TABLE public.insurance_plans ADD COLUMN IF NOT EXISTS client_id TEXT;
+ALTER TABLE public.insurance_plans ADD COLUMN IF NOT EXISTS monthly_cost NUMERIC(12, 2);
+ALTER TABLE public.insurance_plans ADD COLUMN IF NOT EXISTS coverage_details TEXT;
+ALTER TABLE public.insurance_plans ADD COLUMN IF NOT EXISTS policy_number TEXT;
+ALTER TABLE public.insurance_plans ADD COLUMN IF NOT EXISTS renewal_date DATE;
+ALTER TABLE public.insurance_plans ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE;
+UPDATE public.insurance_plans
+SET client_id = id::TEXT
+WHERE client_id IS NULL;
+UPDATE public.insurance_plans
+SET updated_at = created_at
+WHERE updated_at IS NULL;
+ALTER TABLE public.insurance_plans ALTER COLUMN updated_at SET DEFAULT NOW();
+ALTER TABLE public.insurance_plans
+  DROP CONSTRAINT IF EXISTS insurance_plans_type_check;
+ALTER TABLE public.insurance_plans
+  ADD CONSTRAINT insurance_plans_type_check
+  CHECK (type IN (
+    'health', 'auto', 'liability', 'disability', 'life',
+    'equipment', 'professional', 'cyber', 'umbrella', 'other'
+  ));
 
 ALTER TABLE public.insurance_plans ENABLE ROW LEVEL SECURITY;
 
@@ -240,9 +286,13 @@ CREATE TRIGGER on_auth_user_created
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON public.transactions(user_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_date ON public.transactions(date);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_user_client_id
+  ON public.transactions(user_id, client_id);
 CREATE INDEX IF NOT EXISTS idx_categories_user_id ON public.categories(user_id);
 CREATE INDEX IF NOT EXISTS idx_savings_goals_user_id ON public.savings_goals(user_id);
 CREATE INDEX IF NOT EXISTS idx_tax_records_user_id ON public.tax_records(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_insurance_plans_user_client_id
+  ON public.insurance_plans(user_id, client_id);
 
 -- Views for quick access to financial summaries
 CREATE OR REPLACE VIEW public.user_financial_summary AS

@@ -1,669 +1,677 @@
-# 💼 Gig Economy Finance Tracker
-
-<div align="center">
+# Gig Economy Finance Tracker
 
 **A comprehensive financial tracking and analytics platform built for gig economy workers**
 
-[![React](https://img.shields.io/badge/React-18.3+-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-5.4+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-
-[Features](#-features) • [Demo](#-live-demo) • [Screenshots](#-screenshots) • [Installation](#-installation) • [Tech Stack](#-tech-stack) • [Themes](#-themes)
-
-</div>
+[Features](#features) | [Demo](#live-demo) | [Installation](#installation) | [Tech Stack](#tech-stack) | [Themes](#themes)
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [Live Demo](#-live-demo)
-- [Screenshots](#-screenshots)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Themes](#-themes)
-- [Security](#-security)
-- [Project Structure](#-project-structure)
-- [Role & Responsibilities](#-role--responsibilities)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [Overview](#overview)
+- [Live Demo](#live-demo)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Themes](#themes)
+- [Security](#security)
+- [Project Structure](#project-structure)
+- [Role & Responsibilities](#role--responsibilities)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
 ## Overview
 
-Gig Economy Finance Tracker is a modern, beautifully designed web application that helps freelancers, gig workers, and independent contractors take control of their finances. With features like income tracking, expense management, tax calculation, insurance recommendations, and stunning customizable themes, it's the all-in-one financial companion for the modern gig worker.
+Gig Economy Finance Tracker is a modern web application that helps freelancers, gig workers, and independent contractors manage their finances. It provides income tracking, expense management, tax calculations, insurance recommendations, and customizable themes.
 
 ### Why This App?
 
--  **Smart Analytics** - Visualize your financial health with interactive charts
--  **Income Tracking** - Track earnings from 30+ gig platforms (Uber, DoorDash, Fiverr, etc.)
--  **Expense Management** - Categorize spending across 25+ categories
--  **Goal Setting** - Set and track savings goals with visual progress
--  **Tax Tools** - Calculate quarterly tax estimates with deduction tracking
--  **Insurance Advisor** - Get personalized insurance recommendations
--  **9 Beautiful Themes** - Customize your experience with stunning visual themes
--  **Secure & Private** - Your data is encrypted and protected
-
-
----
-
-
-##  Features
-
-### **Financial Management**
-- **Income Tracking**: Log earnings from multiple platforms with date, amount, and notes
-- **Expense Tracking**: Categorize expenses with 25+ categories (Gas, Food, Equipment, etc.)
-- **Net Income Calculation**: Real-time calculation of profits
-- **Financial Health Score**: Dashboard showing your overall financial status
-
-### **Analytics & Insights**
-- **Interactive Charts**: Visualize income/expense trends with Recharts
-- **Category Breakdown**: See spending patterns by category
-- **Platform Analysis**: Track which gig platforms earn you the most
-- **Monthly Trends**: Identify seasonal patterns in your income
-
-### **Goal Management**
-- **Savings Goals**: Set target amounts with deadlines
-- **Visual Progress**: Track goal completion with progress bars
-- **Multiple Goals**: Manage emergency funds, vacation savings, equipment purchases, etc.
-- **Goal Completion**: Celebrate achievements when goals are met
-
-### **Tax Tools**
-- **Quarterly Calculator**: Break down tax obligations by quarter (Q1-Q4)
-- **Deduction Tracker**: Track deductible expenses (Gas, Equipment, Software, etc.)
-- **Tax Estimates**: Calculate estimated tax bills at 25% rate
-- **Tax Checklist**: Prepare for tax season with guided checklist
-- **Year Selection**: View tax data for multiple years (2022-2025)
-
-### **Insurance Advisor**
-- **Smart Recommendations**: Get personalized insurance suggestions based on income
-- **9 Insurance Types**: Health, Auto, Liability, Disability, Life, Equipment, Professional, Cyber, Umbrella
-- **Affordability Analysis**: See if insurance fits your budget
-- **Priority Levels**: High/Medium/Low priority based on your financial situation
-- **Policy Management**: Track active policies, costs, and renewal dates
-
-### **Receipt Management**
-- **Image Upload**: Store receipt photos for tax deductions
-- **Categorization**: Link receipts to expense categories
-- **Organization**: Search and filter receipts
-- **Cloud Storage**: Powered by Supabase Storage
-
-### **Export & Reports**
-- **CSV Export**: Download data for Excel/Google Sheets
-- **PDF Reports**: Generate professional financial reports
-- **Custom Date Ranges**: Export specific time periods
-
-### **Customizable Themes**
-**9 Beautiful Themes:**
-1.  **Pure White** - Clean, minimal, professional
-2.  **Midnight Black** - OLED-friendly dark mode
-3.  **Soft Pastels** - Dreamy vintage aesthetic
-4.  **Coral Sunset** - Warm tropical vibes
-5.  **Lavender Dream** - Calming purple tones
-6.  **Mint Fresh** - Natural and refreshing
-7.  **Ocean Breeze** - Coastal tranquility with animated waves
-8.  **Midnight Latte** - Cozy coffee shop dark mode
-9.  **Seasonal** - Auto-changes with seasons (Spring/Summer/Fall/Winter)
-
-**Theme Features:**
-- Animated particle backgrounds (snowflakes, petals, waves)
-- Smooth transitions (0.4s ease)
-- LocalStorage persistence
-- Accessibility support (respects prefers-reduced-motion)
+- **Smart Analytics** - Visualize financial health with interactive charts.
+- **Income Tracking** - Track earnings from multiple gig platforms.
+- **Expense Management** - Categorize spending across multiple categories.
+- **Goal Setting** - Set and track savings goals.
+- **Tax Tools** - Calculate quarterly tax estimates and track deductions.
+- **Insurance Advisor** - Get personalized insurance recommendations.
+- **Customizable Themes** - Choose from nine visual themes.
+- **Security** - Protect financial data with authentication and access controls.
 
 ---
 
-##  Tech Stack
+## Live Demo
 
-### **Core Framework & Build Tools**
+**Live Application:** [https://gigeconomy-xi.vercel.app](https://gigeconomy-xi.vercel.app)
 
-#### **React 18.2.0**
-- **What it is**: A JavaScript library for building user interfaces
-- **Why we use it**:
-  - Component-based architecture for reusable UI elements
-  - Virtual DOM for optimal rendering performance
-  - Hooks for state and lifecycle management
-  - Large ecosystem and community support
-- **Key features in our app**:
-  - Functional components with hooks (useState, useEffect, useRef)
-  - React Router for navigation
-  - No class components (modern approach)
-
-#### **Vite 5.0.8**
-- **What it is**: Next-generation frontend build tool
-- **Why we use it**:
-  - Lightning-fast Hot Module Replacement (HMR) - see changes instantly
-  - Optimized production builds with code splitting
-  - Native ES modules support
-  - 10-100x faster than webpack in development
-- **Key features**:
-  - Development server starts in < 1 second
-  - Hot reload in milliseconds
-  - Optimized builds with tree-shaking
-  - Built-in TypeScript support
-
-#### **React Router DOM 6.20.0**
-- **What it is**: Client-side routing library for React
-- **Why we use it**:
-  - Single Page Application (SPA) navigation without page reloads
-  - Protected routes for authentication
-  - Nested routing for dashboard layout
-- **Key features in our app**:
-  - `/dashboard/*` routes protected by auth
-  - Programmatic navigation (useNavigate)
-  - URL parameters and query strings
-  - 404 error handling
+Create an account and explore the application's features.
 
 ---
 
-### **Backend & Database**
+## Features
 
-#### **Supabase 2.45.0**
-- **What it is**: Open-source Firebase alternative (Backend-as-a-Service)
-- **Why we use it**:
-  - PostgreSQL database (enterprise-grade SQL database)
-  - Built-in authentication system
-  - Real-time subscriptions (live data updates)
-  - RESTful API auto-generated from database schema
-  - File storage for receipt images
-- **Components we use**:
-  - **Supabase Database**: Store income, expenses, goals, insurance data
-  - **Supabase Auth**: User signup, login, password reset
-  - **Supabase Storage**: Store receipt images
-  - **Row Level Security (RLS)**: Users can only access their own data
-- **Key features**:
-  - JWT token-based authentication
-  - Real-time data sync across devices
-  - Automatic API generation
-  - Built-in SQL editor
+### Financial Management
 
----
+- **Income Tracking:** Log earnings from multiple platforms with dates, amounts, and notes.
+- **Expense Tracking:** Categorize expenses such as gas, food, and equipment.
+- **Net Income Calculation:** Calculate profits in real time.
+- **Financial Health Score:** View an overview of financial status.
 
-### **State Management**
+### Analytics and Insights
 
-#### **Zustand 4.5.0**
-- **What it is**: Lightweight state management library
-- **Why we use it**:
-  - Simple API (easier than Redux)
-  - Small bundle size (< 1KB gzipped)
-  - No boilerplate code required
-  - Works seamlessly with React hooks
-- **Stores in our app**:
-  - `authStore.js` - User authentication state (login/logout)
-  - `financeStore.js` - Income, expenses, goals data
-  - `themeStore.js` - Selected theme, theme preferences
-  - `settingsStore.js` - App settings, currency, date format
-- **Key features**:
-  - Persist middleware for localStorage
-  - Direct state mutations (no reducers needed)
-  - TypeScript support
+- **Interactive Charts:** Visualize income and expense trends using Recharts.
+- **Category Breakdown:** Analyze spending patterns by category.
+- **Platform Analysis:** Identify the highest-earning gig platforms.
+- **Monthly Trends:** Identify seasonal patterns in income.
 
----
+### Goal Management
 
-### **UI Components & Styling**
+- **Savings Goals:** Set target amounts and deadlines.
+- **Visual Progress:** Track goal completion with progress bars.
+- **Multiple Goals:** Manage emergency funds, vacation savings, and equipment purchases.
+- **Goal Completion:** Track progress toward financial goals.
 
-#### **Lucide React 0.300.0**
-- **What it is**: Beautiful, consistent icon library
-- **Why we use it**:
-  - 1000+ professionally designed icons
-  - Tree-shakable (only imports icons you use)
-  - Customizable size and color
-  - Lightweight SVG icons
-- **Usage in our app**:
-  - Navigation icons (DollarSign, CreditCard, Target, etc.)
-  - Action buttons (Plus, Trash, Edit icons)
-  - Visual indicators (Check, X, Alert icons)
+### Tax Tools
 
-#### **Recharts 2.10.0**
-- **What it is**: Composable charting library built on React components
-- **Why we use it**:
-  - React-friendly API (components not canvas)
-  - Responsive charts that resize automatically
-  - Beautiful animations out of the box
-  - Customizable and themeable
-- **Charts in our app**:
-  - Line charts for income/expense trends
-  - Bar charts for category breakdowns
-  - Pie charts for expense distribution
-  - Area charts for cumulative data
+- **Quarterly Calculator:** Calculate tax obligations by quarter.
+- **Deduction Tracker:** Track deductible expenses such as gas, equipment, and software.
+- **Tax Estimates:** Calculate estimated tax bills using a 25% rate.
+- **Tax Checklist:** Prepare for tax season using a checklist.
+- **Year Selection:** View tax data for different years.
 
-#### **Custom CSS with CSS Variables**
-- **What it is**: Dynamic styling using CSS custom properties
-- **Why we use it**:
-  - Theme switching without reloading (instant color changes)
-  - No CSS-in-JS library needed (faster performance)
-  - Better browser support than styled-components
-  - Easier to maintain and debug
-- **Key features**:
-  - 9 theme color palettes
-  - Smooth transitions (0.4s ease)
-  - Dark mode support
-  - Responsive design (mobile-first)
+### Insurance Advisor
+
+- **Smart Recommendations:** Receive insurance suggestions based on income.
+- **Insurance Types:** Explore health, auto, liability, disability, life, equipment, professional, cyber, and umbrella insurance.
+- **Affordability Analysis:** Evaluate insurance costs against your budget.
+- **Priority Levels:** Identify high-, medium-, and low-priority insurance needs.
+- **Policy Management:** Track active policies, costs, and renewal dates.
+
+### Receipt Management
+
+- **Image Upload:** Store receipt photos for expense documentation.
+- **Categorization:** Link receipts to expense categories.
+- **Organization:** Search and filter receipts.
+- **Cloud Storage:** Store receipt images using Supabase Storage.
+
+### Export and Reports
+
+- **CSV Export:** Download financial data for Excel or Google Sheets.
+- **PDF Reports:** Generate financial reports.
+- **Custom Date Ranges:** Export data for specific periods.
+
+### Customizable Themes
+
+The application includes nine themes:
+
+1. **Pure White** - Clean, minimal, professional.
+2. **Midnight Black** - Dark mode with OLED-friendly colors.
+3. **Soft Pastels** - Soft vintage-inspired colors.
+4. **Coral Sunset** - Warm tropical colors.
+5. **Lavender Dream** - Calming purple tones.
+6. **Mint Fresh** - Natural green tones.
+7. **Ocean Breeze** - Coastal colors with animated waves.
+8. **Midnight Latte** - Dark coffee-inspired colors.
+9. **Seasonal** - Changes according to the season.
+
+### Theme Features
+
+- Animated backgrounds.
+- Smooth transitions.
+- LocalStorage persistence.
+- Accessibility support for reduced motion preferences.
 
 ---
 
-### **AI & Machine Learning**
+## Tech Stack
 
-#### **Tesseract.js 7.0.0**
-- **What it is**: Pure JavaScript OCR (Optical Character Recognition) library
-- **Why we use it**:
-  - Scans receipt images and extracts text
-  - No server-side processing needed (runs in browser)
-  - Supports 100+ languages
-  - Free and open-source
-- **Usage in our app**:
-  - Receipt Scanner feature
-  - Automatically extracts store name, total amount, and date
-  - Converts images to text for expense tracking
-- **Key features**:
-  - Web Worker support (doesn't block UI)
-  - Progress tracking during scan
-  - Confidence scores for accuracy
+### Core Framework and Build Tools
+
+#### React 18
+
+React is a JavaScript library for building user interfaces.
+
+**Why it is used:**
+
+- Component-based architecture.
+- Reusable UI components.
+- Virtual DOM for efficient rendering.
+- Hooks for state and lifecycle management.
+- Integration with React Router.
+
+#### Vite
+
+Vite is a frontend build tool used to develop and build the application.
+
+**Why it is used:**
+
+- Fast development server.
+- Hot Module Replacement.
+- Optimized production builds.
+- Native ES module support.
+- Built-in TypeScript support.
+
+#### React Router DOM
+
+React Router DOM manages navigation within the application.
+
+**Features:**
+
+- Client-side navigation.
+- Protected routes.
+- Nested routes.
+- URL parameters and query strings.
+- Error-page handling.
+
+### Backend and Database
+
+#### Supabase
+
+Supabase provides backend services and a PostgreSQL database.
+
+**Why it is used:**
+
+- PostgreSQL database.
+- User authentication.
+- Real-time subscriptions.
+- Automatically generated APIs.
+- File storage.
+- Row Level Security.
+
+**Components:**
+
+- **Supabase Database:** Stores income, expenses, goals, and insurance information.
+- **Supabase Auth:** Handles signup, login, and password recovery.
+- **Supabase Storage:** Stores receipt images.
+- **Row Level Security:** Restricts access to users' own data.
+
+### State Management
+
+#### Zustand
+
+Zustand manages application state.
+
+**Why it is used:**
+
+- Simple API.
+- Minimal boilerplate.
+- Integration with React hooks.
+- Persistent state support.
+- Lightweight implementation.
+
+**Stores used in the application:**
+
+- `authStore.js` - Authentication state.
+- `financeStore.js` - Income, expenses, and goals.
+- `themeStore.js` - Theme preferences.
+- `settingsStore.js` - Application settings.
+
+### UI Components and Styling
+
+#### Lucide React
+
+Lucide React provides icons for navigation, actions, and interface elements.
+
+#### Recharts
+
+Recharts provides charts and visualizations.
+
+**Charts include:**
+
+- Line charts for income and expense trends.
+- Bar charts for category breakdowns.
+- Pie charts for expense distribution.
+- Area charts for cumulative data.
+
+#### CSS Variables
+
+CSS variables support dynamic styling and theme customization.
+
+**Features:**
+
+- Nine theme color palettes.
+- Smooth transitions.
+- Dark mode support.
+- Responsive styling.
+
+### AI and Machine Learning
+
+#### Tesseract.js
+
+Tesseract.js provides Optical Character Recognition (OCR).
+
+**Usage:**
+
+- Scans receipt images.
+- Extracts text from images.
+- Helps identify store names, totals, and dates.
+- Supports browser-based processing.
+- Provides progress information during scanning.
+
+### Development Tools
+
+#### ESLint
+
+ESLint helps maintain code quality.
+
+**Features:**
+
+- Identifies potential bugs.
+- Enforces consistent coding standards.
+- Supports React-specific linting rules.
+- Helps maintain readable code.
+
+#### TypeScript and JSDoc
+
+Type annotations and JSDoc improve code documentation and editor assistance.
+
+**Benefits:**
+
+- Better IDE autocomplete.
+- Improved code readability.
+- Earlier detection of type-related errors.
+
+### Security
+
+#### Content Security Policy
+
+Content Security Policy helps restrict which resources a browser can load.
+
+#### Rate Limiting
+
+Rate limiting restricts repeated authentication attempts.
+
+#### Input Sanitization
+
+Input sanitization helps prevent unsafe input from being processed.
+
+#### Password Validation
+
+Password validation enforces password requirements.
+
+#### Audit Logging
+
+Audit logging records security-related events.
 
 ---
 
-### **Development Tools**
+## Architecture Patterns
 
-#### **ESLint 8.55.0**
-- **What it is**: JavaScript linting tool for code quality
-- **Why we use it**:
-  - Catches bugs before runtime
-  - Enforces consistent code style
-  - React-specific rules (hooks, JSX)
-- **Plugins**:
-  - `eslint-plugin-react` - React best practices
-  - `eslint-plugin-react-hooks` - Hook rules
-  - `eslint-plugin-react-refresh` - HMR compatibility
+### Component Structure
 
-#### **TypeScript Types**
-- **What it is**: Type definitions for better IDE autocomplete
-- **Why we use it**:
-  - Better intellisense in VS Code
-  - Catch type errors during development
-  - Self-documenting code
-- **Note**: We use JavaScript with TypeScript types (JSDoc)
-
----
-
-### **Security Features**
-
-#### **Content Security Policy (CSP)**
-- **What it is**: HTTP header that prevents XSS attacks
-- **Implementation**: Meta tag in `index.html`
-- **Features**:
-  - Blocks inline scripts (prevents script injection)
-  - Whitelists trusted CDNs (Supabase, Tesseract)
-  - Prevents clickjacking with frame-ancestors
-  - Upgrades insecure requests to HTTPS
-
-#### **Rate Limiting**
-- **What it is**: Limits number of requests to prevent abuse
-- **Implementation**: `src/utils/security.js`
-- **Features**:
-  - Login: 5 attempts per 15 minutes
-  - Signup: 3 attempts per hour
-  - Prevents brute force attacks
-
-#### **Input Sanitization**
-- **What it is**: Removes dangerous characters from user input
-- **Implementation**: `sanitizeString()`, `validatePassword()`
-- **Prevents**:
-  - XSS (Cross-Site Scripting) attacks
-  - SQL injection (though Supabase also protects)
-  - HTML injection
-
-#### **Password Validation**
-- **What it is**: Enforces strong password requirements
-- **Requirements**:
-  - Minimum 8 characters
-  - At least 1 uppercase letter
-  - At least 1 lowercase letter
-  - At least 1 number
-  - At least 1 special character
-  - Blocks common passwords (password123, etc.)
-
-#### **Audit Logging**
-- **What it is**: Tracks security events
-- **Events logged**:
-  - Login attempts (success/failure)
-  - Signup attempts
-  - Password changes
-  - Logout events
-  - Rate limit violations
-- **Storage**: In-memory (production should use server)
-
----
-
-### **Architecture Patterns**
-
-#### **Component Structure**
-```
+```text
 src/
-├── components/     # Reusable UI components
-├── layouts/        # Page layouts (DashboardLayout)
-├── pages/          # Route pages (Dashboard, Income, etc.)
-├── store/          # Zustand state stores
-├── config/         # Configuration (Supabase)
-├── utils/          # Helper functions (security, validation)
-└── theme/          # Theme definitions
+├── components/
+├── layouts/
+├── pages/
+├── store/
+├── config/
+├── utils/
+└── theme/
 ```
 
-#### **State Management Pattern**
-- **Global state**: Zustand stores (auth, finance, theme)
-- **Local state**: React useState for component-specific data
-- **Persistence**: LocalStorage via Zustand persist middleware
+### State Management Pattern
 
-#### **Data Flow**
-1. User interacts with UI component
-2. Component calls Zustand store action
-3. Store action makes Supabase API call
-4. Supabase returns data
-5. Store updates state
-6. Components re-render with new data
+- **Global State:** Zustand stores for authentication, finance, and themes.
+- **Local State:** React `useState` for component-specific information.
+- **Persistence:** LocalStorage through Zustand persistence middleware.
 
----
+### Data Flow
 
-### **Performance Optimizations**
-
-- **Code splitting**: React Router lazy loading
-- **Tree shaking**: Vite removes unused code
-- **Asset optimization**: Image compression, SVG icons
-- **Lazy loading**: Components loaded only when needed
-- **Memoization**: React.memo for expensive components
-- **Virtual DOM**: React optimizes re-renders
-- **CDN**: Static assets served from CDN
+1. The user interacts with a UI component.
+2. The component calls a Zustand store action.
+3. The store communicates with Supabase.
+4. Supabase returns the requested data.
+5. The store updates the application state.
+6. Components render the updated information.
 
 ---
 
-### **Browser Support**
+## Performance Optimizations
 
-- **Modern browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **Mobile**: iOS Safari 14+, Chrome Android 90+
-- **Not supported**: Internet Explorer (use modern browser)
+- Code splitting using React Router.
+- Tree shaking through Vite.
+- Asset optimization.
+- Lazy loading of components.
+- Memoization for expensive components.
+- Efficient rendering through React.
+- CDN delivery of static assets.
 
 ---
 
-### **Environment Variables**
+## Browser Support
 
-All configuration is done via `.env` file:
+- Chrome 90 and later.
+- Firefox 88 and later.
+- Safari 14 and later.
+- Edge 90 and later.
+- Modern mobile browsers.
+
+Internet Explorer is not supported.
+
+---
+
+## Environment Variables
+
+Create a `.env` file in the project root.
 
 ```env
-# Required
 VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_anon_key
-
-# Optional
-VITE_DEV_MODE=true  # Bypass auth in development
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-**Why VITE_ prefix?**
-- Vite only exposes variables with `VITE_` prefix to client
-- Prevents accidental exposure of server secrets
-- Build-time variable replacement
+### Why Use the VITE_ Prefix?
+
+- Vite exposes variables with the `VITE_` prefix to client-side code.
+- Environment variables allow configuration without hardcoding values.
+- Secret credentials must never be exposed in frontend code.
 
 ---
 
-### **Deployment**
+## Deployment
 
-The app can be deployed to:
-- **Vercel** (recommended) - Zero config deployment
-- **Netlify** - Built-in CI/CD
-- **GitHub Pages** - Free static hosting
-- **AWS S3 + CloudFront** - Enterprise solution
+The application can be deployed using:
 
-**Build command**: `npm run build`
-**Output directory**: `dist/`
+- Vercel.
+- Netlify.
+- GitHub Pages.
+- AWS S3 and CloudFront.
+
+**Build command:**
+
+```bash
+npm run build
+```
+
+**Output directory:**
+
+```text
+dist/
+```
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
-- **Node.js** 16+ and npm
-- **Supabase Account** (free tier available)
-- **Git** (optional)
+- Node.js 16 or later.
+- npm.
+- A Supabase account.
+- Git, if cloning the repository.
 
-### Quick Start
+### Step 1: Clone the Repository
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/gig-economy-app.git
-   cd gig-economy-app
-   ```
+```bash
+git clone https://github.com/yourusername/gig-economy-app.git
+cd gig-economy-app
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+Replace the repository URL with the actual repository URL.
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   ```
+### Step 2: Install Dependencies
 
-   Edit `.env` and add your Supabase credentials:
-   ```env
-   VITE_SUPABASE_URL=your_supabase_project_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+```bash
+npm install
+```
 
-4. **Set up Supabase Database**
+### Step 3: Configure Environment Variables
 
-   Create the following tables in your Supabase project:
+Create a `.env` file in the project root.
 
-   **incomes**
-   ```sql
-   CREATE TABLE incomes (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     platform TEXT NOT NULL,
-     amount DECIMAL(10,2) NOT NULL,
-     date DATE NOT NULL,
-     notes TEXT,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-   **expenses**
-   ```sql
-   CREATE TABLE expenses (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     category TEXT NOT NULL,
-     amount DECIMAL(10,2) NOT NULL,
-     date DATE NOT NULL,
-     notes TEXT,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
+Replace the example values with your Supabase project credentials.
 
-   **goals**
-   ```sql
-   CREATE TABLE goals (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     name TEXT NOT NULL,
-     target_amount DECIMAL(10,2) NOT NULL,
-     current_amount DECIMAL(10,2) DEFAULT 0,
-     deadline DATE,
-     completed BOOLEAN DEFAULT FALSE,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
+### Step 4: Set Up the Supabase Database
 
-   **insurance**
-   ```sql
-   CREATE TABLE insurance (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     user_id UUID REFERENCES auth.users NOT NULL,
-     type TEXT NOT NULL,
-     provider TEXT NOT NULL,
-     policy_number TEXT,
-     monthly_cost DECIMAL(10,2) NOT NULL,
-     coverage_amount TEXT,
-     renewal_date DATE,
-     created_at TIMESTAMP DEFAULT NOW()
-   );
-   ```
+Create the following tables in your Supabase project.
 
-5. **Enable Row Level Security (RLS)**
+#### Incomes
 
-   For each table, run:
-   ```sql
-   ALTER TABLE incomes ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE goals ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE insurance ENABLE ROW LEVEL SECURITY;
+```sql
+CREATE TABLE incomes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  platform TEXT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  date DATE NOT NULL,
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
 
-   -- Users can only access their own data
-   CREATE POLICY "Users can view own data" ON incomes
-     FOR SELECT USING (auth.uid() = user_id);
-   CREATE POLICY "Users can insert own data" ON incomes
-     FOR INSERT WITH CHECK (auth.uid() = user_id);
-   CREATE POLICY "Users can update own data" ON incomes
-     FOR UPDATE USING (auth.uid() = user_id);
-   CREATE POLICY "Users can delete own data" ON incomes
-     FOR DELETE USING (auth.uid() = user_id);
+#### Expenses
 
-   -- Repeat for expenses, goals, insurance tables
-   ```
+```sql
+CREATE TABLE expenses (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  category TEXT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  date DATE NOT NULL,
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
 
-6. **Start development server**
-   ```bash
-   npm run dev
-   ```
+#### Goals
 
-7. **Open in browser**
-   ```
-   http://localhost:5173
-   ```
+```sql
+CREATE TABLE goals (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  name TEXT NOT NULL,
+  target_amount DECIMAL(10,2) NOT NULL,
+  current_amount DECIMAL(10,2) DEFAULT 0,
+  deadline DATE,
+  completed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### Insurance
+
+```sql
+CREATE TABLE insurance (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  type TEXT NOT NULL,
+  provider TEXT NOT NULL,
+  policy_number TEXT,
+  monthly_cost DECIMAL(10,2) NOT NULL,
+  coverage_amount TEXT,
+  renewal_date DATE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Step 5: Enable Row Level Security
+
+Enable Row Level Security on the tables.
+
+```sql
+ALTER TABLE incomes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE goals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE insurance ENABLE ROW LEVEL SECURITY;
+```
+
+Create policies to restrict access to each user's own data. For example:
+
+```sql
+CREATE POLICY "Users can view own income"
+ON incomes
+FOR SELECT
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own income"
+ON incomes
+FOR INSERT
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own income"
+ON incomes
+FOR UPDATE
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own income"
+ON incomes
+FOR DELETE
+USING (auth.uid() = user_id);
+```
+
+Apply equivalent policies to the other tables.
+
+### Step 6: Start the Development Server
+
+```bash
+npm run dev
+```
+
+### Step 7: Open the Application
+
+Open the local URL displayed in the terminal. With the default Vite configuration, this is usually:
+
+```text
+http://localhost:5173
+```
 
 ---
 
-##  Configuration
+## Configuration
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the project root.
 
 ```env
-# Supabase Configuration (Required)
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 
-# Optional: Plaid (Bank Linking)
 VITE_PLAID_CLIENT_ID=your_plaid_client_id
 VITE_PLAID_SECRET=your_plaid_secret
 VITE_PLAID_ENV=sandbox
 
-# Optional: Stripe (Payments)
 VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
-**Important Security Notes:**
--  `.env` is in `.gitignore` - never commit it
--  Use `VITE_` prefix for all frontend variables
--  Never expose secret keys in client-side code
-  
+Only configure optional services if they are implemented and required by your application.
+
+### Important Security Notes
+
+- Keep `.env` in `.gitignore`.
+- Never commit real credentials to GitHub.
+- Do not expose secret API keys in client-side code.
+- Keep private service credentials on a secure backend.
+
 ### Building for Production
 
-```bash
-# Build optimized production bundle
-npm run build
+Build the application:
 
-# Preview production build locally
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
 npm run preview
 ```
 
-Output will be in `dist/` directory
+The generated production files are placed in the `dist/` directory.
 
 ---
 
-##  Themes
+## Themes
 
-The app features 9 professionally designed themes with animated backgrounds:
+The application supports nine themes.
 
 | Theme | Mode | Description | Special Effects |
-|-------|------|-------------|-----------------|
-|  Pure White | Light | Clean, minimal, professional | None |
-|  Midnight Black | Dark | OLED-friendly true blacks | White sparkles |
-|  Soft Pastels | Light | Dreamy vintage aesthetic | Pink petals |
-|  Coral Sunset | Light | Warm tropical vibes | Orange gradient orbs |
-|  Lavender Dream | Light | Calming purple fields | Purple petals |
-|  Mint Fresh | Light | Natural and refreshing | Green leaves |
-|  Ocean Breeze | Light | Coastal tranquility | Animated waves |
-|  Midnight Latte | Dark | Cozy coffee shop | Steam wisps |
-|  Seasonal | Dynamic | Auto-changes with seasons | Season-specific |
+|---|---|---|---|
+| Pure White | Light | Clean and professional | None |
+| Midnight Black | Dark | OLED-friendly dark mode | White sparkles |
+| Soft Pastels | Light | Soft vintage-inspired colors | Pink petals |
+| Coral Sunset | Light | Warm tropical colors | Gradient orbs |
+| Lavender Dream | Light | Calming purple tones | Purple petals |
+| Mint Fresh | Light | Natural green tones | Green leaves |
+| Ocean Breeze | Light | Coastal colors | Animated waves |
+| Midnight Latte | Dark | Coffee-inspired dark mode | Steam effects |
+| Seasonal | Dynamic | Changes with seasons | Seasonal effects |
 
-**Seasonal Theme Changes:**
--  **Spring** (Mar 20 - Jun 20): Pink cherry blossoms
--  **Summer** (Jun 21 - Sep 22): Golden sunshine
--  **Fall** (Sep 23 - Dec 20): Autumn leaves
--  **Winter** (Dec 21 - Mar 19): Snowy twilight
+### Seasonal Theme Changes
+
+- **Spring:** Pink cherry blossoms.
+- **Summer:** Golden sunshine.
+- **Fall:** Autumn leaves.
+- **Winter:** Snowy twilight.
 
 ---
 
-##  Security
+## Security
 
-### Implemented Security Features
+### Authentication
 
- **Authentication**
-- JWT token-based sessions (Supabase Auth)
-- Secure password hashing (bcrypt)
-- Email verification support
-- Password reset functionality
+- JWT token-based sessions through Supabase Auth.
+- Password hashing handled by the authentication provider.
+- Email verification support.
+- Password reset functionality.
 
- **Data Protection**
-- Row Level Security (RLS) in Supabase
-- Users can only access their own data
-- Environment variables for secrets
-- No hardcoded credentials
+### Data Protection
 
- **Frontend Security**
-- Content Security Policy (CSP)
-- XSS protection headers
-- HTTPS/SSL encryption
-- Input validation & sanitization
-- Secure localStorage wrapper
+- Row Level Security in Supabase.
+- User-specific data access.
+- Environment variables for configuration.
+- No hardcoded credentials.
 
- **Code Security**
-- No sensitive data in git history
-- `.env` in `.gitignore`
-- npm audit for vulnerabilities
-- Regular dependency updates
+### Frontend Security
+
+- Content Security Policy.
+- Input validation and sanitization.
+- HTTPS support through deployment configuration.
+- Secure handling of application data.
+
+### Code Security
+
+- Keep sensitive credentials out of Git history.
+- Add `.env` to `.gitignore`.
+- Audit dependencies for vulnerabilities.
+- Update dependencies regularly.
 
 ### Security Utilities
 
-The app includes security helper functions in `src/utils/security.js`:
+The application includes security helper functions in `src/utils/security.js`.
 
 ```javascript
 import {
-  sanitizeString,      // Remove HTML/script tags
-  validateAmount,      // Validate money amounts
-  validateEmail,       // Check email format
-  validateFile,        // Validate file uploads
-  secureStorage,       // Safe localStorage wrapper
-  maskSensitiveData    // Hide sensitive info
-} from './utils/security'
+  sanitizeString,
+  validateAmount,
+  validateEmail,
+  validateFile,
+  secureStorage,
+  maskSensitiveData,
+} from "./utils/security";
 ```
 
-##  Project Structure
+Ensure these functions exist in the project before documenting them as implemented features.
 
-```
+---
+
+## Project Structure
+
+```text
 gig-economy-app/
-├── public/              # Static assets
+├── public/
 ├── src/
-│   ├── components/      # Reusable UI components
+│   ├── components/
 │   │   ├── AnimatedBackground.jsx
 │   │   └── ThemeSwitcherModal.jsx
-│   ├── layouts/         # Page layouts
+│   ├── layouts/
 │   │   └── DashboardLayout.jsx
-│   ├── pages/           # Application pages
+│   ├── pages/
 │   │   ├── Dashboard.jsx
 │   │   ├── Income.jsx
 │   │   ├── Expenses.jsx
@@ -676,148 +684,160 @@ gig-economy-app/
 │   │   ├── Settings.jsx
 │   │   ├── Login.jsx
 │   │   └── Signup.jsx
-│   ├── store/           # Zustand state management
+│   ├── store/
 │   │   ├── authStore.js
 │   │   ├── financeStore.js
 │   │   └── themeStore.js
-│   ├── config/          # Configuration files
+│   ├── config/
 │   │   └── supabase.js
-│   ├── utils/           # Utility functions
+│   ├── utils/
 │   │   └── security.js
-│   ├── App.jsx          # Main app component
-│   └── main.jsx         # Entry point
-├── .env                 # Environment variables (not committed)
-├── .env.example         # Environment template
-├── .gitignore           # Git ignore rules
-├── index.html           # HTML template with security headers
-├── package.json         # Dependencies
-├── vite.config.js       # Vite configuration
-└── README.md            # This file
+│   ├── App.jsx
+│   └── main.jsx
+├── .env
+├── .env.example
+├── .gitignore
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
 ---
 
-##  Role & Responsibilities
+## Role and Responsibilities
 
 ### Project Development
 
-**Full-Stack Developer** | *Solo Project*
+**Full-Stack Developer | Team of 2**
 
-#### Key Responsibilities:
+### Key Responsibilities
 
-** Frontend Development**
-- Designed and implemented responsive UI using React 18.2 and modern CSS
-- Built 15+ interactive pages (Dashboard, Income, Expenses, Goals, Analytics, etc.)
-- Created reusable component library with 20+ custom components
-- Implemented 9 custom themes with animated backgrounds using CSS variables
-- Integrated Recharts for data visualization with custom styling
-- Developed mobile-first responsive design supporting all screen sizes
+#### Frontend Development
 
-** Backend & Database**
-- Set up and configured Supabase backend (PostgreSQL database)
-- Designed database schema with 5+ tables (incomes, expenses, goals, insurance, receipts)
-- Implemented Row Level Security (RLS) policies for data protection
-- Created RESTful API endpoints using Supabase auto-generation
-- Set up authentication system with JWT tokens
-- Configured file storage for receipt image uploads
+- Designed and implemented responsive UI using React and CSS.
+- Built interactive pages for the dashboard, income, expenses, goals, analytics, and other features.
+- Created reusable UI components.
+- Implemented customizable themes.
+- Integrated Recharts for data visualization.
+- Developed responsive layouts for mobile, tablet, and desktop.
 
-** Security Implementation**
-- Implemented Content Security Policy (CSP) headers
-- Built rate limiting system (login/signup protection)
-- Created input sanitization and validation utilities
-- Added password strength validation with security requirements
-- Implemented audit logging for security events
-- Set up environment variable management for secrets
+#### Backend and Database
 
-** State Management**
-- Architected global state management using Zustand
-- Created 4 state stores (auth, finance, theme, settings)
-- Implemented localStorage persistence for offline support
-- Designed clean data flow patterns
+- Configured the Supabase backend and PostgreSQL database.
+- Designed database tables for financial data.
+- Implemented Row Level Security policies.
+- Integrated Supabase APIs.
+- Configured authentication.
+- Set up receipt image storage.
 
-** DevOps & Deployment**
-- Configured Vite build system for optimal performance
-- Set up CI/CD pipeline with Vercel deployment
-- Implemented environment variable management
-- Optimized bundle size with code splitting and tree shaking
-- Configured production builds with security headers
+#### Security Implementation
 
-** Testing & Quality Assurance**
-- Conducted end-to-end testing of all features
-- Performed security audits and vulnerability scanning
-- Optimized performance (lighthouse scores 90+)
-- Cross-browser and cross-device testing
+- Configured Content Security Policy where supported.
+- Implemented input validation and sanitization.
+- Added password validation.
+- Managed environment variables.
+- Worked on security-related logging and protections.
 
-#### Technical Achievements:
+#### State Management
 
- Built complete full-stack application in React + Supabase
- Implemented secure authentication with rate limiting
- Created 9 custom themes with animated backgrounds
- Integrated 3rd-party APIs (Plaid, Stripe - ready for production)
- Implemented OCR receipt scanning with Tesseract.js
- Achieved responsive design across mobile, tablet, and desktop
- Deployed to production with zero downtime
- Maintained clean, documented, and scalable codebase
+- Implemented global state management using Zustand.
+- Organized authentication, finance, and theme state.
+- Configured state persistence where required.
+- Structured data flow between components and stores.
 
-#### Technologies Used:
+#### DevOps and Deployment
 
-**Frontend:** React, Vite, React Router, Zustand, Recharts, Lucide Icons
-**Backend:** Supabase (PostgreSQL, Auth, Storage)
-**Security:** CSP, Rate Limiting, Input Validation, RLS
-**Deployment:** Vercel, GitHub Actions
-**Tools:** Git, npm, VS Code, ESLint
+- Configured the Vite build system.
+- Set up deployment through Vercel.
+- Managed environment configuration.
+- Optimized production builds.
+- Configured deployment settings.
+
+#### Testing and Quality Assurance
+
+- Tested application features.
+- Reviewed security and dependency issues.
+- Checked responsive behavior.
+- Tested the application across supported browsers and devices.
+
+### Technical Achievements
+
+- Developed a financial tracking application using React and Supabase.
+- Implemented authentication and data access controls.
+- Created customizable themes.
+- Worked on financial data visualization.
+- Integrated receipt scanning where supported by the application.
+- Built responsive interfaces.
+- Deployed the application.
+- Maintained project documentation.
+
+### Technologies Used
+
+**Frontend:** React, Vite, React Router, Zustand, Recharts, CSS.
+
+**Backend:** Supabase, PostgreSQL, Supabase Auth, Supabase Storage.
+
+**Security:** Content Security Policy, input validation, Row Level Security.
+
+**Deployment:** Vercel.
+
+**Tools:** Git, npm, VS Code, ESLint.
 
 ---
 
-##  Contributing
+## Contributing
 
-Contributions are welcome! Here's how you can help:
+Contributions are welcome.
 
-1. **Fork the repository**
-2. **Create a feature branch**
+### How to Contribute
+
+1. Fork the repository.
+2. Create a feature branch.
+
    ```bash
    git checkout -b feature/AmazingFeature
    ```
-3. **Commit your changes**
+
+3. Commit your changes.
+
    ```bash
    git commit -m "Add some AmazingFeature"
    ```
-4. **Push to the branch**
+
+4. Push your branch.
+
    ```bash
    git push origin feature/AmazingFeature
    ```
-5. **Open a Pull Request**
+
+5. Open a pull request.
 
 ### Development Guidelines
 
-- Follow existing code style
-- Write clear commit messages
-- Add comments for complex logic
-- Test thoroughly before submitting
-- Update documentation if needed
+- Follow the existing coding style.
+- Write clear commit messages.
+- Add comments for complex logic.
+- Test changes before submitting.
+- Update documentation when necessary.
 
 ---
 
-##  License
+## License
 
 This project is licensed under the MIT License.
 
 ---
 
-##  Acknowledgments
+## Acknowledgments
 
-- **Supabase** - For the amazing backend-as-a-service platform
-- **Vite** - For the lightning-fast build tool
-- **Zustand** - For the simple state management
-- **Lucide** - For the beautiful icon library
-- **Recharts** - For the data visualization
-- **React Community** - For the excellent ecosystem
+- **Supabase:** Backend and database services.
+- **Vite:** Frontend build tooling.
+- **Zustand:** State management.
+- **Lucide:** Icon library.
+- **Recharts:** Data visualization.
+- **React Community:** Documentation and ecosystem.
 
 ---
 
-<div align="center">
-
-
-[⬆ Back to Top](#-gig-economy-finance-tracker)
-
-</div>
+[Back to Top](#gig-economy-finance-tracker)
