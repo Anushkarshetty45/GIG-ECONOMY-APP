@@ -123,47 +123,25 @@ The application includes nine themes:
 ## Tech Stack
 
 
-### Frontend:
+### Technologies Used
 
-#### React 18
+**Frontend**: React, Vite, React Router, Recharts, CSS.
 
-#### Vite
+**Backend**: Supabase, PostgreSQL, Supabase Auth.
 
-#### React Router DOM
+**Security**: Content Security Policy, input validation, Row Level Security.
 
+**Receipt Scanning**: Tesseract.js.
 
+**Development Tools**: ESLint, Typescript and JSDoc.
 
-### Backend and Database:
+**State Management**: Zustand.
 
-#### Supabase
+**Deployment**: Vercel.
 
+**Tools**: Git, npm, VS Code, ESLint.
 
-
-### State Management:
-
-#### Zustand
-
-
-
-### UI Components and Styling:
-
-#### Lucide React
-
-#### CSS Variables
-
-
-
-### Receipt Scanning:
-
-#### Tesseract.js
-
-
-
-### Development Tools:
-
-#### ESLint
-
-#### TypeScript and JSDoc
+---
 
 
 
@@ -235,19 +213,6 @@ npm run build
 ---
 
 
-### Technologies Used
-
-**Frontend**: React, Vite, React Router, Zustand, Recharts, CSS.
-
-**Backend**: Supabase, PostgreSQL, Supabase Auth.
-
-**Security**: Content Security Policy, input validation, Row Level Security.
-
-**Deployment**: Vercel.
-
-**Tools**: Git, npm, VS Code, ESLint.
-
----
 
 ## Contributing
 
