@@ -14,11 +14,6 @@
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [Themes](#themes)
-- [Security](#security)
-- [Project Structure](#project-structure)
-- [Role and Responsibilities](#role-and-responsibilities)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -127,242 +122,45 @@ The application includes nine themes:
 
 ## Tech Stack
 
+
 ### Frontend
 
 #### React 18
 
-React is a JavaScript library for building user interfaces.
-
-**Why it is used:**
-
-- Component-based architecture.
-- Reusable UI components.
-- Virtual DOM for efficient rendering.
-- Hooks for state and lifecycle management.
-- Integration with React Router.
-
 #### Vite
-
-Vite is a frontend build tool used to develop and build the application.
-
-**Why it is used:**
-
-- Fast development server.
-- Hot Module Replacement.
-- Optimized production builds.
-- Native ES module support.
-- Built-in TypeScript support.
 
 #### React Router DOM
 
-React Router DOM manages navigation within the application.
-
-**Features:**
-
-- Client-side navigation.
-- Protected routes where configured.
-- Nested routes.
-- URL parameters and query strings.
-- Error-page handling.
 
 ### Backend and Database
 
 #### Supabase
 
-Supabase provides backend services and a PostgreSQL database.
-
-**Why it is used:**
-
-- PostgreSQL database.
-- User authentication.
-- Real-time subscriptions.
-- Automatically generated APIs.
-- File storage capabilities.
-- Row Level Security.
-
-**Components:**
-
-- **Supabase Database**: Stores supported financial records.
-- **Supabase Auth**: Handles signup, login, and password recovery.
-- **Row Level Security**: Restricts access to users' own remote records when correctly configured.
-
-The application uses `transactions` for income and expense records, `insurance_plans` for insurance policies, and `tax_checklist_progress` for tax checklist progress.
-
-Receipt records are not uploaded to Supabase Storage.
 
 ### State Management
 
 #### Zustand
 
-Zustand manages application state.
-
-**Why it is used:**
-
-- Simple API.
-- Minimal boilerplate.
-- Integration with React hooks.
-- Persistent state support where configured.
-- Lightweight implementation.
-
-**Stores used in the application:**
-
-- `authStore.js`: Authentication state.
-- `financeStore.js`: Income, expenses, receipts, and insurance policies.
-- `userStore.js`: Savings goals, if present in the project.
-- `taxChecklistStore.js`: Tax checklist progress, if present in the project.
-- `themeStore.js`: Theme preferences.
-- `settingsStore.js`: Application settings, currency, and date format.
-
-The actual stores and their responsibilities should be verified against the repository.
 
 ### UI Components and Styling
 
 #### Lucide React
 
-Lucide React provides interface icons for navigation and actions.
-
-#### Recharts
-
-Recharts provides charts and visualizations.
-
-**Charts include:**
-
-- Line charts for income and expense trends.
-- Bar charts for category breakdowns.
-- Pie charts for expense distribution.
-- Area charts for cumulative data.
-
 #### CSS Variables
 
-CSS variables support dynamic styling and theme customization.
-
-**Features:**
-
-- Nine theme color palettes.
-- Smooth transitions.
-- Dark mode support.
-- Responsive styling.
 
 ### Receipt Scanning
 
 #### Tesseract.js
 
-Tesseract.js provides Optical Character Recognition.
-
-**Usage:**
-
-- Scans receipt images.
-- Extracts text from images.
-- Helps identify store names, totals, and dates.
-- Supports browser-based processing.
-- Provides progress information during scanning.
-
-Extracted values require user review and may be inaccurate.
-
-Receipt records remain in browser storage and are not synchronized or backed up in Supabase.
 
 ### Development Tools
 
 #### ESLint
 
-ESLint helps maintain code quality.
-
-**Features:**
-
-- Identifies potential bugs.
-- Enforces consistent coding standards.
-- Supports React-specific linting rules.
-- Helps maintain readable code.
-
 #### TypeScript and JSDoc
 
-Type annotations and JSDoc improve code documentation and editor assistance.
 
-**Benefits:**
-
-- Better IDE autocomplete.
-- Improved code readability.
-- Earlier detection of type-related errors.
-
----
-
-## Architecture Patterns
-
-### Component Structure
-
-```text
-src/
-├── components/
-├── layouts/
-├── pages/
-├── store/
-├── config/
-├── utils/
-└── theme/
-```
-
-### State Management Pattern
-
-- **Global state**: Zustand stores for authentication, finance, and themes.
-- **Local state**: React `useState` for component-specific information.
-- **Persistence**: Browser storage keeps local preferences and a finance cache. Signed-in insurance policies and tax checklist progress can persist in Supabase.
-
-### Data Flow
-
-The finance store synchronizes income and expense transactions with Supabase and maintains a browser-side cache.
-
-Signed-in insurance policies and tax checklist progress can load from and save to their Supabase tables.
-
-Other application state may remain local. Browser storage is not a cross-device backup.
-
----
-
-## Performance Optimizations
-
-- Code splitting using React Router.
-- Tree shaking through Vite.
-- Asset optimization.
-- Lazy loading of components.
-- Memoization for expensive components.
-- Efficient rendering through React.
-- CDN delivery of static assets.
-
----
-
-## Browser Support
-
-- Chrome 90 and later.
-- Firefox 88 and later.
-- Safari 14 and later.
-- Edge 90 and later.
-- Modern mobile browsers.
-
-**Supported target**: The responsive Vite web application in current desktop and mobile browsers.
-
-**Native mobile app**: Expo and React Native source and configuration files are present, but the package manifest and lockfile do not include the required native runtime dependencies or run scripts. The native app is not currently runnable or supported. Its tax screen also lacks the web year selector and interactive, persisted checklist. Mobile feature parity is incomplete and unverified.
-
-**Not supported**: Internet Explorer.
-
----
-
-## Environment Variables
-
-Create a `.env` file in the project root.
-
-```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### Client-Side Security
-
-Vite embeds variables prefixed with `VITE_` in the browser bundle.
-
-The Supabase URL and anon or publishable key are intended for client use and must be protected by correctly configured Supabase RLS policies.
-
-Never put a service-role key, database password, or other private credential in a `VITE_` variable.
-
-`VITE_DEV_MODE=true` enables a development-only authentication bypass if implemented in the application. The Supabase client still needs valid configuration to initialize. Do not enable this flag in production.
 
 ### Known Limitations
 
@@ -433,40 +231,8 @@ Otherwise, run:
 npm install
 ```
 
-### Step 3: Configure Environment Variables
 
-Create a `.env` file in the project root and add your Supabase project URL and anon or publishable key.
-
-```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
-```
-
-Replace the example values with your own project credentials.
-
-Do not place service-role keys, database passwords, or other private credentials in `VITE_` variables because Vite exposes them to browser code.
-
-### Step 4: Configure the Supabase Database
-
-For a new project, run `supabase/schema.sql` in the Supabase SQL Editor.
-
-For an existing project that already has the base schema, run `supabase/finance_persistence_migration.sql` if required by the repository's current schema.
-
-Review the SQL before applying it to a database containing existing data.
-
-The application uses:
-
-- `transactions` for income and expense records.
-- `insurance_plans` for insurance policy records.
-- `tax_checklist_progress` for tax checklist progress.
-
-The `tax_records` table is present in the schema but is not used by the application.
-
-Receipt records remain in browser storage.
-
-Verify the deployed database and RLS policies in your own Supabase project.
-
-### Step 5: Start the Development Server
+### Step 3: Start the Development Server
 
 ```bash
 npm run dev
@@ -474,7 +240,7 @@ npm run dev
 
 Open the local URL printed in the terminal. The configured Vite port may differ from the default.
 
-### Step 6: Run Checks and Build
+### Step 4: Run Checks and Build
 
 Run the scripts available in `package.json`.
 
@@ -483,240 +249,8 @@ npm test
 npm run build
 ```
 
-If the project does not define a `test` script, omit `npm test`.
-
 ---
 
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the project root. The application requires Supabase configuration.
-
-```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
-```
-
-Only configure optional services if they are implemented and required by your application.
-
-### Important Security Notes
-
-- `.env` must be included in `.gitignore`. Never commit it.
-- `VITE_` variables are exposed in the browser bundle. Use only the Supabase anon or publishable key there, with RLS enabled.
-- Never expose service-role keys, database passwords, or other private credentials in client-side code.
-- Keep private service credentials on a secure backend.
-- The Plaid and Stripe values shown in `.env.example` are placeholders if those integrations are not wired into the current application.
-
-### Building for Production
-
-Build the application:
-
-```bash
-npm run build
-```
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-The generated production files are placed in the `dist/` directory.
-
----
-
-## Themes
-
-The application supports nine themes.
-
-| Theme | Mode | Description | Special Effects |
-|---|---|---|---|
-| Pure White | Light | Clean and professional | None |
-| Midnight Black | Dark | OLED-friendly dark mode | White sparkles |
-| Soft Pastels | Light | Soft vintage-inspired colors | Pink petals |
-| Coral Sunset | Light | Warm tropical colors | Gradient orbs |
-| Lavender Dream | Light | Calming purple tones | Purple petals |
-| Mint Fresh | Light | Natural green tones | Green leaves |
-| Ocean Breeze | Light | Coastal colors | Animated waves |
-| Midnight Latte | Dark | Coffee-inspired dark mode | Steam effects |
-| Seasonal | Dynamic | Changes with seasons | Seasonal effects |
-
-### Seasonal Theme Changes
-
-- **Spring**: Pink cherry blossoms.
-- **Summer**: Golden sunshine.
-- **Fall**: Autumn leaves.
-- **Winter**: Snowy twilight.
-
----
-
-## Security
-
-### Authentication
-
-- JWT token-based sessions through Supabase Auth.
-- Password hashing handled by the authentication provider.
-- Email verification support where configured.
-- Password reset functionality where configured.
-
-### Data Protection
-
-- Row Level Security in Supabase.
-- User-specific data access when database policies are correctly configured.
-- Environment variables for configuration.
-- No hardcoded credentials.
-- Browser-side cached finance data is not encrypted.
-- `VITE_` variables are public client configuration, not a place for secrets.
-
-Supabase RLS policies must be applied and verified against your project before relying on them to isolate financial records between users.
-
-### Frontend Security
-
-- Content Security Policy where configured.
-- Input validation and sanitization where implemented.
-- HTTPS support through deployment configuration.
-- Review the deployed configuration before treating these protections as verified.
-
-### Code Security
-
-- Keep sensitive credentials out of Git history.
-- Add `.env` to `.gitignore`.
-- Audit dependencies for vulnerabilities.
-- Update dependencies regularly.
-
-### Security Utilities
-
-The application includes security helper functions in `src/utils/security.js` if these functions are present in the project.
-
-```javascript
-import {
-  sanitizeString,
-  validateAmount,
-  validateEmail,
-  validateFile,
-  secureStorage,
-  maskSensitiveData,
-} from "./utils/security";
-```
-
-Ensure these functions exist in the project before documenting them as implemented features.
-
-The `secureStorage` helper is an error-handling wrapper for localStorage, not encryption.
-
----
-
-## Project Structure
-
-```text
-gig-economy-app/
-├── public/
-├── src/
-│   ├── components/
-│   │   ├── AnimatedBackground.jsx
-│   │   └── ThemeSwitcherModal.jsx
-│   ├── layouts/
-│   │   └── DashboardLayout.jsx
-│   ├── pages/
-│   │   ├── Dashboard.jsx
-│   │   ├── Income.jsx
-│   │   ├── Expenses.jsx
-│   │   ├── Goals.jsx
-│   │   ├── Analytics.jsx
-│   │   ├── Insurance.jsx
-│   │   ├── TaxTools.jsx
-│   │   ├── Receipts.jsx
-│   │   ├── Export.jsx
-│   │   ├── Settings.jsx
-│   │   ├── Login.jsx
-│   │   └── Signup.jsx
-│   ├── store/
-│   │   ├── authStore.js
-│   │   ├── financeStore.js
-│   │   └── themeStore.js
-│   ├── config/
-│   │   └── supabase.js
-│   ├── utils/
-│   │   └── security.js
-│   ├── App.jsx
-│   └── main.jsx
-├── .env.example
-├── .gitignore
-├── index.html
-├── package.json
-├── vite.config.js
-└── README.md
-```
-
-This structure is illustrative. Verify the actual file names and directories in the repository.
-
----
-
-## Role and Responsibilities
-
-### Project Development
-
-**Full-Stack Developer | Team of 2**
-
-### Key Responsibilities
-
-#### Frontend Development
-
-- Designed and implemented responsive UI using React and CSS.
-- Built interactive pages for the dashboard, income, expenses, goals, analytics, and other features.
-- Created reusable UI components.
-- Implemented customizable themes.
-- Integrated Recharts for data visualization.
-- Developed responsive layouts for mobile, tablet, and desktop.
-
-#### Backend and Database
-
-- Configured the Supabase backend and PostgreSQL database.
-- Designed database structures for financial data.
-- Implemented or configured Row Level Security policies.
-- Integrated Supabase APIs.
-- Configured authentication.
-- Implemented browser-based receipt scanning and receipt record handling.
-
-#### Security Implementation
-
-- Configured Content Security Policy where supported.
-- Implemented input validation and sanitization where available.
-- Managed environment variables.
-- Worked on security-related logging and protections.
-
-#### State Management
-
-- Implemented global state management using Zustand.
-- Organized authentication, finance, and theme state.
-- Configured state persistence where required.
-- Structured data flow between components and stores.
-
-#### DevOps and Deployment
-
-- Configured the Vite build system.
-- Set up deployment through Vercel.
-- Managed environment configuration.
-- Optimized production builds.
-- Configured deployment settings.
-
-#### Testing and Quality Assurance
-
-- Tested application features.
-- Reviewed security and dependency issues.
-- Checked responsive behavior.
-- Tested the application across supported browsers and devices.
-
-### Technical Achievements
-
-- Developed a financial tracking application using React and Supabase.
-- Worked on authentication and data access controls.
-- Created customizable themes.
-- Implemented financial data visualization.
-- Integrated receipt scanning where supported by the application.
-- Built responsive interfaces.
-- Deployed the application.
-- Maintained project documentation.
 
 ### Technologies Used
 
