@@ -99,17 +99,6 @@ Create an account and explore the application's features.
 
 ### Customizable Themes
 
-The application includes nine themes:
-
-1. **Pure White**: Clean, minimal, professional.
-2. **Midnight Black**: Dark mode with OLED-friendly colors.
-3. **Soft Pastels**: Soft vintage-inspired colors.
-4. **Coral Sunset**: Warm tropical colors.
-5. **Lavender Dream**: Calming purple tones.
-6. **Mint Fresh**: Natural green tones.
-7. **Ocean Breeze**: Coastal colors with animated waves.
-8. **Midnight Latte**: Dark coffee-inspired colors.
-9. **Seasonal**: Changes according to the season.
 
 ### Theme Features
 
