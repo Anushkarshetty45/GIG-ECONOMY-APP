@@ -123,7 +123,7 @@ The application includes nine themes:
 ## Tech Stack
 
 
-### Frontend
+### Frontend:
 
 #### React 18
 
@@ -132,29 +132,34 @@ The application includes nine themes:
 #### React Router DOM
 
 
-### Backend and Database
+
+### Backend and Database:
 
 #### Supabase
 
 
-### State Management
+
+### State Management:
 
 #### Zustand
 
 
-### UI Components and Styling
+
+### UI Components and Styling:
 
 #### Lucide React
 
 #### CSS Variables
 
 
-### Receipt Scanning
+
+### Receipt Scanning:
 
 #### Tesseract.js
 
 
-### Development Tools
+
+### Development Tools:
 
 #### ESLint
 
@@ -174,28 +179,6 @@ The application includes nine themes:
 
 ---
 
-## Deployment
-
-The application can be deployed using:
-
-- Vercel.
-- Netlify.
-- GitHub Pages.
-- AWS S3 and CloudFront.
-
-### Build Command
-
-```bash
-npm run build
-```
-
-### Output Directory
-
-```text
-dist/
-```
-
----
 
 ## Installation
 
